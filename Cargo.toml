@@ -1,0 +1,13 @@
+[package]
+name = "cidr"
+version = "0.0.1"
+authors = ["Stefan Bühler <stbuehler@web.de>"]
+description = "IP network and IP host withing network types"
+documentation = "https://stbuehler.github.io/rustdocs/cidr/cidr/"
+homepage = "https://github.com/stbuehler/rust-cidr"
+repository = "https://github.com/stbuehler/rust-cidr"
+readme = "README.md"
+keywords = ["cidr", "network"]
+license = "MIT"
+
+[dependencies]
