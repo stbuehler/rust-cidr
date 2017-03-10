@@ -49,6 +49,11 @@ macro_rules! impl_cidr_for {
 					network_length: 0,
 				}
 			}
+
+			fn shared_prefix_len(&self, other: &Self) -> usize {
+				let max_len = min(self.network_length, other.network_length) as usize;
+				FixedBitString::shared_prefix_len(&self.address, &other.address, max_len)
+			}
 		}
 
 		impl Cidr for $n {

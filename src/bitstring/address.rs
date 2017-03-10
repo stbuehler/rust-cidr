@@ -48,6 +48,10 @@ impl FixedBitString for Ipv4Addr {
 		})
 	}
 
+	fn shared_prefix_len(&self, other: &Self, max_len: usize) -> usize {
+		BigEndianManipulation::shared_prefix_len(&self.octets(), &other.octets(), max_len)
+	}
+
 	fn zeroesfrom(&mut self, ndx: usize) {
 		with_ipv4_mut_slice(self, |slice| {
 			BigEndianManipulation::zeroesfrom(slice, ndx)
@@ -124,6 +128,10 @@ impl FixedBitString for Ipv6Addr {
 		with_ipv6_mut_slice(self, |slice| {
 			BigEndianManipulation::flip(slice, ndx)
 		})
+	}
+
+	fn shared_prefix_len(&self, other: &Self, max_len: usize) -> usize {
+		BigEndianManipulation::shared_prefix_len(&self.octets(), &other.octets(), max_len)
 	}
 
 	fn zeroesfrom(&mut self, ndx: usize) {

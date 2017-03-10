@@ -27,6 +27,15 @@ pub trait FixedBitString: Sized+Clone {
 	fn off(&mut self, ndx: usize);
 	fn flip(&mut self, ndx: usize);
 
+	fn shared_prefix_len(&self, other: &Self, max_len: usize) -> usize {
+		for i in 0..max_len {
+			if self.get(i) != other.get(i) {
+				return i
+			}
+		}
+		max_len
+	}
+
 	fn zeroesfrom(&mut self, ndx: usize);
 	fn is_zeroesfrom(&self, ndx: usize) -> bool;
 

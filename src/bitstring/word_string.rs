@@ -49,4 +49,9 @@ impl<W: FixedBitString+Clone> BitString for BitWordString<W> {
 			len: 0,
 		}
 	}
+
+	fn shared_prefix_len(&self, other: &Self) -> usize {
+		let max_len = min(self.len, other.len);
+		W::shared_prefix_len(&self.bitwords, &other.bitwords, max_len)
+	}
 }
