@@ -1,5 +1,5 @@
-use std::net::AddrParseError;
 use std::str::FromStr;
+use local_addr_parser::ParseableAddress;
 
 use super::super::errors::*;
 use super::super::traits::*;
@@ -7,13 +7,13 @@ use super::super::traits::*;
 pub fn cidr_from_str<C>(s: &str) -> Result<C, NetworkParseError>
 where
 	C: Cidr,
-	C::Address: FromStr<Err=AddrParseError>
+	C::Address: ParseableAddress
 {
 	match s.rfind('/') {
-		None => Ok(C::new_host(C::Address::from_str(s)?)),
+		None => Ok(C::new_host(C::Address::address_from_str(s)?)),
 		Some(pos) => {
 			C::new(
-				C::Address::from_str(&s[0..pos])?,
+				C::Address::address_from_str(&s[0..pos])?,
 				u8::from_str(&s[pos+1..])?,
 			)
 		}

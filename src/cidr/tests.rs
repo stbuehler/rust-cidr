@@ -328,9 +328,31 @@ fn parse_v4_8bit() {
 }
 
 #[test]
+fn parse_v4_8bit_short() {
+	test_v4(
+		"10/8",
+		Ipv4Addr::new(10, 0, 0, 0),
+		Ipv4Addr::new(10, 255, 255, 255),
+		Ipv4Addr::new(255, 0, 0, 0),
+		8
+	);
+}
+
+#[test]
 fn parse_v4_0bit() {
 	test_v4(
 		"0.0.0.0/0",
+		Ipv4Addr::new(0, 0, 0, 0),
+		Ipv4Addr::new(255, 255, 255, 255),
+		Ipv4Addr::new(0, 0, 0, 0),
+		0
+	);
+}
+
+#[test]
+fn parse_v4_0bit_short() {
+	test_v4(
+		"0/0",
 		Ipv4Addr::new(0, 0, 0, 0),
 		Ipv4Addr::new(255, 255, 255, 255),
 		Ipv4Addr::new(0, 0, 0, 0),
