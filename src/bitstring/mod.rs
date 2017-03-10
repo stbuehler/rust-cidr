@@ -64,19 +64,47 @@ pub trait BitString: Sized+Clone {
 		a
 	}
 
-	// a < b iff a != b and a is a prefix of b
-	fn bitstring_partial_cmp(&self, other: &Self) -> Option<Ordering> {
+	// `a < b` iff `a != b` and `b` is a prefix of `a`
+	fn bitstring_subset_cmp(&self, other: &Self) -> Option<Ordering> {
 		let spl = self.shared_prefix_len(other);
 		if spl == self.len() {
+			// self is a prefix of other
 			if spl == other.len() {
 				Some(Ordering::Equal)
 			} else {
-				Some(Ordering::Less)
+				Some(Ordering::Greater)
 			}
 		} else if spl == other.len() {
-			Some(Ordering::Greater)
+			// other is a prefix of self
+			Some(Ordering::Less)
 		} else {
+			// neither is a prefix of the other one
 			None
+		}
+	}
+
+	fn bitstring_lexicographic_cmp(&self, other: &Self) -> Ordering {
+		let spl = self.shared_prefix_len(other);
+		if spl == self.len() {
+			// self is a prefix of other
+			if spl == other.len() {
+				Ordering::Equal
+			} else {
+				// self is shorter than other
+				Ordering::Less
+			}
+		} else if spl == other.len() {
+			// other is a prefix of self and shorter
+			Ordering::Greater
+		} else {
+			// both are at least one bit longer than the shared prefix,
+			// and they differ in that bit (otherwise shared prefix
+			// would be longer)
+			if self.get(spl) {
+				Ordering::Greater
+			} else {
+				Ordering::Less
+			}
 		}
 	}
 }

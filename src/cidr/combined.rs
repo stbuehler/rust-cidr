@@ -1,4 +1,3 @@
-use std::cmp::{Ordering};
 use std::fmt;
 use std::net::{IpAddr};
 use std::str::FromStr;
@@ -114,21 +113,6 @@ impl fmt::Display for IpCidr {
 		match *self {
 			IpCidr::V4(ref c) => fmt::Display::fmt(c, f),
 			IpCidr::V6(ref c) => fmt::Display::fmt(c, f),
-		}
-	}
-}
-
-impl PartialOrd<IpCidr> for IpCidr {
-	fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-		match *self {
-			IpCidr::V4(ref c) => match *other {
-				IpCidr::V4(ref o) => c.partial_cmp(o),
-				IpCidr::V6(_) => None,
-			},
-			IpCidr::V6(ref c) => match *other {
-				IpCidr::V4(_) => None,
-				IpCidr::V6(ref o) => c.partial_cmp(o),
-			},
 		}
 	}
 }

@@ -126,7 +126,13 @@ macro_rules! impl_cidr_for {
 
 		impl PartialOrd<$n> for $n {
 			fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-				self.bitstring_partial_cmp(other)
+				Some(self.bitstring_lexicographic_cmp(other))
+			}
+		}
+
+		impl Ord for $n {
+			fn cmp(&self, other: &Self) -> Ordering {
+				self.bitstring_lexicographic_cmp(other)
 			}
 		}
 

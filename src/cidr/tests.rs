@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::net::{IpAddr,Ipv4Addr,Ipv6Addr};
 
 use Cidr;
@@ -193,6 +194,47 @@ fn test_v6_contains_not(
 		!c2.contains(&IpAddr::V6(addr.clone())),
 		"{:?} must not include {:?} (through IpCidr)", c2, addr
 	);
+}
+
+fn test_v4_order(o: Ordering, a: &'static str, b: &'static str) {
+	let r1 = a.parse::<Ipv4Cidr>().unwrap().cmp(&b.parse::<Ipv4Cidr>().unwrap());
+	assert!(o == r1,
+		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through Ipv4Cidr)", r1, a, b, o);
+
+	let r2 = a.parse::<IpCidr>().unwrap().cmp(&b.parse::<IpCidr>().unwrap());
+	assert!(o == r2,
+		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through IpCidr)", r2, a, b, o);
+
+	if o == Ordering::Less {
+		// reverse test
+		test_v4_order(Ordering::Greater, b, a);
+	}
+}
+
+fn test_v6_order(o: Ordering, a: &'static str, b: &'static str) {
+	let r1 = a.parse::<Ipv6Cidr>().unwrap().cmp(&b.parse::<Ipv6Cidr>().unwrap());
+	assert!(o == r1,
+		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through Ipv6Cidr)", r1, a, b, o);
+
+	let r2 = a.parse::<IpCidr>().unwrap().cmp(&b.parse::<IpCidr>().unwrap());
+	assert!(o == r2,
+		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through IpCidr)", r2, a, b, o);
+
+	if o == Ordering::Less {
+		// reverse test
+		test_v6_order(Ordering::Greater, b, a);
+	}
+}
+
+fn test_order(o: Ordering, a: &'static str, b: &'static str) {
+	let r = a.parse::<IpCidr>().unwrap().cmp(&b.parse::<IpCidr>().unwrap());
+	assert!(o == r,
+		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through IpCidr)", r, a, b, o);
+
+	if o == Ordering::Less {
+		// reverse test
+		test_order(Ordering::Greater, b, a);
+	}
 }
 
 #[test]
@@ -433,4 +475,25 @@ fn contains_not_v6_64bit_2() {
 		"2001:DB8:1234:5678::/64",
 		Ipv6Addr::new(0xa001, 0xdb8, 0x1234, 0x5679, 0x1001, 2, 3, 4)
 	);
+}
+
+#[test]
+fn order_v4() {
+	test_v4_order(Ordering::Equal, "192.0.2.0/24", "192.0.2.0/24");
+	test_v4_order(Ordering::Less, "192.0.2.0/24", "192.0.3.0/24");
+	test_v4_order(Ordering::Less, "192.0.2.0/24", "192.0.2.0/25");
+	test_v4_order(Ordering::Less, "192.0.2.0/24", "192.0.2.128/25");
+}
+
+#[test]
+fn order_v6() {
+	test_v6_order(Ordering::Equal, "2001:DB8:1234:5678::/64", "2001:DB8:1234:5678::/64");
+	test_v6_order(Ordering::Less, "2001:DB8:1234:5678:1000::/80", "2001:DB8:1234:5678:1001::/80");
+	test_v6_order(Ordering::Less, "2001:DB8:1234:5678:1000::/80", "2001:DB8:1234:5678:1000::/81");
+	test_v6_order(Ordering::Less, "2001:DB8:1234:5678:1000::/80", "2001:DB8:1234:5678:1000:8000::/81");
+}
+
+#[test]
+fn order() {
+	test_order(Ordering::Less, "192.0.2.0/24", "2001:DB8:1234:5678::/64");
 }

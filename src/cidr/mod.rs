@@ -11,6 +11,8 @@ mod from_str;
 mod tests;
 
 /// `Cidr` type representing an IPv4 network
+///
+/// Ordering based on lexicographic bitstring representation.
 #[derive(Clone,PartialEq,Eq,Hash)]
 pub struct Ipv4Cidr {
 	address: Ipv4Addr,
@@ -18,6 +20,8 @@ pub struct Ipv4Cidr {
 }
 
 /// `Cidr` type representing an IPv6 network
+///
+/// Ordering based on lexicographic bitstring representation.
 #[derive(Clone,PartialEq,Eq,Hash)]
 pub struct Ipv6Cidr {
 	address: Ipv6Addr,
@@ -25,7 +29,7 @@ pub struct Ipv6Cidr {
 }
 
 /// `Cidr` type representing either an IPv4 or an IPv6 network
-#[derive(Clone,PartialEq,Eq,Hash,Debug)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug)]
 pub enum IpCidr {
 	/// IPv4 network
 	V4(Ipv4Cidr),

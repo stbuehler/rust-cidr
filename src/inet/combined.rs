@@ -1,4 +1,3 @@
-use std::cmp::{Ordering};
 use std::fmt;
 use std::net::{IpAddr};
 use std::str::FromStr;
@@ -135,21 +134,6 @@ impl fmt::Display for IpInet {
 		match *self {
 			IpInet::V4(ref c) => fmt::Display::fmt(c, f),
 			IpInet::V6(ref c) => fmt::Display::fmt(c, f),
-		}
-	}
-}
-
-impl PartialOrd<IpInet> for IpInet {
-	fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-		match *self {
-			IpInet::V4(ref c) => match *other {
-				IpInet::V4(ref o) => c.partial_cmp(o),
-				IpInet::V6(_) => None,
-			},
-			IpInet::V6(ref c) => match *other {
-				IpInet::V4(_) => None,
-				IpInet::V6(ref o) => c.partial_cmp(o),
-			},
 		}
 	}
 }

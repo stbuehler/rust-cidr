@@ -1,4 +1,4 @@
-use std::cmp::{min,Ordering};
+use std::cmp::min;
 use std::fmt;
 use std::net::{Ipv4Addr,Ipv6Addr};
 use std::str::FromStr;
@@ -139,12 +139,6 @@ macro_rules! impl_inet_for {
 		impl fmt::Display for $n {
 			fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 				write!(f, "{}/{}", self.address, self.network_length)
-			}
-		}
-
-		impl PartialOrd<$n> for $n {
-			fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-				self.bitstring_partial_cmp(other)
 			}
 		}
 
