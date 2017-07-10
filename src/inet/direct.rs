@@ -1,10 +1,10 @@
+use bitstring::*;
 use std::cmp::min;
 use std::fmt;
 use std::net::{Ipv4Addr,Ipv6Addr};
 use std::str::FromStr;
 
 use super::from_str::inet_from_str;
-use super::super::bitstring::*;
 use super::super::cidr::*;
 use super::super::errors::*;
 use super::super::family::Family;
@@ -34,7 +34,7 @@ macro_rules! impl_inet_for {
 
 			fn clip(&mut self, len: usize) {
 				if len > 255 { return; }
-				self.address.zeroesfrom(len);
+				self.address.set_false_from(len);
 				self.network_length = min(self.network_length, len as u8);
 			}
 
@@ -45,7 +45,7 @@ macro_rules! impl_inet_for {
 
 			fn null() -> Self {
 				$n{
-					address: FixedBitString::all_zeroes(),
+					address: FixedBitString::new_all_false(),
 					network_length: 0,
 				}
 			}
@@ -92,7 +92,7 @@ macro_rules! impl_inet_for {
 
 			fn first_address(&self) -> Self::Address {
 				let mut a = self.address.clone();
-				a.zeroesfrom(self.network_length as usize);
+				a.set_false_from(self.network_length as usize);
 				a
 			}
 
@@ -105,7 +105,7 @@ macro_rules! impl_inet_for {
 
 			fn last_address(&self) -> Self::Address {
 				let mut a = self.address.clone();
-				a.onesfrom(self.network_length as usize);
+				a.set_true_from(self.network_length as usize);
 				a
 			}
 
@@ -125,8 +125,8 @@ macro_rules! impl_inet_for {
 			}
 
 			fn mask(&self) -> Self::Address {
-				let mut a = Self::Address::all_ones();
-				a.zeroesfrom(self.network_length as usize);
+				let mut a = Self::Address::new_all_true();
+				a.set_false_from(self.network_length as usize);
 				a
 			}
 

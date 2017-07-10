@@ -1,13 +1,21 @@
 [package]
 name = "cidr"
+# also bump version in html_root_url in src/lib.rs
 version = "0.0.2"
 authors = ["Stefan Bühler <stbuehler@web.de>"]
 description = "IP network and IP host withing network types"
-documentation = "https://stbuehler.github.io/rustdocs/cidr/cidr/"
+documentation = "https://docs.rs/cidr"
 homepage = "https://github.com/stbuehler/rust-cidr"
 repository = "https://github.com/stbuehler/rust-cidr"
-readme = "README.md"
+categories = ["data-structures","network-programming"]
 keywords = ["cidr", "network"]
+readme = "README.md"
 license = "MIT"
+exclude = ["CHECKLIST.md"]
+
+[badges]
+travis-ci = { repository = "stbuehler/rust-cidr" }
+appveyor = { repository = "stbuehler/rust-cidr" }
 
 [dependencies]
+bitstring = "0.1.0"

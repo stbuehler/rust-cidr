@@ -1,10 +1,10 @@
+use bitstring::*;
 use std::cmp::{min,Ordering};
 use std::fmt;
 use std::net::{Ipv4Addr,Ipv6Addr};
 use std::str::FromStr;
 
 use super::from_str::cidr_from_str;
-use super::super::bitstring::*;
 use super::super::errors::*;
 use super::super::family::Family;
 use super::super::inet::*;
@@ -34,7 +34,7 @@ macro_rules! impl_cidr_for {
 
 			fn clip(&mut self, len: usize) {
 				if len > 255 { return; }
-				self.address.zeroesfrom(len);
+				self.address.set_false_from(len);
 				self.network_length = min(self.network_length, len as u8);
 			}
 
@@ -45,7 +45,7 @@ macro_rules! impl_cidr_for {
 
 			fn null() -> Self {
 				$n{
-					address: FixedBitString::all_zeroes(),
+					address: FixedBitString::new_all_false(),
 					network_length: 0,
 				}
 			}
@@ -63,7 +63,7 @@ macro_rules! impl_cidr_for {
 			fn new(addr: Self::Address, len: u8) -> Result<Self, NetworkParseError> {
 				if len > $family.len() {
 					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
-				} else if !addr.is_zeroesfrom(len as usize) {
+				} else if !addr.is_false_from(len as usize) {
 					Err(NetworkParseError::InvalidHostPart)
 				} else {
 					Ok($n{
@@ -90,7 +90,7 @@ macro_rules! impl_cidr_for {
 
 			fn last_address(&self) -> Self::Address {
 				let mut a = self.address.clone();
-				a.onesfrom(self.network_length as usize);
+				a.set_true_from(self.network_length as usize);
 				a
 			}
 
@@ -107,8 +107,8 @@ macro_rules! impl_cidr_for {
 			}
 
 			fn mask(&self) -> Self::Address {
-				let mut a = Self::Address::all_ones();
-				a.zeroesfrom(self.network_length as usize);
+				let mut a = Self::Address::new_all_true();
+				a.set_false_from(self.network_length as usize);
 				a
 			}
 
@@ -131,13 +131,13 @@ macro_rules! impl_cidr_for {
 
 		impl PartialOrd<$n> for $n {
 			fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-				Some(self.bitstring_lexicographic_cmp(other))
+				Some(self.lexicographic_cmp(other))
 			}
 		}
 
 		impl Ord for $n {
 			fn cmp(&self, other: &Self) -> Ordering {
-				self.bitstring_lexicographic_cmp(other)
+				self.lexicographic_cmp(other)
 			}
 		}
 

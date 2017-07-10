@@ -1,4 +1,5 @@
 #![warn(missing_docs)]
+#![doc(html_root_url = "https://docs.rs/cidr/0.0.2")]
 
 //! This library provides types to represent an IP network (`Cidr`) or
 //! an IP host withing a network (`Inet`)
@@ -14,11 +15,7 @@ pub use self::inet::*;
 pub use self::inet_iterator::*;
 pub use self::traits::*;
 
-/// should perhaps be a separate crate
-mod bitstring;
-
-/// implementation helper for bitstrings
-mod bigendian;
+extern crate bitstring;
 
 mod cidr;
 mod errors;
