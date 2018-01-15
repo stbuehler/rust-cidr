@@ -8,4 +8,4 @@ host withing a network (`Inet`).
 
 The naming follows the names of the [PostgreSQL data types](https://www.postgresql.org/docs/current/static/datatype-net-types.html)
 
-The documentation for `master` is located at [https://stbuehler.github.io/rustdocs/cidr/cidr/](https://stbuehler.github.io/rustdocs/cidr/cidr/); released versions are documented at [https://docs.rs/bitstring-trees](https://docs.rs/cidr).
+The documentation for `master` is located at [https://stbuehler.github.io/rustdocs/cidr/cidr/](https://stbuehler.github.io/rustdocs/cidr/cidr/); released versions are documented at [https://docs.rs/cidr](https://docs.rs/cidr).
