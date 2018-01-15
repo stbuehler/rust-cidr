@@ -32,11 +32,13 @@ pub trait Cidr: Sized {
 	/// error is returned.
 	fn new(addr: Self::Address, len: u8) -> Result<Self, NetworkParseError>;
 
-	/// Create a network containing a single address (network length = address length).
+	/// Create a network containing a single address (network length =
+	/// address length).
 	fn new_host(addr: Self::Address) -> Self;
 
 	/// Iterate over all addresses in the range.  With IPv6 addresses
-	/// this can produce really long iterations (up to 2^128 addresses).
+	/// this can produce really long iterations (up to 2<sup>128</sup>
+	/// addresses).
 	fn iter(&self) -> InetIterator<Self::Inet> {
 		InetIterator::new(self.first())
 	}
@@ -94,7 +96,8 @@ pub trait Inet: Sized {
 	/// network (network length = address length).
 	fn new_host(addr: Self::Address) -> Self;
 
-	/// increments host part (without changing the network part); returns true on wrap around
+	/// increments host part (without changing the network part);
+	/// returns true on wrap around
 	fn next(&mut self) -> bool;
 
 	/// network (i.e. drops the host information)
