@@ -1,15 +1,15 @@
 use bitstring::*;
-use std::cmp::{min,Ordering};
+use std::cmp::{min, Ordering};
 use std::fmt;
-use std::net::{Ipv4Addr,Ipv6Addr};
+use std::net::{Ipv4Addr, Ipv6Addr};
 use std::str::FromStr;
 
+use super::{Ipv4Cidr, Ipv6Cidr};
 use super::from_str::cidr_from_str;
 use super::super::errors::*;
 use super::super::family::Family;
 use super::super::inet::*;
 use super::super::traits::*;
-use super::{Ipv4Cidr,Ipv6Cidr};
 
 macro_rules! impl_cidr_for {
 	($n:ident : inet $inet:ident : addr $addr:ty : family $family:expr) => (

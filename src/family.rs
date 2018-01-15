@@ -1,7 +1,7 @@
-use std::net::{IpAddr,Ipv4Addr,Ipv6Addr};
+use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
 /// Represents the type of an IP address
-#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug)]
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 pub enum Family {
 	/// IPv4
 	Ipv4,

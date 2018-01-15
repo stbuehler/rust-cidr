@@ -1,5 +1,5 @@
-use super::family::Family;
 use super::errors::*;
+use super::family::Family;
 use super::inet_iterator::*;
 
 /// Types implementing Cidr represent IP networks.  An IP network in
@@ -24,7 +24,7 @@ pub trait Cidr: Sized {
 
 	/// Corresponding `Inet` type (representing an address + a network
 	/// containing it)
-	type Inet: Inet<Address=Self::Address>;
+	type Inet: Inet<Address = Self::Address>;
 
 	/// Create new network from address and prefix length.  If the
 	/// network length exceeds the address length or the address is not
@@ -80,12 +80,15 @@ pub trait Inet: Sized {
 	type Address;
 
 	/// Corresponding `Cidr` type (representing only the network)
-	type Cidr: Cidr<Address=Self::Address>;
+	type Cidr: Cidr<Address = Self::Address>;
 
 	/// Create new host within a network from address and prefix length.
 	/// If the network length exceeds the address length an error is
 	/// returned.
-	fn new(addr: Self::Address, len: u8) -> Result<Self, NetworkLengthTooLongError>;
+	fn new(
+		addr: Self::Address,
+		len: u8,
+	) -> Result<Self, NetworkLengthTooLongError>;
 
 	/// Create a network containing a single address as host and the
 	/// network (network length = address length).

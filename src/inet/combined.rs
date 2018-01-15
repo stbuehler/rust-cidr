@@ -1,13 +1,13 @@
 use std::fmt;
-use std::net::{IpAddr};
+use std::net::IpAddr;
 use std::str::FromStr;
 
+use super::{IpInet, Ipv4Inet, Ipv6Inet};
 use super::from_str::inet_from_str;
 use super::super::cidr::*;
 use super::super::errors::*;
 use super::super::family::Family;
 use super::super::traits::*;
-use super::{IpInet,Ipv4Inet,Ipv6Inet};
 
 impl IpInet {
 	/// Whether representing an IPv4 network
@@ -31,7 +31,10 @@ impl Inet for IpInet {
 	type Address = IpAddr;
 	type Cidr = IpCidr;
 
-	fn new(addr: Self::Address, len: u8) -> Result<Self, NetworkLengthTooLongError> {
+	fn new(
+		addr: Self::Address,
+		len: u8,
+	) -> Result<Self, NetworkLengthTooLongError> {
 		Ok(match addr {
 			IpAddr::V4(a) => IpInet::V4(Ipv4Inet::new(a, len)?),
 			IpAddr::V6(a) => IpInet::V6(Ipv6Inet::new(a, len)?),

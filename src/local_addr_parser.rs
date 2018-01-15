@@ -1,4 +1,4 @@
-use std::net::{AddrParseError,IpAddr,Ipv4Addr,Ipv6Addr};
+use std::net::{AddrParseError, IpAddr, Ipv4Addr, Ipv6Addr};
 use std::str::FromStr;
 
 pub trait ParseableAddress: Sized {
@@ -8,9 +8,13 @@ pub trait ParseableAddress: Sized {
 fn special_ipv4_parser(s: &str) -> Option<Ipv4Addr> {
 	let mut octets = [0u8; 4];
 	for (ndx, os) in s.split('.').enumerate() {
-		if ndx >= 4 { return None; } // too many octets
+		if ndx >= 4 {
+			return None;
+		} // too many octets
 		match u8::from_str_radix(os, 10) {
-			Ok(o) => { octets[ndx] = o; },
+			Ok(o) => {
+				octets[ndx] = o;
+			},
 			Err(_) => return None, // invalid octet
 		}
 	}
@@ -24,7 +28,7 @@ impl ParseableAddress for Ipv4Addr {
 			Err(err) => match special_ipv4_parser(s) {
 				Some(addr) => Ok(addr),
 				None => Err(err),
-			}
+			},
 		}
 	}
 }
@@ -42,7 +46,7 @@ impl ParseableAddress for IpAddr {
 			Err(err) => match special_ipv4_parser(s) {
 				Some(addr) => Ok(IpAddr::V4(addr)),
 				None => Err(err),
-			}
+			},
 		}
 	}
 }
@@ -50,19 +54,23 @@ impl ParseableAddress for IpAddr {
 #[cfg(test)]
 mod tests {
 	use super::ParseableAddress;
-	use std::net::{IpAddr,Ipv4Addr};
+	use std::net::{IpAddr, Ipv4Addr};
 
 	fn test_addr(s: &str, a: Ipv4Addr) {
 		assert_eq!(
 			Ipv4Addr::address_from_str(s).unwrap(),
 			a,
-			"{} didn't match {:?} (through Ipv4Addr)", s, a
+			"{} didn't match {:?} (through Ipv4Addr)",
+			s,
+			a
 		);
 
 		assert_eq!(
 			IpAddr::address_from_str(s).unwrap(),
 			IpAddr::V4(a),
-			"{} didn't match {:?} (through IpAddr)", s, a
+			"{} didn't match {:?} (through IpAddr)",
+			s,
+			a
 		);
 	}
 

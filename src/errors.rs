@@ -6,7 +6,7 @@ use std::num::ParseIntError;
 use super::Family;
 
 /// Error returned when the network length was longer than the address
-#[derive(Clone,PartialEq,Eq,Hash)]
+#[derive(Clone, PartialEq, Eq, Hash)]
 pub struct NetworkLengthTooLongError(usize, Family);
 
 impl NetworkLengthTooLongError {
@@ -40,7 +40,7 @@ impl Error for NetworkLengthTooLongError {
 }
 
 /// Error type returned when parsing IP networks
-#[derive(Clone,PartialEq)]
+#[derive(Clone, PartialEq)]
 pub enum NetworkParseError {
 	/// The host part wasn't zero but should have been. The `Cidr` types
 	/// require that you use the first address in the network (and the

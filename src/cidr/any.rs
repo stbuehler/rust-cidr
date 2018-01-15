@@ -1,14 +1,14 @@
 use bitstring::*;
 use std::fmt;
-use std::net::{IpAddr};
+use std::net::IpAddr;
 use std::str::FromStr;
 
+use super::{IpCidr, Ipv4Cidr, Ipv6Cidr};
 use super::from_str::cidr_from_str;
 use super::super::errors::*;
 use super::super::family::Family;
 use super::super::inet::*;
 use super::super::traits::*;
-use super::{IpCidr,Ipv4Cidr,Ipv6Cidr};
 
 /// Represents either an IPv4 or an IPv6 network or "any".
 ///
@@ -22,7 +22,7 @@ use super::{IpCidr,Ipv4Cidr,Ipv6Cidr};
 /// The `Cidr` trait itself cannot be implemented because `Any` has no
 /// address family, but there is a very similar interface implemented
 /// directly.
-#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug)]
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 pub enum AnyIpCidr {
 	/// "any" network containing all IPv4 and IPv6 addresses
 	Any,
@@ -294,7 +294,9 @@ impl BitString for AnyIpCidr {
 
 	fn clip(&mut self, len: usize) {
 		// max length is 129 (len(IPv6) + 1)
-		if len > 128 { return; }
+		if len > 128 {
+			return;
+		}
 		if 0 == len {
 			*self = AnyIpCidr::Any;
 		} else {
@@ -308,12 +310,10 @@ impl BitString for AnyIpCidr {
 
 	fn append(&mut self, bit: bool) {
 		match *self {
-			AnyIpCidr::Any => {
-				if bit {
-					*self = AnyIpCidr::V6(Ipv6Cidr::null());
-				} else {
-					*self = AnyIpCidr::V4(Ipv4Cidr::null());
-				}
+			AnyIpCidr::Any => if bit {
+				*self = AnyIpCidr::V6(Ipv6Cidr::null());
+			} else {
+				*self = AnyIpCidr::V4(Ipv4Cidr::null());
 			},
 			AnyIpCidr::V4(ref mut c) => c.append(bit),
 			AnyIpCidr::V6(ref mut c) => c.append(bit),
@@ -333,4 +333,3 @@ impl BitString for AnyIpCidr {
 		}
 	}
 }
-

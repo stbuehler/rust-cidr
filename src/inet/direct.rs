@@ -1,15 +1,15 @@
 use bitstring::*;
 use std::cmp::min;
 use std::fmt;
-use std::net::{Ipv4Addr,Ipv6Addr};
+use std::net::{Ipv4Addr, Ipv6Addr};
 use std::str::FromStr;
 
+use super::{Ipv4Inet, Ipv6Inet};
 use super::from_str::inet_from_str;
 use super::super::cidr::*;
 use super::super::errors::*;
 use super::super::family::Family;
 use super::super::traits::*;
-use super::{Ipv4Inet,Ipv6Inet};
 
 macro_rules! impl_inet_for {
 	($n:ident : cidr $cidr:ident : addr $addr:ty : family $family:expr) => (
@@ -60,7 +60,10 @@ macro_rules! impl_inet_for {
 			type Address = $addr;
 			type Cidr = $cidr;
 
-			fn new(addr: Self::Address, len: u8) -> Result<Self, NetworkLengthTooLongError> {
+			fn new(
+				addr: Self::Address,
+				len: u8,
+			) -> Result<Self, NetworkLengthTooLongError> {
 				if len > $family.len() {
 					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
 				} else {
