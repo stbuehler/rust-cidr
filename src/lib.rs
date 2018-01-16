@@ -16,6 +16,13 @@ pub use self::inet_iterator::*;
 pub use self::traits::*;
 
 extern crate bitstring;
+#[cfg(feature = "serde")]
+extern crate serde;
+
+#[cfg(all(test, feature = "serde"))]
+extern crate serde_test;
+
+mod serde_common;
 
 mod cidr;
 mod errors;

@@ -17,5 +17,12 @@ exclude = ["CHECKLIST.md"]
 travis-ci = { repository = "stbuehler/rust-cidr" }
 appveyor = { repository = "stbuehler/rust-cidr" }
 
+[features]
+default = ["serde"]
+
 [dependencies]
 bitstring = "0.1.0"
+serde = { version = "1.0.27", optional = true }
+
+[dev-dependencies]
+serde_test = "1.0.27"

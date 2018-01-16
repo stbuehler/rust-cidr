@@ -8,6 +8,7 @@ mod any;
 mod combined;
 mod direct;
 mod from_str;
+mod serde;
 
 #[cfg(test)]
 mod tests;
