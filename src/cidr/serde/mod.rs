@@ -3,7 +3,8 @@
 use Cidr;
 use cidr::{AnyIpCidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
 use serde;
-use serde_common::addr_len_map;
+use serde_common;
+use std::net::IpAddr;
 
 static NAME_IPV4_CIDR: &str = "Ipv4Cidr";
 
@@ -15,11 +16,10 @@ impl serde::Serialize for Ipv4Cidr {
 		if serializer.is_human_readable() {
 			serializer.serialize_str(&format!("{}", self))
 		} else {
-			addr_len_map::serialize(
+			serde_common::serialize_v4(
 				serializer,
 				NAME_IPV4_CIDR,
-				&self.address,
-				self.network_length,
+				(self.address, self.network_length),
 			)
 		}
 	}
@@ -35,7 +35,7 @@ impl<'de> serde::Deserialize<'de> for Ipv4Cidr {
 			s.parse().map_err(serde::de::Error::custom)
 		} else {
 			let (addr, network_length) =
-				addr_len_map::deserialize(deserializer, NAME_IPV4_CIDR)?;
+				serde_common::deserialize_v4(deserializer, NAME_IPV4_CIDR)?;
 			Ipv4Cidr::new(addr, network_length)
 				.map_err(serde::de::Error::custom)
 		}
@@ -52,11 +52,10 @@ impl serde::Serialize for Ipv6Cidr {
 		if serializer.is_human_readable() {
 			serializer.serialize_str(&format!("{}", self))
 		} else {
-			addr_len_map::serialize(
+			serde_common::serialize_v6(
 				serializer,
 				NAME_IPV6_CIDR,
-				&self.address,
-				self.network_length,
+				(self.address, self.network_length),
 			)
 		}
 	}
@@ -72,16 +71,92 @@ impl<'de> serde::Deserialize<'de> for Ipv6Cidr {
 			s.parse().map_err(serde::de::Error::custom)
 		} else {
 			let (addr, network_length) =
-				addr_len_map::deserialize(deserializer, NAME_IPV6_CIDR)?;
+				serde_common::deserialize_v6(deserializer, NAME_IPV6_CIDR)?;
 			Ipv6Cidr::new(addr, network_length)
 				.map_err(serde::de::Error::custom)
 		}
 	}
 }
 
-serde_nf_enum!{IpCidr}
+static NAME_IP_CIDR: &str = "IpCidr";
 
-serde_nf_any_enum!{AnyIpCidr}
+impl serde::Serialize for IpCidr {
+	fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+	where
+		S: serde::Serializer,
+	{
+		if serializer.is_human_readable() {
+			serializer.serialize_str(&format!("{}", self))
+		} else {
+			let data = match *self {
+				IpCidr::V4(ref c) => (IpAddr::V4(c.address), c.network_length),
+				IpCidr::V6(ref c) => (IpAddr::V6(c.address), c.network_length),
+			};
+			serde_common::serialize(serializer, NAME_IP_CIDR, data)
+		}
+	}
+}
+
+impl<'de> serde::Deserialize<'de> for IpCidr {
+	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+	where
+		D: serde::Deserializer<'de>,
+	{
+		if deserializer.is_human_readable() {
+			let s = String::deserialize(deserializer)?;
+			s.parse().map_err(serde::de::Error::custom)
+		} else {
+			let (addr, network_length) =
+				serde_common::deserialize(deserializer, NAME_IP_CIDR)?;
+			IpCidr::new(addr, network_length).map_err(serde::de::Error::custom)
+		}
+	}
+}
+
+static NAME_ANY_IP_CIDR: &str = "AnyIpCidr";
+
+impl serde::Serialize for AnyIpCidr {
+	fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+	where
+		S: serde::Serializer,
+	{
+		if serializer.is_human_readable() {
+			serializer.serialize_str(&format!("{}", self))
+		} else {
+			let data = match *self {
+				AnyIpCidr::Any => None,
+				AnyIpCidr::V4(ref c) => {
+					Some((IpAddr::V4(c.address), c.network_length))
+				},
+				AnyIpCidr::V6(ref c) => {
+					Some((IpAddr::V6(c.address), c.network_length))
+				},
+			};
+			serde_common::serialize_any(serializer, NAME_ANY_IP_CIDR, data)
+		}
+	}
+}
+
+impl<'de> serde::Deserialize<'de> for AnyIpCidr {
+	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+	where
+		D: serde::Deserializer<'de>,
+	{
+		if deserializer.is_human_readable() {
+			let s = String::deserialize(deserializer)?;
+			s.parse().map_err(serde::de::Error::custom)
+		} else {
+			match serde_common::deserialize_any(deserializer, NAME_ANY_IP_CIDR)?
+			{
+				None => Ok(AnyIpCidr::Any),
+				Some((addr, network_length)) => {
+					AnyIpCidr::new(addr, network_length)
+						.map_err(serde::de::Error::custom)
+				},
+			}
+		}
+	}
+}
 
 #[cfg(test)]
 mod tests;

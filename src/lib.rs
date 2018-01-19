@@ -6,7 +6,24 @@
 //!
 //! The naming follows the names of the [PostgreSQL data types](https://www.postgresql.org/docs/current/static/datatype-net-types.html)
 //!
-//! Address parsing also accepts IPv4 address with less than four octets (but always parses those as decimal).
+//! Address parsing also accepts IPv4 address with less than four octets
+//! (but always parses those as decimal).
+//!
+//! # Feature `serde`
+//!
+//! This feature is enabled by default (not using `serde-derive`, only
+//! `serde`).
+//!
+//! In human readable formats the `Display` and `FromStr` interfaces are
+//! used.  Otherwise all values are serialized in the same format (apart
+//! from the newtype wrapping) as a tuple of two values:
+//!
+//! - `tag: u8`:
+//!   - `0x00...0x20`: IPv4 with network length `tag`
+//!   - `0x40...0xc0`: IPv6 with network length `tag - 0x40`
+//!   - `0xff`: `any`
+//! - address according to `tag`: `Ipv4Addr` (`[u8; 4]`), `Ipv6Addr`
+//!   (`[u8; 16]`) or `()`
 
 pub use self::cidr::*;
 pub use self::errors::*;

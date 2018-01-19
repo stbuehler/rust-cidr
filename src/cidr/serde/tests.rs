@@ -10,51 +10,31 @@ fn test_ipv4() {
 	assert_tokens(
 		&c.clone().compact(),
 		&[
-			Token::Struct {
-				name: "Ipv4Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
+			Token::NewtypeStruct { name: "Ipv4Cidr" },
+			Token::Tuple { len: 2 },
+			Token::U8(24),
 			Token::Tuple { len: 4 },
 			Token::U8(192),
 			Token::U8(0),
 			Token::U8(2),
 			Token::U8(0),
 			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(24),
-			Token::StructEnd,
-		],
-	);
-
-	assert_de_tokens(
-		&c.clone().compact(),
-		&[
-			Token::Map { len: None },
-			Token::Str("address"),
-			Token::Tuple { len: 4 },
-			Token::U8(192),
-			Token::U8(0),
-			Token::U8(2),
-			Token::U8(0),
 			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(24),
-			Token::MapEnd,
 		],
 	);
 
 	assert_de_tokens(
 		&c.clone().compact(),
 		&[
+			Token::NewtypeStruct { name: "Ipv4Cidr" },
 			Token::Seq { len: None },
-			Token::Tuple { len: 4 },
+			Token::U8(24),
+			Token::Seq { len: None },
 			Token::U8(192),
 			Token::U8(0),
 			Token::U8(2),
 			Token::U8(0),
-			Token::TupleEnd,
-			Token::U8(24),
+			Token::SeqEnd,
 			Token::SeqEnd,
 		],
 	);
@@ -72,11 +52,9 @@ fn test_ipv6() {
 	assert_tokens(
 		&c.clone().compact(),
 		&[
-			Token::Struct {
-				name: "Ipv6Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
+			Token::NewtypeStruct { name: "Ipv6Cidr" },
+			Token::Tuple { len: 2 },
+			Token::U8(64 + 0x40),
 			Token::Tuple { len: 16 },
 			Token::U8(0x20),
 			Token::U8(0x01),
@@ -95,46 +73,17 @@ fn test_ipv6() {
 			Token::U8(0x00),
 			Token::U8(0x00),
 			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(64),
-			Token::StructEnd,
-		],
-	);
-
-	assert_de_tokens(
-		&c.clone().compact(),
-		&[
-			Token::Map { len: None },
-			Token::Str("address"),
-			Token::Tuple { len: 16 },
-			Token::U8(0x20),
-			Token::U8(0x01),
-			Token::U8(0x0d),
-			Token::U8(0xb8),
-			Token::U8(0x12),
-			Token::U8(0x34),
-			Token::U8(0x56),
-			Token::U8(0x78),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
 			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(64),
-			Token::MapEnd,
 		],
 	);
 
 	assert_de_tokens(
 		&c.clone().compact(),
 		&[
+			Token::NewtypeStruct { name: "Ipv6Cidr" },
 			Token::Seq { len: None },
-			Token::Tuple { len: 16 },
+			Token::U8(64 + 0x40),
+			Token::Seq { len: None },
 			Token::U8(0x20),
 			Token::U8(0x01),
 			Token::U8(0x0d),
@@ -151,8 +100,7 @@ fn test_ipv6() {
 			Token::U8(0x00),
 			Token::U8(0x00),
 			Token::U8(0x00),
-			Token::TupleEnd,
-			Token::U8(64),
+			Token::SeqEnd,
 			Token::SeqEnd,
 		],
 	);
@@ -167,90 +115,32 @@ fn test_cidr_v4() {
 	assert_tokens(
 		&c.clone().compact(),
 		&[
-			Token::NewtypeVariant {
-				name: "IpCidr",
-				variant: "V4",
-			},
-			Token::Struct {
-				name: "Ipv4Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
+			Token::NewtypeStruct { name: "IpCidr" },
+			Token::Tuple { len: 2 },
+			Token::U8(24),
 			Token::Tuple { len: 4 },
 			Token::U8(192),
 			Token::U8(0),
 			Token::U8(2),
 			Token::U8(0),
 			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(24),
-			Token::StructEnd,
-		],
-	);
-
-	assert_tokens(
-		&c.clone().compact(),
-		&[
-			Token::Enum { name: "IpCidr" },
-			Token::Str("V4"),
-			Token::Struct {
-				name: "Ipv4Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
-			Token::Tuple { len: 4 },
-			Token::U8(192),
-			Token::U8(0),
-			Token::U8(2),
-			Token::U8(0),
 			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(24),
-			Token::StructEnd,
 		],
 	);
 
 	assert_de_tokens(
 		&c.clone().compact(),
 		&[
-			Token::Enum { name: "IpCidr" },
-			Token::Bytes(b"V4"),
-			Token::Struct {
-				name: "Ipv4Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
-			Token::Tuple { len: 4 },
+			Token::NewtypeStruct { name: "IpCidr" },
+			Token::Seq { len: None },
+			Token::U8(24),
+			Token::Seq { len: None },
 			Token::U8(192),
 			Token::U8(0),
 			Token::U8(2),
 			Token::U8(0),
-			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(24),
-			Token::StructEnd,
-		],
-	);
-
-	assert_de_tokens(
-		&c.clone().compact(),
-		&[
-			Token::Enum { name: "IpCidr" },
-			Token::U32(1),
-			Token::Struct {
-				name: "Ipv4Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
-			Token::Tuple { len: 4 },
-			Token::U8(192),
-			Token::U8(0),
-			Token::U8(2),
-			Token::U8(0),
-			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(24),
-			Token::StructEnd,
+			Token::SeqEnd,
+			Token::SeqEnd,
 		],
 	);
 }
@@ -267,15 +157,9 @@ fn test_cidr_v6() {
 	assert_tokens(
 		&c.clone().compact(),
 		&[
-			Token::NewtypeVariant {
-				name: "IpCidr",
-				variant: "V6",
-			},
-			Token::Struct {
-				name: "Ipv6Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
+			Token::NewtypeStruct { name: "IpCidr" },
+			Token::Tuple { len: 2 },
+			Token::U8(64 + 0x40),
 			Token::Tuple { len: 16 },
 			Token::U8(0x20),
 			Token::U8(0x01),
@@ -294,57 +178,17 @@ fn test_cidr_v6() {
 			Token::U8(0x00),
 			Token::U8(0x00),
 			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(64),
-			Token::StructEnd,
-		],
-	);
-
-	assert_tokens(
-		&c.clone().compact(),
-		&[
-			Token::Enum { name: "IpCidr" },
-			Token::Str("V6"),
-			Token::Struct {
-				name: "Ipv6Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
-			Token::Tuple { len: 16 },
-			Token::U8(0x20),
-			Token::U8(0x01),
-			Token::U8(0x0d),
-			Token::U8(0xb8),
-			Token::U8(0x12),
-			Token::U8(0x34),
-			Token::U8(0x56),
-			Token::U8(0x78),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
 			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(64),
-			Token::StructEnd,
 		],
 	);
 
 	assert_de_tokens(
 		&c.clone().compact(),
 		&[
-			Token::Enum { name: "IpCidr" },
-			Token::Bytes(b"V6"),
-			Token::Struct {
-				name: "Ipv6Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
-			Token::Tuple { len: 16 },
+			Token::NewtypeStruct { name: "IpCidr" },
+			Token::Seq { len: None },
+			Token::U8(64 + 0x40),
+			Token::Seq { len: None },
 			Token::U8(0x20),
 			Token::U8(0x01),
 			Token::U8(0x0d),
@@ -361,44 +205,8 @@ fn test_cidr_v6() {
 			Token::U8(0x00),
 			Token::U8(0x00),
 			Token::U8(0x00),
-			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(64),
-			Token::StructEnd,
-		],
-	);
-
-	assert_de_tokens(
-		&c.clone().compact(),
-		&[
-			Token::Enum { name: "IpCidr" },
-			Token::U32(2),
-			Token::Struct {
-				name: "Ipv6Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
-			Token::Tuple { len: 16 },
-			Token::U8(0x20),
-			Token::U8(0x01),
-			Token::U8(0x0d),
-			Token::U8(0xb8),
-			Token::U8(0x12),
-			Token::U8(0x34),
-			Token::U8(0x56),
-			Token::U8(0x78),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(64),
-			Token::StructEnd,
+			Token::SeqEnd,
+			Token::SeqEnd,
 		],
 	);
 }
@@ -412,37 +220,22 @@ fn test_any_cidr_any() {
 	assert_tokens(
 		&c.clone().compact(),
 		&[
-			Token::UnitVariant {
-				name: "AnyIpCidr",
-				variant: "Any",
-			},
-		],
-	);
-
-	assert_tokens(
-		&c.clone().compact(),
-		&[
-			Token::Enum { name: "AnyIpCidr" },
-			Token::Str("Any"),
+			Token::NewtypeStruct { name: "AnyIpCidr" },
+			Token::Tuple { len: 2 },
+			Token::U8(0xff),
 			Token::Unit,
+			Token::TupleEnd,
 		],
 	);
 
 	assert_de_tokens(
 		&c.clone().compact(),
 		&[
-			Token::Enum { name: "AnyIpCidr" },
-			Token::Bytes(b"Any"),
+			Token::NewtypeStruct { name: "AnyIpCidr" },
+			Token::Seq { len: None },
+			Token::U8(0xff),
 			Token::Unit,
-		],
-	);
-
-	assert_de_tokens(
-		&c.clone().compact(),
-		&[
-			Token::Enum { name: "AnyIpCidr" },
-			Token::U32(0),
-			Token::Unit,
+			Token::SeqEnd,
 		],
 	);
 }
@@ -456,90 +249,32 @@ fn test_any_cidr_v4() {
 	assert_tokens(
 		&c.clone().compact(),
 		&[
-			Token::NewtypeVariant {
-				name: "AnyIpCidr",
-				variant: "V4",
-			},
-			Token::Struct {
-				name: "Ipv4Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
+			Token::NewtypeStruct { name: "AnyIpCidr" },
+			Token::Tuple { len: 2 },
+			Token::U8(24),
 			Token::Tuple { len: 4 },
 			Token::U8(192),
 			Token::U8(0),
 			Token::U8(2),
 			Token::U8(0),
 			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(24),
-			Token::StructEnd,
-		],
-	);
-
-	assert_tokens(
-		&c.clone().compact(),
-		&[
-			Token::Enum { name: "AnyIpCidr" },
-			Token::Str("V4"),
-			Token::Struct {
-				name: "Ipv4Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
-			Token::Tuple { len: 4 },
-			Token::U8(192),
-			Token::U8(0),
-			Token::U8(2),
-			Token::U8(0),
 			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(24),
-			Token::StructEnd,
 		],
 	);
 
 	assert_de_tokens(
 		&c.clone().compact(),
 		&[
-			Token::Enum { name: "AnyIpCidr" },
-			Token::Bytes(b"V4"),
-			Token::Struct {
-				name: "Ipv4Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
-			Token::Tuple { len: 4 },
+			Token::NewtypeStruct { name: "AnyIpCidr" },
+			Token::Seq { len: None },
+			Token::U8(24),
+			Token::Seq { len: None },
 			Token::U8(192),
 			Token::U8(0),
 			Token::U8(2),
 			Token::U8(0),
-			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(24),
-			Token::StructEnd,
-		],
-	);
-
-	assert_de_tokens(
-		&c.clone().compact(),
-		&[
-			Token::Enum { name: "AnyIpCidr" },
-			Token::U32(1),
-			Token::Struct {
-				name: "Ipv4Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
-			Token::Tuple { len: 4 },
-			Token::U8(192),
-			Token::U8(0),
-			Token::U8(2),
-			Token::U8(0),
-			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(24),
-			Token::StructEnd,
+			Token::SeqEnd,
+			Token::SeqEnd,
 		],
 	);
 }
@@ -556,15 +291,9 @@ fn test_any_cidr_v6() {
 	assert_tokens(
 		&c.clone().compact(),
 		&[
-			Token::NewtypeVariant {
-				name: "AnyIpCidr",
-				variant: "V6",
-			},
-			Token::Struct {
-				name: "Ipv6Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
+			Token::NewtypeStruct { name: "AnyIpCidr" },
+			Token::Tuple { len: 2 },
+			Token::U8(64 + 0x40),
 			Token::Tuple { len: 16 },
 			Token::U8(0x20),
 			Token::U8(0x01),
@@ -583,57 +312,17 @@ fn test_any_cidr_v6() {
 			Token::U8(0x00),
 			Token::U8(0x00),
 			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(64),
-			Token::StructEnd,
-		],
-	);
-
-	assert_tokens(
-		&c.clone().compact(),
-		&[
-			Token::Enum { name: "AnyIpCidr" },
-			Token::Str("V6"),
-			Token::Struct {
-				name: "Ipv6Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
-			Token::Tuple { len: 16 },
-			Token::U8(0x20),
-			Token::U8(0x01),
-			Token::U8(0x0d),
-			Token::U8(0xb8),
-			Token::U8(0x12),
-			Token::U8(0x34),
-			Token::U8(0x56),
-			Token::U8(0x78),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
 			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(64),
-			Token::StructEnd,
 		],
 	);
 
 	assert_de_tokens(
 		&c.clone().compact(),
 		&[
-			Token::Enum { name: "AnyIpCidr" },
-			Token::Bytes(b"V6"),
-			Token::Struct {
-				name: "Ipv6Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
-			Token::Tuple { len: 16 },
+			Token::NewtypeStruct { name: "AnyIpCidr" },
+			Token::Seq { len: None },
+			Token::U8(64 + 0x40),
+			Token::Seq { len: None },
 			Token::U8(0x20),
 			Token::U8(0x01),
 			Token::U8(0x0d),
@@ -650,44 +339,8 @@ fn test_any_cidr_v6() {
 			Token::U8(0x00),
 			Token::U8(0x00),
 			Token::U8(0x00),
-			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(64),
-			Token::StructEnd,
-		],
-	);
-
-	assert_de_tokens(
-		&c.clone().compact(),
-		&[
-			Token::Enum { name: "AnyIpCidr" },
-			Token::U32(2),
-			Token::Struct {
-				name: "Ipv6Cidr",
-				len: 2,
-			},
-			Token::Str("address"),
-			Token::Tuple { len: 16 },
-			Token::U8(0x20),
-			Token::U8(0x01),
-			Token::U8(0x0d),
-			Token::U8(0xb8),
-			Token::U8(0x12),
-			Token::U8(0x34),
-			Token::U8(0x56),
-			Token::U8(0x78),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::TupleEnd,
-			Token::Str("network_length"),
-			Token::U8(64),
-			Token::StructEnd,
+			Token::SeqEnd,
+			Token::SeqEnd,
 		],
 	);
 }
