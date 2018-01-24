@@ -1,5 +1,5 @@
 #![warn(missing_docs)]
-#![doc(html_root_url = "https://docs.rs/cidr/0.0.3")]
+#![doc(html_root_url = "https://docs.rs/cidr/0.0.4")]
 
 //! This library provides types to represent an IP network (`Cidr`) or
 //! an IP host withing a network (`Inet`)
