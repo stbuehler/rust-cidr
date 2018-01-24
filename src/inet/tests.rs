@@ -476,7 +476,6 @@ fn parse_v4_non_zero_host_bits() {
 	);
 }
 
-
 #[test]
 fn contains_v4_24bit() {
 	test_v4_contains("192.0.2.0/24", Ipv4Addr::new(0xc0, 0x00, 0x02, 0x01));
