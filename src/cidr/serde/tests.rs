@@ -1,11 +1,42 @@
 use {AnyIpCidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
+use bincode;
+use serde;
 use serde_test::{assert_de_tokens, assert_tokens, Configure, Token};
+
+pub fn assert_bincode<'de, T>(value: &T, raw: &'de [u8])
+where
+	T: serde::Serialize
+		+ serde::Deserialize<'de>
+		+ PartialEq
+		+ ::std::fmt::Debug,
+{
+	let limit = bincode::Bounded(256.max(raw.len() as u64));
+
+	let s = bincode::serialize(value, limit).unwrap_or_else(|e| {
+		panic!("failed serializing {:?}: {}", value, e);
+	});
+
+	assert_eq!(
+		&s as &[u8], raw,
+		"unexpected result serializing {:?}",
+		value
+	);
+
+	assert_eq!(
+		&bincode::deserialize::<T>(raw).unwrap(),
+		value,
+		"unexpected result deserializing {:?}",
+		raw
+	);
+}
 
 #[test]
 fn test_ipv4() {
 	let c: Ipv4Cidr = "192.0.2.0/24".parse().unwrap();
 
 	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.0/24")]);
+
+	assert_bincode(&c.clone().compact(), &[24, 192, 0, 2, 0]);
 
 	assert_tokens(
 		&c.clone().compact(),
@@ -47,6 +78,29 @@ fn test_ipv6() {
 	assert_tokens(
 		&c.clone().readable(),
 		&[Token::Str("2001:db8:1234:5678::/64")],
+	);
+
+	assert_bincode(
+		&c.clone().compact(),
+		&[
+			64 + 0x40,
+			0x20,
+			0x01,
+			0x0d,
+			0xb8,
+			0x12,
+			0x34,
+			0x56,
+			0x78,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+		],
 	);
 
 	assert_tokens(
@@ -112,6 +166,8 @@ fn test_cidr_v4() {
 
 	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.0/24")]);
 
+	assert_bincode(&c.clone().compact(), &[24, 192, 0, 2, 0]);
+
 	assert_tokens(
 		&c.clone().compact(),
 		&[
@@ -152,6 +208,29 @@ fn test_cidr_v6() {
 	assert_tokens(
 		&c.clone().readable(),
 		&[Token::Str("2001:db8:1234:5678::/64")],
+	);
+
+	assert_bincode(
+		&c.clone().compact(),
+		&[
+			64 + 0x40,
+			0x20,
+			0x01,
+			0x0d,
+			0xb8,
+			0x12,
+			0x34,
+			0x56,
+			0x78,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+		],
 	);
 
 	assert_tokens(
@@ -217,6 +296,8 @@ fn test_any_cidr_any() {
 
 	assert_tokens(&c.clone().readable(), &[Token::Str("any")]);
 
+	assert_bincode(&c.clone().compact(), &[0xff]);
+
 	assert_tokens(
 		&c.clone().compact(),
 		&[
@@ -245,6 +326,8 @@ fn test_any_cidr_v4() {
 	let c: AnyIpCidr = "192.0.2.0/24".parse().unwrap();
 
 	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.0/24")]);
+
+	assert_bincode(&c.clone().compact(), &[24, 192, 0, 2, 0]);
 
 	assert_tokens(
 		&c.clone().compact(),
@@ -286,6 +369,29 @@ fn test_any_cidr_v6() {
 	assert_tokens(
 		&c.clone().readable(),
 		&[Token::Str("2001:db8:1234:5678::/64")],
+	);
+
+	assert_bincode(
+		&c.clone().compact(),
+		&[
+			64 + 0x40,
+			0x20,
+			0x01,
+			0x0d,
+			0xb8,
+			0x12,
+			0x34,
+			0x56,
+			0x78,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+		],
 	);
 
 	assert_tokens(
