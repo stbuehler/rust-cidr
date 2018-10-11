@@ -125,7 +125,11 @@ macro_rules! impl_cidr_for {
 
 		impl fmt::Display for $n {
 			fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-				write!(f, "{}/{}", self.address, self.network_length)
+				write!(f, "{}", self.address)?;
+				if self.network_length != $family.len() {
+					write!(f, "/{}", self.network_length)?;
+				}
+				Ok(())
 			}
 		}
 
