@@ -76,7 +76,7 @@ fn test_ipv4() {
 fn test_ipv4_host() {
 	let c: Ipv4Cidr = "192.0.2.1/32".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.1/32")]);
+	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.1")]);
 
 	assert_bincode(&c.clone().compact(), &[32, 192, 0, 2, 1]);
 
@@ -208,7 +208,7 @@ fn test_ipv6_host() {
 
 	assert_tokens(
 		&c.clone().readable(),
-		&[Token::Str("2001:db8:1234:5678:1:2:3:4/128")],
+		&[Token::Str("2001:db8:1234:5678:1:2:3:4")],
 	);
 
 	assert_bincode(
@@ -336,7 +336,7 @@ fn test_cidr_v4() {
 fn test_cidr_v4_host() {
 	let c: IpCidr = "192.0.2.1/32".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.1/32")]);
+	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.1")]);
 
 	assert_bincode(&c.clone().compact(), &[32, 192, 0, 2, 1]);
 
@@ -468,7 +468,7 @@ fn test_cidr_v6_host() {
 
 	assert_tokens(
 		&c.clone().readable(),
-		&[Token::Str("2001:db8:1234:5678:1:2:3:4/128")],
+		&[Token::Str("2001:db8:1234:5678:1:2:3:4")],
 	);
 
 	assert_bincode(
@@ -627,7 +627,7 @@ fn test_any_cidr_v4() {
 fn test_any_cidr_v4_host() {
 	let c: AnyIpCidr = "192.0.2.1/32".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.1/32")]);
+	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.1")]);
 
 	assert_bincode(&c.clone().compact(), &[32, 192, 0, 2, 1]);
 
@@ -759,7 +759,7 @@ fn test_any_cidr_v6_host() {
 
 	assert_tokens(
 		&c.clone().readable(),
-		&[Token::Str("2001:db8:1234:5678:1:2:3:4/128")],
+		&[Token::Str("2001:db8:1234:5678:1:2:3:4")],
 	);
 
 	assert_bincode(

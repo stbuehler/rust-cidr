@@ -285,12 +285,12 @@ fn parse_v4_33bit_2() {
 fn test_v4_representations_32bit() {
 	assert_eq!(
 		format!("{}", "127.0.0.1".parse::<Ipv4Cidr>().unwrap()),
-		"127.0.0.1/32"
+		"127.0.0.1"
 	);
 
 	assert_eq!(
 		format!("{}", "127.0.0.1".parse::<IpCidr>().unwrap()),
-		"127.0.0.1/32"
+		"127.0.0.1"
 	);
 
 	assert_eq!(
@@ -498,12 +498,12 @@ fn parse_v6_33bit_2() {
 fn test_v6_representations_128bit() {
 	assert_eq!(
 		format!("{}", "::".parse::<Ipv6Cidr>().unwrap()),
-		"::/128"
+		"::"
 	);
 
 	assert_eq!(
 		format!("{}", "::".parse::<IpCidr>().unwrap()),
-		"::/128"
+		"::"
 	);
 
 	assert_eq!(
