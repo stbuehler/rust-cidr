@@ -282,6 +282,75 @@ fn parse_v4_33bit_2() {
 }
 
 #[test]
+fn test_v4_representations_32bit() {
+	assert_eq!(
+		format!("{}", "127.0.0.1".parse::<Ipv4Cidr>().unwrap()),
+		"127.0.0.1/32"
+	);
+
+	assert_eq!(
+		format!("{}", "127.0.0.1".parse::<IpCidr>().unwrap()),
+		"127.0.0.1/32"
+	);
+
+	assert_eq!(
+		format!("{:?}", "127.0.0.1".parse::<Ipv4Cidr>().unwrap()),
+		"127.0.0.1/32"
+	);
+
+	assert_eq!(
+		format!("{:?}", "127.0.0.1".parse::<IpCidr>().unwrap()),
+		"V4(127.0.0.1/32)"
+	);
+}
+
+#[test]
+fn test_v4_representations_8bit() {
+	assert_eq!(
+		format!("{}", "10.0.0.0/8".parse::<Ipv4Cidr>().unwrap()),
+		"10.0.0.0/8"
+	);
+
+	assert_eq!(
+		format!("{}", "10.0.0.0/8".parse::<IpCidr>().unwrap()),
+		"10.0.0.0/8"
+	);
+
+	assert_eq!(
+		format!("{:?}", "10.0.0.0/8".parse::<Ipv4Cidr>().unwrap()),
+		"10.0.0.0/8"
+	);
+
+	assert_eq!(
+		format!("{:?}", "10.0.0.0/8".parse::<IpCidr>().unwrap()),
+		"V4(10.0.0.0/8)"
+	);
+}
+
+#[test]
+fn test_v4_representations_0bit() {
+	assert_eq!(
+		format!("{}", "0.0.0.0/0".parse::<Ipv4Cidr>().unwrap()),
+		"0.0.0.0/0"
+	);
+
+	assert_eq!(
+		format!("{}", "0.0.0.0/0".parse::<IpCidr>().unwrap()),
+		"0.0.0.0/0"
+	);
+
+	assert_eq!(
+		format!("{:?}", "0.0.0.0/0".parse::<Ipv4Cidr>().unwrap()),
+		"0.0.0.0/0"
+	);
+
+	assert_eq!(
+		format!("{:?}", "0.0.0.0/0".parse::<IpCidr>().unwrap()),
+		"V4(0.0.0.0/0)"
+	);
+}
+
+#[test]
 fn parse_v4_localhost() {
 	test_v4(
 		"127.0.0.1",
@@ -423,6 +492,75 @@ fn parse_v6_129bit() {
 #[should_panic(expected = "invalid length for network: Network length 129 is too long for Ipv6 (maximum: 128)")]
 fn parse_v6_33bit_2() {
 	"2001:DB8::/129".parse::<IpCidr>().unwrap();
+}
+
+#[test]
+fn test_v6_representations_128bit() {
+	assert_eq!(
+		format!("{}", "::".parse::<Ipv6Cidr>().unwrap()),
+		"::/128"
+	);
+
+	assert_eq!(
+		format!("{}", "::".parse::<IpCidr>().unwrap()),
+		"::/128"
+	);
+
+	assert_eq!(
+		format!("{:?}", "::".parse::<Ipv6Cidr>().unwrap()),
+		"::/128"
+	);
+
+	assert_eq!(
+		format!("{:?}", "::".parse::<IpCidr>().unwrap()),
+		"V6(::/128)"
+	);
+}
+
+#[test]
+fn test_v6_representations_64bit() {
+	assert_eq!(
+		format!("{}", "2001:DB8:1234:5678::/64".parse::<Ipv6Cidr>().unwrap()),
+		"2001:db8:1234:5678::/64"
+	);
+
+	assert_eq!(
+		format!("{}", "2001:DB8:1234:5678::/64".parse::<IpCidr>().unwrap()),
+		"2001:db8:1234:5678::/64"
+	);
+
+	assert_eq!(
+		format!("{:?}", "2001:DB8:1234:5678::/64".parse::<Ipv6Cidr>().unwrap()),
+		"2001:db8:1234:5678::/64"
+	);
+
+	assert_eq!(
+		format!("{:?}", "2001:DB8:1234:5678::/64".parse::<IpCidr>().unwrap()),
+		"V6(2001:db8:1234:5678::/64)"
+	);
+}
+
+#[test]
+fn test_v6_representations_0bit() {
+	assert_eq!(
+		format!("{}", "::/0".parse::<Ipv6Cidr>().unwrap()),
+		"::/0"
+	);
+
+	assert_eq!(
+		format!("{}", "::/0".parse::<IpCidr>().unwrap()),
+		"::/0"
+	);
+
+	assert_eq!(
+		format!("{:?}", "::/0".parse::<Ipv6Cidr>().unwrap()),
+		"::/0"
+	);
+
+	assert_eq!(
+		format!("{:?}", "::/0".parse::<IpCidr>().unwrap()),
+		"V6(::/0)"
+	);
 }
 
 #[test]
