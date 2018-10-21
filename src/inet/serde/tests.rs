@@ -32,11 +32,11 @@ where
 
 #[test]
 fn test_ipv4() {
-	let c: Ipv4Inet = "192.0.2.0/24".parse().unwrap();
+	let c: Ipv4Inet = "192.0.2.1/24".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.0/24")]);
+	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.1/24")]);
 
-	assert_bincode(&c.clone().compact(), &[24, 192, 0, 2, 0]);
+	assert_bincode(&c.clone().compact(), &[24, 192, 0, 2, 1]);
 
 	assert_tokens(
 		&c.clone().compact(),
@@ -48,7 +48,7 @@ fn test_ipv4() {
 			Token::U8(192),
 			Token::U8(0),
 			Token::U8(2),
-			Token::U8(0),
+			Token::U8(1),
 			Token::TupleEnd,
 			Token::TupleEnd,
 		],
@@ -64,7 +64,7 @@ fn test_ipv4() {
 			Token::U8(192),
 			Token::U8(0),
 			Token::U8(2),
-			Token::U8(0),
+			Token::U8(1),
 			Token::SeqEnd,
 			Token::SeqEnd,
 		],
@@ -73,11 +73,11 @@ fn test_ipv4() {
 
 #[test]
 fn test_ipv6() {
-	let c: Ipv6Inet = "2001:DB8:1234:5678::/64".parse().unwrap();
+	let c: Ipv6Inet = "2001:DB8:1234:5678:1:2:3:4/64".parse().unwrap();
 
 	assert_tokens(
 		&c.clone().readable(),
-		&[Token::Str("2001:db8:1234:5678::/64")],
+		&[Token::Str("2001:db8:1234:5678:1:2:3:4/64")],
 	);
 
 	assert_bincode(
@@ -93,13 +93,13 @@ fn test_ipv6() {
 			0x56,
 			0x78,
 			0x00,
+			0x01,
 			0x00,
+			0x02,
 			0x00,
+			0x03,
 			0x00,
-			0x00,
-			0x00,
-			0x00,
-			0x00,
+			0x04,
 		],
 	);
 
@@ -119,13 +119,13 @@ fn test_ipv6() {
 			Token::U8(0x56),
 			Token::U8(0x78),
 			Token::U8(0x00),
+			Token::U8(0x01),
 			Token::U8(0x00),
+			Token::U8(0x02),
 			Token::U8(0x00),
+			Token::U8(0x03),
 			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
+			Token::U8(0x04),
 			Token::TupleEnd,
 			Token::TupleEnd,
 		],
@@ -147,13 +147,13 @@ fn test_ipv6() {
 			Token::U8(0x56),
 			Token::U8(0x78),
 			Token::U8(0x00),
+			Token::U8(0x01),
 			Token::U8(0x00),
+			Token::U8(0x02),
 			Token::U8(0x00),
+			Token::U8(0x03),
 			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
+			Token::U8(0x04),
 			Token::SeqEnd,
 			Token::SeqEnd,
 		],
@@ -162,11 +162,11 @@ fn test_ipv6() {
 
 #[test]
 fn test_inet_v4() {
-	let c: IpInet = "192.0.2.0/24".parse().unwrap();
+	let c: IpInet = "192.0.2.1/24".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.0/24")]);
+	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.1/24")]);
 
-	assert_bincode(&c.clone().compact(), &[24, 192, 0, 2, 0]);
+	assert_bincode(&c.clone().compact(), &[24, 192, 0, 2, 1]);
 
 	assert_tokens(
 		&c.clone().compact(),
@@ -178,7 +178,7 @@ fn test_inet_v4() {
 			Token::U8(192),
 			Token::U8(0),
 			Token::U8(2),
-			Token::U8(0),
+			Token::U8(1),
 			Token::TupleEnd,
 			Token::TupleEnd,
 		],
@@ -194,7 +194,7 @@ fn test_inet_v4() {
 			Token::U8(192),
 			Token::U8(0),
 			Token::U8(2),
-			Token::U8(0),
+			Token::U8(1),
 			Token::SeqEnd,
 			Token::SeqEnd,
 		],
@@ -203,11 +203,11 @@ fn test_inet_v4() {
 
 #[test]
 fn test_inet_v6() {
-	let c: IpInet = "2001:DB8:1234:5678::/64".parse().unwrap();
+	let c: IpInet = "2001:DB8:1234:5678:1:2:3:4/64".parse().unwrap();
 
 	assert_tokens(
 		&c.clone().readable(),
-		&[Token::Str("2001:db8:1234:5678::/64")],
+		&[Token::Str("2001:db8:1234:5678:1:2:3:4/64")],
 	);
 
 	assert_bincode(
@@ -223,13 +223,13 @@ fn test_inet_v6() {
 			0x56,
 			0x78,
 			0x00,
+			0x01,
 			0x00,
+			0x02,
 			0x00,
+			0x03,
 			0x00,
-			0x00,
-			0x00,
-			0x00,
-			0x00,
+			0x04,
 		],
 	);
 
@@ -249,13 +249,13 @@ fn test_inet_v6() {
 			Token::U8(0x56),
 			Token::U8(0x78),
 			Token::U8(0x00),
+			Token::U8(0x01),
 			Token::U8(0x00),
+			Token::U8(0x02),
 			Token::U8(0x00),
+			Token::U8(0x03),
 			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
+			Token::U8(0x04),
 			Token::TupleEnd,
 			Token::TupleEnd,
 		],
@@ -277,13 +277,13 @@ fn test_inet_v6() {
 			Token::U8(0x56),
 			Token::U8(0x78),
 			Token::U8(0x00),
+			Token::U8(0x01),
 			Token::U8(0x00),
+			Token::U8(0x02),
 			Token::U8(0x00),
+			Token::U8(0x03),
 			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
-			Token::U8(0x00),
+			Token::U8(0x04),
 			Token::SeqEnd,
 			Token::SeqEnd,
 		],
