@@ -16,7 +16,7 @@ fn test_v4(
 	assert_eq!(
 		s.parse::<Ipv4Inet>().unwrap(),
 		Ipv4Inet {
-			address: addr.clone(),
+			address: addr,
 			network_length: l,
 		},
 		"internal data through Ipv4Inet"
@@ -24,44 +24,44 @@ fn test_v4(
 
 	assert_eq!(
 		s.parse::<Ipv4Inet>().unwrap().address(),
-		addr.clone(),
+		addr,
 		"address through Ipv4Inet"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv4Inet>().unwrap().first_address(),
-		first_addr.clone(),
+		first_addr,
 		"first address through Ipv4Inet"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv4Inet>().unwrap().network().first_address(),
-		first_addr.clone(),
+		first_addr,
 		"first address through Ipv4Inet -> network"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv4Inet>().unwrap().last_address(),
-		last_addr.clone(),
+		last_addr,
 		"last address through Ipv4Inet"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv4Inet>().unwrap().network().last_address(),
-		last_addr.clone(),
+		last_addr,
 		"last address through Ipv4Inet -> network"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv4Inet>().unwrap().mask(),
-		mask.clone(),
+		mask,
 		"mask through Ipv4Inet"
 	);
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap(),
 		IpInet::V4(Ipv4Inet {
-			address: addr.clone(),
+			address: addr,
 			network_length: l,
 		}),
 		"internal data through IpInet"
@@ -69,37 +69,37 @@ fn test_v4(
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().address(),
-		IpAddr::V4(addr.clone()),
+		IpAddr::V4(addr),
 		"address through IpInet"
 	);
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().first_address(),
-		IpAddr::V4(first_addr.clone()),
+		IpAddr::V4(first_addr),
 		"first address through IpInet"
 	);
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().network().first_address(),
-		IpAddr::V4(first_addr.clone()),
+		IpAddr::V4(first_addr),
 		"first address through IpInet -> network"
 	);
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().last_address(),
-		IpAddr::V4(last_addr.clone()),
+		IpAddr::V4(last_addr),
 		"last address through IpInet"
 	);
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().network().last_address(),
-		IpAddr::V4(last_addr.clone()),
+		IpAddr::V4(last_addr),
 		"last address through IpInet -> network"
 	);
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().mask(),
-		IpAddr::V4(mask.clone()),
+		IpAddr::V4(mask),
 		"mask through IpInet"
 	);
 }
@@ -115,7 +115,7 @@ fn test_v4_contains(s: &'static str, addr: Ipv4Addr) {
 
 	let c2 = s.parse::<IpInet>().unwrap();
 	assert!(
-		c2.contains(&IpAddr::V4(addr.clone())),
+		c2.contains(&IpAddr::V4(addr)),
 		"{:?} must include {:?} (through IpInet)",
 		c2,
 		addr
@@ -133,7 +133,7 @@ fn test_v4_contains_not(s: &'static str, addr: Ipv4Addr) {
 
 	let c2 = s.parse::<IpInet>().unwrap();
 	assert!(
-		!c2.contains(&IpAddr::V4(addr.clone())),
+		!c2.contains(&IpAddr::V4(addr)),
 		"{:?} must not include {:?} (through IpInet)",
 		c2,
 		addr
@@ -151,7 +151,7 @@ fn test_v6(
 	assert_eq!(
 		s.parse::<Ipv6Inet>().unwrap(),
 		Ipv6Inet {
-			address: addr.clone(),
+			address: addr,
 			network_length: l,
 		},
 		"internal data through Ipv6Inet"
@@ -159,44 +159,44 @@ fn test_v6(
 
 	assert_eq!(
 		s.parse::<Ipv6Inet>().unwrap().address(),
-		addr.clone(),
+		addr,
 		"address through Ipv6Inet"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv6Inet>().unwrap().first_address(),
-		first_addr.clone(),
+		first_addr,
 		"first address through Ipv6Inet"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv6Inet>().unwrap().network().first_address(),
-		first_addr.clone(),
+		first_addr,
 		"first address through Ipv6Inet -> network"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv6Inet>().unwrap().last_address(),
-		last_addr.clone(),
+		last_addr,
 		"last address through Ipv6Inet"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv6Inet>().unwrap().network().last_address(),
-		last_addr.clone(),
+		last_addr,
 		"last address through Ipv6Inet -> network"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv6Inet>().unwrap().mask(),
-		mask.clone(),
+		mask,
 		"mask through Ipv6Inet"
 	);
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap(),
 		IpInet::V6(Ipv6Inet {
-			address: addr.clone(),
+			address: addr,
 			network_length: l,
 		}),
 		"internal data through IpInet"
@@ -204,37 +204,37 @@ fn test_v6(
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().address(),
-		IpAddr::V6(addr.clone()),
+		IpAddr::V6(addr),
 		"address through IpInet"
 	);
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().first_address(),
-		IpAddr::V6(first_addr.clone()),
+		IpAddr::V6(first_addr),
 		"first address through IpInet"
 	);
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().network().first_address(),
-		IpAddr::V6(first_addr.clone()),
+		IpAddr::V6(first_addr),
 		"first address through IpInet -> network"
 	);
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().last_address(),
-		IpAddr::V6(last_addr.clone()),
+		IpAddr::V6(last_addr),
 		"last address through IpInet"
 	);
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().network().last_address(),
-		IpAddr::V6(last_addr.clone()),
+		IpAddr::V6(last_addr),
 		"last address through IpInet -> network"
 	);
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().mask(),
-		IpAddr::V6(mask.clone()),
+		IpAddr::V6(mask),
 		"mask through IpInet"
 	);
 }
@@ -250,7 +250,7 @@ fn test_v6_contains(s: &'static str, addr: Ipv6Addr) {
 
 	let c2 = s.parse::<IpInet>().unwrap();
 	assert!(
-		c2.contains(&IpAddr::V6(addr.clone())),
+		c2.contains(&IpAddr::V6(addr)),
 		"{:?} must include {:?} (through IpInet)",
 		c2,
 		addr
@@ -268,7 +268,7 @@ fn test_v6_contains_not(s: &'static str, addr: Ipv6Addr) {
 
 	let c2 = s.parse::<IpInet>().unwrap();
 	assert!(
-		!c2.contains(&IpAddr::V6(addr.clone())),
+		!c2.contains(&IpAddr::V6(addr)),
 		"{:?} must not include {:?} (through IpInet)",
 		c2,
 		addr

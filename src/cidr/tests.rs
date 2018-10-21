@@ -14,7 +14,7 @@ fn test_v4(
 	assert_eq!(
 		s.parse::<Ipv4Cidr>().unwrap(),
 		Ipv4Cidr {
-			address: first_addr.clone(),
+			address: first_addr,
 			network_length: l,
 		},
 		"internal data through Ipv4Cidr"
@@ -22,26 +22,26 @@ fn test_v4(
 
 	assert_eq!(
 		s.parse::<Ipv4Cidr>().unwrap().first_address(),
-		first_addr.clone(),
+		first_addr,
 		"first address through Ipv4Cidr"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv4Cidr>().unwrap().last_address(),
-		last_addr.clone(),
+		last_addr,
 		"last address through Ipv4Cidr"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv4Cidr>().unwrap().mask(),
-		mask.clone(),
+		mask,
 		"mask through Ipv4Cidr"
 	);
 
 	assert_eq!(
 		s.parse::<IpCidr>().unwrap(),
 		IpCidr::V4(Ipv4Cidr {
-			address: first_addr.clone(),
+			address: first_addr,
 			network_length: l,
 		}),
 		"internal data through IpCidr"
@@ -49,19 +49,19 @@ fn test_v4(
 
 	assert_eq!(
 		s.parse::<IpCidr>().unwrap().first_address(),
-		IpAddr::V4(first_addr.clone()),
+		IpAddr::V4(first_addr),
 		"first address through IpCidr"
 	);
 
 	assert_eq!(
 		s.parse::<IpCidr>().unwrap().last_address(),
-		IpAddr::V4(last_addr.clone()),
+		IpAddr::V4(last_addr),
 		"last address through IpCidr"
 	);
 
 	assert_eq!(
 		s.parse::<IpCidr>().unwrap().mask(),
-		IpAddr::V4(mask.clone()),
+		IpAddr::V4(mask),
 		"mask through IpCidr"
 	);
 }
@@ -77,7 +77,7 @@ fn test_v4_contains(s: &'static str, addr: Ipv4Addr) {
 
 	let c2 = s.parse::<IpCidr>().unwrap();
 	assert!(
-		c2.contains(&IpAddr::V4(addr.clone())),
+		c2.contains(&IpAddr::V4(addr)),
 		"{:?} must include {:?} (through IpCidr)",
 		c2,
 		addr
@@ -95,7 +95,7 @@ fn test_v4_contains_not(s: &'static str, addr: Ipv4Addr) {
 
 	let c2 = s.parse::<IpCidr>().unwrap();
 	assert!(
-		!c2.contains(&IpAddr::V4(addr.clone())),
+		!c2.contains(&IpAddr::V4(addr)),
 		"{:?} must not include {:?} (through IpCidr)",
 		c2,
 		addr
@@ -112,7 +112,7 @@ fn test_v6(
 	assert_eq!(
 		s.parse::<Ipv6Cidr>().unwrap(),
 		Ipv6Cidr {
-			address: first_addr.clone(),
+			address: first_addr,
 			network_length: l,
 		},
 		"internal data through Ipv6Cidr"
@@ -120,26 +120,26 @@ fn test_v6(
 
 	assert_eq!(
 		s.parse::<Ipv6Cidr>().unwrap().first_address(),
-		first_addr.clone(),
+		first_addr,
 		"first address through Ipv6Cidr"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv6Cidr>().unwrap().last_address(),
-		last_addr.clone(),
+		last_addr,
 		"last address through Ipv6Cidr"
 	);
 
 	assert_eq!(
 		s.parse::<Ipv6Cidr>().unwrap().mask(),
-		mask.clone(),
+		mask,
 		"mask through Ipv6Cidr"
 	);
 
 	assert_eq!(
 		s.parse::<IpCidr>().unwrap(),
 		IpCidr::V6(Ipv6Cidr {
-			address: first_addr.clone(),
+			address: first_addr,
 			network_length: l,
 		}),
 		"internal data through IpCidr"
@@ -147,19 +147,19 @@ fn test_v6(
 
 	assert_eq!(
 		s.parse::<IpCidr>().unwrap().first_address(),
-		IpAddr::V6(first_addr.clone()),
+		IpAddr::V6(first_addr),
 		"first address through IpCidr"
 	);
 
 	assert_eq!(
 		s.parse::<IpCidr>().unwrap().last_address(),
-		IpAddr::V6(last_addr.clone()),
+		IpAddr::V6(last_addr),
 		"last address through IpCidr"
 	);
 
 	assert_eq!(
 		s.parse::<IpCidr>().unwrap().mask(),
-		IpAddr::V6(mask.clone()),
+		IpAddr::V6(mask),
 		"mask through IpCidr"
 	);
 }
@@ -175,7 +175,7 @@ fn test_v6_contains(s: &'static str, addr: Ipv6Addr) {
 
 	let c2 = s.parse::<IpCidr>().unwrap();
 	assert!(
-		c2.contains(&IpAddr::V6(addr.clone())),
+		c2.contains(&IpAddr::V6(addr)),
 		"{:?} must include {:?} (through IpCidr)",
 		c2,
 		addr
@@ -193,7 +193,7 @@ fn test_v6_contains_not(s: &'static str, addr: Ipv6Addr) {
 
 	let c2 = s.parse::<IpCidr>().unwrap();
 	assert!(
-		!c2.contains(&IpAddr::V6(addr.clone())),
+		!c2.contains(&IpAddr::V6(addr)),
 		"{:?} must not include {:?} (through IpCidr)",
 		c2,
 		addr
