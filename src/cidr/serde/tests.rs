@@ -10,8 +10,8 @@ where
 		+ PartialEq
 		+ ::std::fmt::Debug,
 {
-	let mut config = bincode::config();
-	config.limit(256.max(raw.len() as u64));
+	use bincode::Options;
+	let config = bincode::options().with_limit(256.max(raw.len() as u64));
 
 	let s = config.serialize(value).unwrap_or_else(|e| {
 		panic!("failed serializing {:?}: {}", value, e);
