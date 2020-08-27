@@ -1,4 +1,4 @@
-use {AnyIpCidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
+use crate::{AnyIpCidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
 use bincode;
 use serde;
 use serde_test::{assert_de_tokens, assert_tokens, Configure, Token};

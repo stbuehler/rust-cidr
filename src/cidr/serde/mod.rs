@@ -1,9 +1,9 @@
 #![cfg(feature = "serde")]
 
-use Cidr;
-use cidr::{AnyIpCidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
+use crate::Cidr;
+use crate::cidr::{AnyIpCidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
 use serde;
-use serde_common;
+use crate::serde_common;
 use std::net::IpAddr;
 
 static NAME_IPV4_CIDR: &str = "Ipv4Cidr";

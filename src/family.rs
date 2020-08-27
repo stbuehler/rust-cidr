@@ -8,7 +8,7 @@ pub enum Family {
 	/// IPv6
 	Ipv6,
 }
-pub use Family::*;
+pub use crate::Family::*;
 
 impl Family {
 	/// The length of an address in the given family

@@ -1,4 +1,4 @@
-use {IpInet, Ipv4Inet, Ipv6Inet};
+use crate::{IpInet, Ipv4Inet, Ipv6Inet};
 use bincode;
 use serde;
 use serde_test::{assert_de_tokens, assert_tokens, Configure, Token};

@@ -1,4 +1,4 @@
-use local_addr_parser::ParseableAddress;
+use crate::local_addr_parser::ParseableAddress;
 use std::str::FromStr;
 
 use super::super::errors::*;

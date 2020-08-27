@@ -325,7 +325,7 @@ impl BitString for AnyIpCidr {
 	}
 
 	fn shared_prefix_len(&self, other: &Self) -> usize {
-		use AnyIpCidr::*;
+		use crate::AnyIpCidr::*;
 		match (self, other) {
 			(&V4(ref a), &V4(ref b)) => 1 + a.shared_prefix_len(b),
 			(&V6(ref a), &V6(ref b)) => 1 + a.shared_prefix_len(b),

@@ -1,9 +1,9 @@
 #![cfg(feature = "serde")]
 
-use Inet;
-use inet::{IpInet, Ipv4Inet, Ipv6Inet};
+use crate::Inet;
+use crate::inet::{IpInet, Ipv4Inet, Ipv6Inet};
 use serde;
-use serde_common;
+use crate::serde_common;
 use std::net::IpAddr;
 
 static NAME_IPV4_CIDR: &str = "Ipv4Inet";
