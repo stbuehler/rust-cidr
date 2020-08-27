@@ -56,6 +56,11 @@ pub trait Cidr: Sized {
 	/// IP family of the contained address (`Ipv4` or `Ipv6`).
 	fn family(&self) -> Family;
 
+	/// whether network represents a single host address
+	fn is_host_address(&self) -> bool {
+		self.network_length() == self.family().len()
+	}
+
 	/// network mask: an pseudo address which has the first `network
 	/// length` bits set to 1 and the remaining to 0.
 	fn mask(&self) -> Self::Address;
@@ -118,6 +123,11 @@ pub trait Inet: Sized {
 	fn network_length(&self) -> u8;
 	/// IP family of the contained address (`Ipv4` or `Ipv6`).
 	fn family(&self) -> Family;
+
+	/// whether network represents a single host address
+	fn is_host_address(&self) -> bool {
+		self.network_length() == self.family().len()
+	}
 
 	/// network mask: an pseudo address which has the first `network
 	/// length` bits set to 1 and the remaining to 0.

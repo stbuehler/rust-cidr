@@ -146,6 +146,15 @@ impl AnyIpCidr {
 		}
 	}
 
+	/// whether network represents a single host address
+	pub fn is_host_address(&self) -> bool {
+		match *self {
+			AnyIpCidr::Any => false,
+			AnyIpCidr::V4(ref c) => c.is_host_address(),
+			AnyIpCidr::V6(ref c) => c.is_host_address(),
+		}
+	}
+
 	/// network mask: an pseudo address which has the first `network
 	/// length` bits set to 1 and the remaining to 0.
 	///

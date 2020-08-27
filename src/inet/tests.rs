@@ -357,6 +357,14 @@ fn parse_v4_33bit_2() {
 }
 
 #[test]
+fn test_v4_host_address() {
+	assert!("127.0.0.1/32".parse::<Ipv4Inet>().unwrap().is_host_address());
+	assert!("127.0.0.1/32".parse::<IpInet>().unwrap().is_host_address());
+	assert!(!"127.0.0.1/31".parse::<Ipv4Inet>().unwrap().is_host_address());
+	assert!(!"127.0.0.1/31".parse::<IpInet>().unwrap().is_host_address());
+}
+
+#[test]
 fn test_v4_representations_32bit() {
 	assert_eq!(
 		format!("{}", "127.0.0.1".parse::<Ipv4Inet>().unwrap()),
@@ -612,6 +620,14 @@ fn parse_v6_129bit() {
 #[should_panic(expected = "invalid length for network: Network length 129 is too long for Ipv6 (maximum: 128)")]
 fn parse_v6_33bit_2() {
 	"2001:DB8::/129".parse::<IpInet>().unwrap();
+}
+
+#[test]
+fn test_v6_host_address() {
+	assert!("::/128".parse::<Ipv6Inet>().unwrap().is_host_address());
+	assert!("::/128".parse::<IpInet>().unwrap().is_host_address());
+	assert!(!"::/127".parse::<Ipv6Inet>().unwrap().is_host_address());
+	assert!(!"::/127".parse::<IpInet>().unwrap().is_host_address());
 }
 
 #[test]
