@@ -82,7 +82,8 @@ impl Error for NetworkParseError {
 	fn description(&self) -> &str {
 		"network parse error"
 	}
-	fn cause(&self) -> Option<&Error> {
+
+	fn source(&self) -> Option<&(dyn Error + 'static)> {
 		match *self {
 			NetworkParseError::InvalidHostPart => None,
 			NetworkParseError::AddrParseError(ref e) => Some(e),
