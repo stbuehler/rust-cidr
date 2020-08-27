@@ -9,6 +9,9 @@
 //! Address parsing also accepts IPv4 address with less than four octets
 //! (but always parses those as decimal).
 //!
+//! If the `#` flag is used with the `Display` formatting (i.e. `{:#}`) the
+//! prefix will be shown even for host addresses (added in `0.1.1`).
+//!
 //! # Feature `serde`
 //!
 //! This feature is enabled by default (not using `serde-derive`, only
