@@ -23,22 +23,14 @@ where
 		},
 		// tag: 0x00...0x20
 		Some((IpAddr::V4(addr), len)) => {
-			assert!(
-				len <= 32,
-				"network length out of bounds for IPv4: {}",
-				len
-			);
+			assert!(len <= 32, "network length out of bounds for IPv4: {}", len);
 			let tag: u8 = len;
 			let value = (tag, addr);
 			serializer.serialize_newtype_struct(name, &value)
 		},
 		// tag: 0x40...0xc0
 		Some((IpAddr::V6(addr), len)) => {
-			assert!(
-				len <= 128,
-				"network length out of bounds for IPv4: {}",
-				len
-			);
+			assert!(len <= 128, "network length out of bounds for IPv4: {}", len);
 			let tag: u8 = len + 64;
 			let value = (tag, addr);
 			serializer.serialize_newtype_struct(name, &value)
@@ -98,24 +90,23 @@ where
 		where
 			A: de::SeqAccess<'de>,
 		{
-			let tag: u8 = seq.next_element()?
-				.ok_or_else(|| de::Error::invalid_length(0, &self))?;
+			let tag: u8 = seq.next_element()?.ok_or_else(|| de::Error::invalid_length(0, &self))?;
 			match tag {
 				0xff => {
-					let _data: () = seq.next_element()?
-						.ok_or_else(|| de::Error::invalid_length(1, &self))?;
+					let _data: () =
+						seq.next_element()?.ok_or_else(|| de::Error::invalid_length(1, &self))?;
 					Ok(None)
 				},
 				0x00..=0x20 => {
 					let network_length = tag;
-					let addr: Ipv4Addr = seq.next_element()?
-						.ok_or_else(|| de::Error::invalid_length(1, &self))?;
+					let addr: Ipv4Addr =
+						seq.next_element()?.ok_or_else(|| de::Error::invalid_length(1, &self))?;
 					Ok(Some((IpAddr::V4(addr), network_length)))
 				},
 				0x40..=0xc0 => {
 					let network_length = tag - 0x40;
-					let addr: Ipv6Addr = seq.next_element()?
-						.ok_or_else(|| de::Error::invalid_length(1, &self))?;
+					let addr: Ipv6Addr =
+						seq.next_element()?.ok_or_else(|| de::Error::invalid_length(1, &self))?;
 					Ok(Some((IpAddr::V6(addr), network_length)))
 				},
 				_ => Err(de::Error::custom("invalid tag")),
@@ -133,10 +124,7 @@ where
 			formatter.write_str("`")
 		}
 
-		fn visit_newtype_struct<D>(
-			self,
-			deserializer: D,
-		) -> Result<Self::Value, D::Error>
+		fn visit_newtype_struct<D>(self, deserializer: D) -> Result<Self::Value, D::Error>
 		where
 			D: de::Deserializer<'de>,
 		{
@@ -147,15 +135,11 @@ where
 	deserializer.deserialize_newtype_struct(name, NewTypeVisitor(name))
 }
 
-pub fn deserialize<'de, D>(
-	deserializer: D,
-	name: &'static str,
-) -> Result<(IpAddr, u8), D::Error>
+pub fn deserialize<'de, D>(deserializer: D, name: &'static str) -> Result<(IpAddr, u8), D::Error>
 where
 	D: de::Deserializer<'de>,
 {
-	deserialize_any(deserializer, name)?
-		.ok_or_else(|| de::Error::custom("invalid value: `any`"))
+	deserialize_any(deserializer, name)?.ok_or_else(|| de::Error::custom("invalid value: `any`"))
 }
 
 pub fn deserialize_v4<'de, D>(
@@ -167,9 +151,7 @@ where
 {
 	match deserialize(deserializer, name)? {
 		(IpAddr::V4(addr), len) => Ok((addr, len)),
-		(IpAddr::V6(_), _) => {
-			Err(de::Error::custom("invalid type: `Ipv6Addr`"))
-		},
+		(IpAddr::V6(_), _) => Err(de::Error::custom("invalid type: `Ipv6Addr`")),
 	}
 }
 
@@ -181,9 +163,7 @@ where
 	D: de::Deserializer<'de>,
 {
 	match deserialize(deserializer, name)? {
-		(IpAddr::V4(_), _) => {
-			Err(de::Error::custom("invalid type: `Ipv4Addr`"))
-		},
+		(IpAddr::V4(_), _) => Err(de::Error::custom("invalid type: `Ipv4Addr`")),
 		(IpAddr::V6(addr), len) => Ok((addr, len)),
 	}
 }

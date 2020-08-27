@@ -4,15 +4,15 @@ use std::fmt;
 use std::net::{Ipv4Addr, Ipv6Addr};
 use std::str::FromStr;
 
-use super::{Ipv4Inet, Ipv6Inet};
-use super::from_str::inet_from_str;
 use super::super::cidr::*;
 use super::super::errors::*;
 use super::super::family::Family;
 use super::super::traits::*;
+use super::from_str::inet_from_str;
+use super::{Ipv4Inet, Ipv6Inet};
 
 macro_rules! impl_inet_for {
-	($n:ident : cidr $cidr:ident : addr $addr:ty : family $family:expr) => (
+	($n:ident : cidr $cidr:ident : addr $addr:ty : family $family:expr) => {
 		impl BitString for $n {
 			fn get(&self, ndx: usize) -> bool {
 				self.address.get(ndx)
@@ -33,7 +33,9 @@ macro_rules! impl_inet_for {
 			}
 
 			fn clip(&mut self, len: usize) {
-				if len > 255 { return; }
+				if len > 255 {
+					return;
+				}
 				self.address.set_false_from(len);
 				self.network_length = min(self.network_length, len as u8);
 			}
@@ -44,10 +46,7 @@ macro_rules! impl_inet_for {
 			}
 
 			fn null() -> Self {
-				$n{
-					address: FixedBitString::new_all_false(),
-					network_length: 0,
-				}
+				$n { address: FixedBitString::new_all_false(), network_length: 0 }
 			}
 
 			fn shared_prefix_len(&self, other: &Self) -> usize {
@@ -60,25 +59,16 @@ macro_rules! impl_inet_for {
 			type Address = $addr;
 			type Cidr = $cidr;
 
-			fn new(
-				addr: Self::Address,
-				len: u8,
-			) -> Result<Self, NetworkLengthTooLongError> {
+			fn new(addr: Self::Address, len: u8) -> Result<Self, NetworkLengthTooLongError> {
 				if len > $family.len() {
 					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
 				} else {
-					Ok($n{
-						address: addr,
-						network_length: len,
-					})
+					Ok($n { address: addr, network_length: len })
 				}
 			}
 
 			fn new_host(addr: Self::Address) -> Self {
-				$n{
-					address: addr,
-					network_length: $family.len(),
-				}
+				$n { address: addr, network_length: $family.len() }
 			}
 
 			fn next(&mut self) -> bool {
@@ -100,10 +90,7 @@ macro_rules! impl_inet_for {
 			}
 
 			fn first(&self) -> Self {
-				$n{
-					address: self.first_address(),
-					network_length: self.network_length,
-				}
+				$n { address: self.first_address(), network_length: self.network_length }
 			}
 
 			fn last_address(&self) -> Self::Address {
@@ -113,10 +100,7 @@ macro_rules! impl_inet_for {
 			}
 
 			fn last(&self) -> Self {
-				$n{
-					address: self.last_address(),
-					network_length: self.network_length,
-				}
+				$n { address: self.last_address(), network_length: self.network_length }
 			}
 
 			fn network_length(&self) -> u8 {
@@ -161,8 +145,8 @@ macro_rules! impl_inet_for {
 				inet_from_str(s)
 			}
 		}
-	)
+	};
 }
 
-impl_inet_for!{Ipv4Inet : cidr Ipv4Cidr : addr Ipv4Addr : family Family::Ipv4}
-impl_inet_for!{Ipv6Inet : cidr Ipv6Cidr : addr Ipv6Addr : family Family::Ipv6}
+impl_inet_for! {Ipv4Inet : cidr Ipv4Cidr : addr Ipv4Addr : family Family::Ipv4}
+impl_inet_for! {Ipv6Inet : cidr Ipv6Cidr : addr Ipv6Addr : family Family::Ipv6}

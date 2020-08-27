@@ -3,12 +3,12 @@ use std::fmt;
 use std::net::IpAddr;
 use std::str::FromStr;
 
-use super::{IpCidr, Ipv4Cidr, Ipv6Cidr};
-use super::from_str::cidr_from_str;
 use super::super::errors::*;
 use super::super::family::Family;
 use super::super::inet::*;
 use super::super::traits::*;
+use super::from_str::cidr_from_str;
+use super::{IpCidr, Ipv4Cidr, Ipv6Cidr};
 
 /// Represents either an IPv4 or an IPv6 network or "any".
 ///
@@ -319,10 +319,12 @@ impl BitString for AnyIpCidr {
 
 	fn append(&mut self, bit: bool) {
 		match *self {
-			AnyIpCidr::Any => if bit {
-				*self = AnyIpCidr::V6(Ipv6Cidr::null());
-			} else {
-				*self = AnyIpCidr::V4(Ipv4Cidr::null());
+			AnyIpCidr::Any => {
+				if bit {
+					*self = AnyIpCidr::V6(Ipv6Cidr::null());
+				} else {
+					*self = AnyIpCidr::V4(Ipv4Cidr::null());
+				}
 			},
 			AnyIpCidr::V4(ref mut c) => c.append(bit),
 			AnyIpCidr::V6(ref mut c) => c.append(bit),

@@ -15,18 +15,11 @@ fn test_v4(
 ) {
 	assert_eq!(
 		s.parse::<Ipv4Inet>().unwrap(),
-		Ipv4Inet {
-			address: addr,
-			network_length: l,
-		},
+		Ipv4Inet { address: addr, network_length: l },
 		"internal data through Ipv4Inet"
 	);
 
-	assert_eq!(
-		s.parse::<Ipv4Inet>().unwrap().address(),
-		addr,
-		"address through Ipv4Inet"
-	);
+	assert_eq!(s.parse::<Ipv4Inet>().unwrap().address(), addr, "address through Ipv4Inet");
 
 	assert_eq!(
 		s.parse::<Ipv4Inet>().unwrap().first_address(),
@@ -52,26 +45,15 @@ fn test_v4(
 		"last address through Ipv4Inet -> network"
 	);
 
-	assert_eq!(
-		s.parse::<Ipv4Inet>().unwrap().mask(),
-		mask,
-		"mask through Ipv4Inet"
-	);
+	assert_eq!(s.parse::<Ipv4Inet>().unwrap().mask(), mask, "mask through Ipv4Inet");
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap(),
-		IpInet::V4(Ipv4Inet {
-			address: addr,
-			network_length: l,
-		}),
+		IpInet::V4(Ipv4Inet { address: addr, network_length: l }),
 		"internal data through IpInet"
 	);
 
-	assert_eq!(
-		s.parse::<IpInet>().unwrap().address(),
-		IpAddr::V4(addr),
-		"address through IpInet"
-	);
+	assert_eq!(s.parse::<IpInet>().unwrap().address(), IpAddr::V4(addr), "address through IpInet");
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().first_address(),
@@ -97,39 +79,20 @@ fn test_v4(
 		"last address through IpInet -> network"
 	);
 
-	assert_eq!(
-		s.parse::<IpInet>().unwrap().mask(),
-		IpAddr::V4(mask),
-		"mask through IpInet"
-	);
+	assert_eq!(s.parse::<IpInet>().unwrap().mask(), IpAddr::V4(mask), "mask through IpInet");
 }
 
 fn test_v4_contains(s: &'static str, addr: Ipv4Addr) {
 	let c1 = s.parse::<Ipv4Inet>().unwrap();
-	assert!(
-		c1.contains(&addr),
-		"{:?} must include {:?} (through Ipv4Inet)",
-		c1,
-		addr
-	);
+	assert!(c1.contains(&addr), "{:?} must include {:?} (through Ipv4Inet)", c1, addr);
 
 	let c2 = s.parse::<IpInet>().unwrap();
-	assert!(
-		c2.contains(&IpAddr::V4(addr)),
-		"{:?} must include {:?} (through IpInet)",
-		c2,
-		addr
-	);
+	assert!(c2.contains(&IpAddr::V4(addr)), "{:?} must include {:?} (through IpInet)", c2, addr);
 }
 
 fn test_v4_contains_not(s: &'static str, addr: Ipv4Addr) {
 	let c1 = s.parse::<Ipv4Inet>().unwrap();
-	assert!(
-		!c1.contains(&addr),
-		"{:?} must not include {:?} (through Ipv4Inet)",
-		c1,
-		addr
-	);
+	assert!(!c1.contains(&addr), "{:?} must not include {:?} (through Ipv4Inet)", c1, addr);
 
 	let c2 = s.parse::<IpInet>().unwrap();
 	assert!(
@@ -150,18 +113,11 @@ fn test_v6(
 ) {
 	assert_eq!(
 		s.parse::<Ipv6Inet>().unwrap(),
-		Ipv6Inet {
-			address: addr,
-			network_length: l,
-		},
+		Ipv6Inet { address: addr, network_length: l },
 		"internal data through Ipv6Inet"
 	);
 
-	assert_eq!(
-		s.parse::<Ipv6Inet>().unwrap().address(),
-		addr,
-		"address through Ipv6Inet"
-	);
+	assert_eq!(s.parse::<Ipv6Inet>().unwrap().address(), addr, "address through Ipv6Inet");
 
 	assert_eq!(
 		s.parse::<Ipv6Inet>().unwrap().first_address(),
@@ -187,26 +143,15 @@ fn test_v6(
 		"last address through Ipv6Inet -> network"
 	);
 
-	assert_eq!(
-		s.parse::<Ipv6Inet>().unwrap().mask(),
-		mask,
-		"mask through Ipv6Inet"
-	);
+	assert_eq!(s.parse::<Ipv6Inet>().unwrap().mask(), mask, "mask through Ipv6Inet");
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap(),
-		IpInet::V6(Ipv6Inet {
-			address: addr,
-			network_length: l,
-		}),
+		IpInet::V6(Ipv6Inet { address: addr, network_length: l }),
 		"internal data through IpInet"
 	);
 
-	assert_eq!(
-		s.parse::<IpInet>().unwrap().address(),
-		IpAddr::V6(addr),
-		"address through IpInet"
-	);
+	assert_eq!(s.parse::<IpInet>().unwrap().address(), IpAddr::V6(addr), "address through IpInet");
 
 	assert_eq!(
 		s.parse::<IpInet>().unwrap().first_address(),
@@ -232,39 +177,20 @@ fn test_v6(
 		"last address through IpInet -> network"
 	);
 
-	assert_eq!(
-		s.parse::<IpInet>().unwrap().mask(),
-		IpAddr::V6(mask),
-		"mask through IpInet"
-	);
+	assert_eq!(s.parse::<IpInet>().unwrap().mask(), IpAddr::V6(mask), "mask through IpInet");
 }
 
 fn test_v6_contains(s: &'static str, addr: Ipv6Addr) {
 	let c1 = s.parse::<Ipv6Inet>().unwrap();
-	assert!(
-		c1.contains(&addr),
-		"{:?} must include {:?} (through Ipv6Inet)",
-		c1,
-		addr
-	);
+	assert!(c1.contains(&addr), "{:?} must include {:?} (through Ipv6Inet)", c1, addr);
 
 	let c2 = s.parse::<IpInet>().unwrap();
-	assert!(
-		c2.contains(&IpAddr::V6(addr)),
-		"{:?} must include {:?} (through IpInet)",
-		c2,
-		addr
-	);
+	assert!(c2.contains(&IpAddr::V6(addr)), "{:?} must include {:?} (through IpInet)", c2, addr);
 }
 
 fn test_v6_contains_not(s: &'static str, addr: Ipv6Addr) {
 	let c1 = s.parse::<Ipv6Inet>().unwrap();
-	assert!(
-		!c1.contains(&addr),
-		"{:?} must not include {:?} (through Ipv6Inet)",
-		c1,
-		addr
-	);
+	assert!(!c1.contains(&addr), "{:?} must not include {:?} (through Ipv6Inet)", c1, addr);
 
 	let c2 = s.parse::<IpInet>().unwrap();
 	assert!(
@@ -276,15 +202,17 @@ fn test_v6_contains_not(s: &'static str, addr: Ipv6Addr) {
 }
 
 fn test_v4_order(o: Ordering, a: &'static str, b: &'static str) {
-	let r1 = a.parse::<Ipv4Inet>()
-		.unwrap()
-		.cmp(&b.parse::<Ipv4Inet>().unwrap());
-	assert!(o == r1,
-		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through Ipv4Inet)", r1, a, b, o);
+	let r1 = a.parse::<Ipv4Inet>().unwrap().cmp(&b.parse::<Ipv4Inet>().unwrap());
+	assert!(
+		o == r1,
+		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through Ipv4Inet)",
+		r1,
+		a,
+		b,
+		o
+	);
 
-	let r2 = a.parse::<IpInet>()
-		.unwrap()
-		.cmp(&b.parse::<IpInet>().unwrap());
+	let r2 = a.parse::<IpInet>().unwrap().cmp(&b.parse::<IpInet>().unwrap());
 	assert!(
 		o == r2,
 		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through IpInet)",
@@ -301,15 +229,17 @@ fn test_v4_order(o: Ordering, a: &'static str, b: &'static str) {
 }
 
 fn test_v6_order(o: Ordering, a: &'static str, b: &'static str) {
-	let r1 = a.parse::<Ipv6Inet>()
-		.unwrap()
-		.cmp(&b.parse::<Ipv6Inet>().unwrap());
-	assert!(o == r1,
-		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through Ipv6Inet)", r1, a, b, o);
+	let r1 = a.parse::<Ipv6Inet>().unwrap().cmp(&b.parse::<Ipv6Inet>().unwrap());
+	assert!(
+		o == r1,
+		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through Ipv6Inet)",
+		r1,
+		a,
+		b,
+		o
+	);
 
-	let r2 = a.parse::<IpInet>()
-		.unwrap()
-		.cmp(&b.parse::<IpInet>().unwrap());
+	let r2 = a.parse::<IpInet>().unwrap().cmp(&b.parse::<IpInet>().unwrap());
 	assert!(
 		o == r2,
 		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through IpInet)",
@@ -326,9 +256,7 @@ fn test_v6_order(o: Ordering, a: &'static str, b: &'static str) {
 }
 
 fn test_order(o: Ordering, a: &'static str, b: &'static str) {
-	let r = a.parse::<IpInet>()
-		.unwrap()
-		.cmp(&b.parse::<IpInet>().unwrap());
+	let r = a.parse::<IpInet>().unwrap().cmp(&b.parse::<IpInet>().unwrap());
 	assert!(
 		o == r,
 		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through IpCidr)",
@@ -345,13 +273,17 @@ fn test_order(o: Ordering, a: &'static str, b: &'static str) {
 }
 
 #[test]
-#[should_panic(expected = "invalid length for network: Network length 33 is too long for Ipv4 (maximum: 32)")]
+#[should_panic(
+	expected = "invalid length for network: Network length 33 is too long for Ipv4 (maximum: 32)"
+)]
 fn parse_v4_33bit() {
 	"192.0.2.48/33".parse::<Ipv4Inet>().unwrap();
 }
 
 #[test]
-#[should_panic(expected = "invalid length for network: Network length 33 is too long for Ipv4 (maximum: 32)")]
+#[should_panic(
+	expected = "invalid length for network: Network length 33 is too long for Ipv4 (maximum: 32)"
+)]
 fn parse_v4_33bit_2() {
 	"192.0.2.48/33".parse::<IpInet>().unwrap();
 }
@@ -366,113 +298,53 @@ fn test_v4_host_address() {
 
 #[test]
 fn test_v4_representations_32bit() {
-	assert_eq!(
-		format!("{}", "127.0.0.1".parse::<Ipv4Inet>().unwrap()),
-		"127.0.0.1"
-	);
+	assert_eq!(format!("{}", "127.0.0.1".parse::<Ipv4Inet>().unwrap()), "127.0.0.1");
 
-	assert_eq!(
-		format!("{}", "127.0.0.1".parse::<IpInet>().unwrap()),
-		"127.0.0.1"
-	);
+	assert_eq!(format!("{}", "127.0.0.1".parse::<IpInet>().unwrap()), "127.0.0.1");
 
-	assert_eq!(
-		format!("{:?}", "127.0.0.1".parse::<Ipv4Inet>().unwrap()),
-		"127.0.0.1/32"
-	);
+	assert_eq!(format!("{:?}", "127.0.0.1".parse::<Ipv4Inet>().unwrap()), "127.0.0.1/32");
 
-	assert_eq!(
-		format!("{:?}", "127.0.0.1".parse::<IpInet>().unwrap()),
-		"V4(127.0.0.1/32)"
-	);
+	assert_eq!(format!("{:?}", "127.0.0.1".parse::<IpInet>().unwrap()), "V4(127.0.0.1/32)");
 }
 
 #[test]
 fn test_v4_representations_8bit() {
-	assert_eq!(
-		format!("{}", "10.0.0.0/8".parse::<Ipv4Inet>().unwrap()),
-		"10.0.0.0/8"
-	);
+	assert_eq!(format!("{}", "10.0.0.0/8".parse::<Ipv4Inet>().unwrap()), "10.0.0.0/8");
 
-	assert_eq!(
-		format!("{}", "10.0.0.0/8".parse::<IpInet>().unwrap()),
-		"10.0.0.0/8"
-	);
+	assert_eq!(format!("{}", "10.0.0.0/8".parse::<IpInet>().unwrap()), "10.0.0.0/8");
 
-	assert_eq!(
-		format!("{:?}", "10.0.0.0/8".parse::<Ipv4Inet>().unwrap()),
-		"10.0.0.0/8"
-	);
+	assert_eq!(format!("{:?}", "10.0.0.0/8".parse::<Ipv4Inet>().unwrap()), "10.0.0.0/8");
 
-	assert_eq!(
-		format!("{:?}", "10.0.0.0/8".parse::<IpInet>().unwrap()),
-		"V4(10.0.0.0/8)"
-	);
+	assert_eq!(format!("{:?}", "10.0.0.0/8".parse::<IpInet>().unwrap()), "V4(10.0.0.0/8)");
 
 	// non-zero host part
-	assert_eq!(
-		format!("{}", "10.4.3.2/8".parse::<Ipv4Inet>().unwrap()),
-		"10.4.3.2/8"
-	);
+	assert_eq!(format!("{}", "10.4.3.2/8".parse::<Ipv4Inet>().unwrap()), "10.4.3.2/8");
 
-	assert_eq!(
-		format!("{}", "10.4.3.2/8".parse::<IpInet>().unwrap()),
-		"10.4.3.2/8"
-	);
+	assert_eq!(format!("{}", "10.4.3.2/8".parse::<IpInet>().unwrap()), "10.4.3.2/8");
 
-	assert_eq!(
-		format!("{:?}", "10.4.3.2/8".parse::<Ipv4Inet>().unwrap()),
-		"10.4.3.2/8"
-	);
+	assert_eq!(format!("{:?}", "10.4.3.2/8".parse::<Ipv4Inet>().unwrap()), "10.4.3.2/8");
 
-	assert_eq!(
-		format!("{:?}", "10.4.3.2/8".parse::<IpInet>().unwrap()),
-		"V4(10.4.3.2/8)"
-	);
+	assert_eq!(format!("{:?}", "10.4.3.2/8".parse::<IpInet>().unwrap()), "V4(10.4.3.2/8)");
 }
 
 #[test]
 fn test_v4_representations_0bit() {
-	assert_eq!(
-		format!("{}", "0.0.0.0/0".parse::<Ipv4Inet>().unwrap()),
-		"0.0.0.0/0"
-	);
+	assert_eq!(format!("{}", "0.0.0.0/0".parse::<Ipv4Inet>().unwrap()), "0.0.0.0/0");
 
-	assert_eq!(
-		format!("{}", "0.0.0.0/0".parse::<IpInet>().unwrap()),
-		"0.0.0.0/0"
-	);
+	assert_eq!(format!("{}", "0.0.0.0/0".parse::<IpInet>().unwrap()), "0.0.0.0/0");
 
-	assert_eq!(
-		format!("{:?}", "0.0.0.0/0".parse::<Ipv4Inet>().unwrap()),
-		"0.0.0.0/0"
-	);
+	assert_eq!(format!("{:?}", "0.0.0.0/0".parse::<Ipv4Inet>().unwrap()), "0.0.0.0/0");
 
-	assert_eq!(
-		format!("{:?}", "0.0.0.0/0".parse::<IpInet>().unwrap()),
-		"V4(0.0.0.0/0)"
-	);
+	assert_eq!(format!("{:?}", "0.0.0.0/0".parse::<IpInet>().unwrap()), "V4(0.0.0.0/0)");
 
 	// non-zero host part
-	assert_eq!(
-		format!("{}", "192.0.2.0/0".parse::<Ipv4Inet>().unwrap()),
-		"192.0.2.0/0"
-	);
+	assert_eq!(format!("{}", "192.0.2.0/0".parse::<Ipv4Inet>().unwrap()), "192.0.2.0/0");
 
-	assert_eq!(
-		format!("{}", "192.0.2.0/0".parse::<IpInet>().unwrap()),
-		"192.0.2.0/0"
-	);
+	assert_eq!(format!("{}", "192.0.2.0/0".parse::<IpInet>().unwrap()), "192.0.2.0/0");
 
-	assert_eq!(
-		format!("{:?}", "192.0.2.0/0".parse::<Ipv4Inet>().unwrap()),
-		"192.0.2.0/0"
-	);
+	assert_eq!(format!("{:?}", "192.0.2.0/0".parse::<Ipv4Inet>().unwrap()), "192.0.2.0/0");
 
-	assert_eq!(
-		format!("{:?}", "192.0.2.0/0".parse::<IpInet>().unwrap()),
-		"V4(192.0.2.0/0)"
-	);
+	assert_eq!(format!("{:?}", "192.0.2.0/0".parse::<IpInet>().unwrap()), "V4(192.0.2.0/0)");
 }
 
 #[test]
@@ -611,13 +483,17 @@ fn contains_not_v4_24bit_2() {
 }
 
 #[test]
-#[should_panic(expected = "invalid length for network: Network length 129 is too long for Ipv6 (maximum: 128)")]
+#[should_panic(
+	expected = "invalid length for network: Network length 129 is too long for Ipv6 (maximum: 128)"
+)]
 fn parse_v6_129bit() {
 	"2001:DB8::/129".parse::<Ipv6Inet>().unwrap();
 }
 
 #[test]
-#[should_panic(expected = "invalid length for network: Network length 129 is too long for Ipv6 (maximum: 128)")]
+#[should_panic(
+	expected = "invalid length for network: Network length 129 is too long for Ipv6 (maximum: 128)"
+)]
 fn parse_v6_33bit_2() {
 	"2001:DB8::/129".parse::<IpInet>().unwrap();
 }
@@ -632,25 +508,13 @@ fn test_v6_host_address() {
 
 #[test]
 fn test_v6_representations_128bit() {
-	assert_eq!(
-		format!("{}", "::".parse::<Ipv6Inet>().unwrap()),
-		"::"
-	);
+	assert_eq!(format!("{}", "::".parse::<Ipv6Inet>().unwrap()), "::");
 
-	assert_eq!(
-		format!("{}", "::".parse::<IpInet>().unwrap()),
-		"::"
-	);
+	assert_eq!(format!("{}", "::".parse::<IpInet>().unwrap()), "::");
 
-	assert_eq!(
-		format!("{:?}", "::".parse::<Ipv6Inet>().unwrap()),
-		"::/128"
-	);
+	assert_eq!(format!("{:?}", "::".parse::<Ipv6Inet>().unwrap()), "::/128");
 
-	assert_eq!(
-		format!("{:?}", "::".parse::<IpInet>().unwrap()),
-		"V6(::/128)"
-	);
+	assert_eq!(format!("{:?}", "::".parse::<IpInet>().unwrap()), "V6(::/128)");
 }
 
 #[test]
@@ -699,25 +563,13 @@ fn test_v6_representations_64bit() {
 
 #[test]
 fn test_v6_representations_0bit() {
-	assert_eq!(
-		format!("{}", "::/0".parse::<Ipv6Inet>().unwrap()),
-		"::/0"
-	);
+	assert_eq!(format!("{}", "::/0".parse::<Ipv6Inet>().unwrap()), "::/0");
 
-	assert_eq!(
-		format!("{}", "::/0".parse::<IpInet>().unwrap()),
-		"::/0"
-	);
+	assert_eq!(format!("{}", "::/0".parse::<IpInet>().unwrap()), "::/0");
 
-	assert_eq!(
-		format!("{:?}", "::/0".parse::<Ipv6Inet>().unwrap()),
-		"::/0"
-	);
+	assert_eq!(format!("{:?}", "::/0".parse::<Ipv6Inet>().unwrap()), "::/0");
 
-	assert_eq!(
-		format!("{:?}", "::/0".parse::<IpInet>().unwrap()),
-		"V6(::/0)"
-	);
+	assert_eq!(format!("{:?}", "::/0".parse::<IpInet>().unwrap()), "V6(::/0)");
 
 	// non-zero host part
 	assert_eq!(
@@ -865,32 +717,16 @@ fn order_v4() {
 
 #[test]
 fn order_v6() {
-	test_v6_order(
-		Ordering::Equal,
-		"2001:DB8:1234:5678::/64",
-		"2001:DB8:1234:5678::/64",
-	);
-	test_v6_order(
-		Ordering::Less,
-		"2001:DB8:1234:5678:1000::/80",
-		"2001:DB8:1234:5678:1001::/80",
-	);
-	test_v6_order(
-		Ordering::Less,
-		"2001:DB8:1234:5678:1000::/80",
-		"2001:DB8:1234:5678:1000::/81",
-	);
+	test_v6_order(Ordering::Equal, "2001:DB8:1234:5678::/64", "2001:DB8:1234:5678::/64");
+	test_v6_order(Ordering::Less, "2001:DB8:1234:5678:1000::/80", "2001:DB8:1234:5678:1001::/80");
+	test_v6_order(Ordering::Less, "2001:DB8:1234:5678:1000::/80", "2001:DB8:1234:5678:1000::/81");
 	test_v6_order(
 		Ordering::Less,
 		"2001:DB8:1234:5678:1000::/80",
 		"2001:DB8:1234:5678:1000:8000::/81",
 	);
 
-	test_v6_order(
-		Ordering::Equal,
-		"2001:DB8:1234:5678::42/64",
-		"2001:DB8:1234:5678::42/64",
-	);
+	test_v6_order(Ordering::Equal, "2001:DB8:1234:5678::42/64", "2001:DB8:1234:5678::42/64");
 	test_v6_order(
 		Ordering::Less,
 		"2001:DB8:1234:5678:1000::41/48",

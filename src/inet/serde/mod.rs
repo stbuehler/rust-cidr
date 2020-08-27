@@ -1,9 +1,9 @@
 #![cfg(feature = "serde")]
 
-use crate::Inet;
 use crate::inet::{IpInet, Ipv4Inet, Ipv6Inet};
-use serde;
 use crate::serde_common;
+use crate::Inet;
+use serde;
 use std::net::IpAddr;
 
 static NAME_IPV4_CIDR: &str = "Ipv4Inet";
@@ -36,8 +36,7 @@ impl<'de> serde::Deserialize<'de> for Ipv4Inet {
 		} else {
 			let (addr, network_length) =
 				serde_common::deserialize_v4(deserializer, NAME_IPV4_CIDR)?;
-			Ipv4Inet::new(addr, network_length)
-				.map_err(serde::de::Error::custom)
+			Ipv4Inet::new(addr, network_length).map_err(serde::de::Error::custom)
 		}
 	}
 }
@@ -72,8 +71,7 @@ impl<'de> serde::Deserialize<'de> for Ipv6Inet {
 		} else {
 			let (addr, network_length) =
 				serde_common::deserialize_v6(deserializer, NAME_IPV6_CIDR)?;
-			Ipv6Inet::new(addr, network_length)
-				.map_err(serde::de::Error::custom)
+			Ipv6Inet::new(addr, network_length).map_err(serde::de::Error::custom)
 		}
 	}
 }
@@ -106,8 +104,7 @@ impl<'de> serde::Deserialize<'de> for IpInet {
 			let s = String::deserialize(deserializer)?;
 			s.parse().map_err(serde::de::Error::custom)
 		} else {
-			let (addr, network_length) =
-				serde_common::deserialize(deserializer, NAME_IP_CIDR)?;
+			let (addr, network_length) = serde_common::deserialize(deserializer, NAME_IP_CIDR)?;
 			IpInet::new(addr, network_length).map_err(serde::de::Error::custom)
 		}
 	}

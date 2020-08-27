@@ -1,23 +1,7 @@
-# Maximum width of each line
-max_width = 80
-
-# Error if unable to get all lines within max_width
-error_on_line_overflow = false
-
-# Reorder import statements alphabetically
-reorder_imports = true
-
-# Reorder import statements in group
-reorder_imports_in_group = true
-
 # Use tab characters for indentation, spaces for alignment
 hard_tabs = true
-
-# Convert /* */ comments to // comments where possible
-normalize_comments = true
 
 # Put a trailing comma after a block based match arm (non-block arms are not affected)
 match_block_trailing_comma = true
 
-# Replace uses of the try! macro by the ? shorthand
-use_try_shorthand = true
+use_small_heuristics = "Max"

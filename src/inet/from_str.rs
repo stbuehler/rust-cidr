@@ -11,9 +11,8 @@ where
 {
 	Ok(match s.rfind('/') {
 		None => I::new_host(I::Address::address_from_str(s)?),
-		Some(pos) => I::new(
-			I::Address::address_from_str(&s[0..pos])?,
-			u8::from_str(&s[pos + 1..])?,
-		)?,
+		Some(pos) => {
+			I::new(I::Address::address_from_str(&s[0..pos])?, u8::from_str(&s[pos + 1..])?)?
+		},
 	})
 }

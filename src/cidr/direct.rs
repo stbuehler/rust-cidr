@@ -4,15 +4,15 @@ use std::fmt;
 use std::net::{Ipv4Addr, Ipv6Addr};
 use std::str::FromStr;
 
-use super::{Ipv4Cidr, Ipv6Cidr};
-use super::from_str::cidr_from_str;
 use super::super::errors::*;
 use super::super::family::Family;
 use super::super::inet::*;
 use super::super::traits::*;
+use super::from_str::cidr_from_str;
+use super::{Ipv4Cidr, Ipv6Cidr};
 
 macro_rules! impl_cidr_for {
-	($n:ident : inet $inet:ident : addr $addr:ty : family $family:expr) => (
+	($n:ident : inet $inet:ident : addr $addr:ty : family $family:expr) => {
 		impl BitString for $n {
 			fn get(&self, ndx: usize) -> bool {
 				self.address.get(ndx)
@@ -33,7 +33,9 @@ macro_rules! impl_cidr_for {
 			}
 
 			fn clip(&mut self, len: usize) {
-				if len > 255 { return; }
+				if len > 255 {
+					return;
+				}
 				self.address.set_false_from(len);
 				self.network_length = min(self.network_length, len as u8);
 			}
@@ -44,10 +46,7 @@ macro_rules! impl_cidr_for {
 			}
 
 			fn null() -> Self {
-				$n{
-					address: FixedBitString::new_all_false(),
-					network_length: 0,
-				}
+				$n { address: FixedBitString::new_all_false(), network_length: 0 }
 			}
 
 			fn shared_prefix_len(&self, other: &Self) -> usize {
@@ -66,18 +65,12 @@ macro_rules! impl_cidr_for {
 				} else if !addr.is_false_from(len as usize) {
 					Err(NetworkParseError::InvalidHostPart)
 				} else {
-					Ok($n{
-						address: addr,
-						network_length: len,
-					})
+					Ok($n { address: addr, network_length: len })
 				}
 			}
 
 			fn new_host(addr: Self::Address) -> Self {
-				$n{
-					address: addr,
-					network_length: $family.len(),
-				}
+				$n { address: addr, network_length: $family.len() }
 			}
 
 			fn first_address(&self) -> Self::Address {
@@ -152,8 +145,8 @@ macro_rules! impl_cidr_for {
 				cidr_from_str(s)
 			}
 		}
-	)
+	};
 }
 
-impl_cidr_for!{Ipv4Cidr : inet Ipv4Inet : addr Ipv4Addr : family Family::Ipv4}
-impl_cidr_for!{Ipv6Cidr : inet Ipv6Inet : addr Ipv6Addr : family Family::Ipv6}
+impl_cidr_for! {Ipv4Cidr : inet Ipv4Inet : addr Ipv4Addr : family Family::Ipv4}
+impl_cidr_for! {Ipv6Cidr : inet Ipv6Inet : addr Ipv6Addr : family Family::Ipv6}

@@ -57,9 +57,7 @@ pub enum NetworkParseError {
 impl fmt::Debug for NetworkParseError {
 	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
 		match *self {
-			NetworkParseError::InvalidHostPart => {
-				write!(w, "host part of address was not zero")
-			},
+			NetworkParseError::InvalidHostPart => write!(w, "host part of address was not zero"),
 			NetworkParseError::AddrParseError(ref e) => {
 				write!(w, "couldn't parse address in network: {}", e)
 			},

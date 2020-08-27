@@ -92,10 +92,7 @@ pub trait Inet: Sized {
 	/// Create new host within a network from address and prefix length.
 	/// If the network length exceeds the address length an error is
 	/// returned.
-	fn new(
-		addr: Self::Address,
-		len: u8,
-	) -> Result<Self, NetworkLengthTooLongError>;
+	fn new(addr: Self::Address, len: u8) -> Result<Self, NetworkLengthTooLongError>;
 
 	/// Create a network containing a single address as host and the
 	/// network (network length = address length).
