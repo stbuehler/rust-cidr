@@ -2,6 +2,8 @@ use std::fmt;
 use std::net::IpAddr;
 use std::str::FromStr;
 
+use crate::InetIterator;
+
 use super::super::errors::*;
 use super::super::family::Family;
 use super::super::inet::*;
@@ -133,5 +135,23 @@ impl From<Ipv4Cidr> for IpCidr {
 impl From<Ipv6Cidr> for IpCidr {
 	fn from(c: Ipv6Cidr) -> Self {
 		IpCidr::V6(c)
+	}
+}
+
+impl IntoIterator for IpCidr {
+	type IntoIter = InetIterator<IpInet>;
+	type Item = IpAddr;
+
+	fn into_iter(self) -> Self::IntoIter {
+		InetIterator::new(self.first())
+	}
+}
+
+impl<'a> IntoIterator for &'a IpCidr {
+	type IntoIter = InetIterator<IpInet>;
+	type Item = IpAddr;
+
+	fn into_iter(self) -> Self::IntoIter {
+		InetIterator::new(self.first())
 	}
 }

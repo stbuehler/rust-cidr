@@ -145,8 +145,67 @@ macro_rules! impl_cidr_for {
 				cidr_from_str(s)
 			}
 		}
+
+		/// Iterate over all the addresses in the CIDR.
+		impl IntoIterator for $n {
+			type IntoIter = $crate::InetIterator<$inet>;
+			type Item = $addr;
+
+			fn into_iter(self) -> Self::IntoIter {
+				use $crate::Cidr;
+				$crate::InetIterator::new(self.first())
+			}
+		}
+
+		/// Iterate over all the addresses in the CIDR.
+		impl<'a> IntoIterator for &'a $n {
+			type IntoIter = $crate::InetIterator<$inet>;
+			type Item = $addr;
+
+			fn into_iter(self) -> Self::IntoIter {
+				use $crate::Cidr;
+				$crate::InetIterator::new(self.first())
+			}
+		}
 	};
 }
 
 impl_cidr_for! {Ipv4Cidr : inet Ipv4Inet : addr Ipv4Addr : family Family::Ipv4}
 impl_cidr_for! {Ipv6Cidr : inet Ipv6Inet : addr Ipv6Addr : family Family::Ipv6}
+
+#[cfg(test)]
+mod tests {
+	use std::net::Ipv4Addr;
+
+	use crate::Cidr;
+
+	use super::Ipv4Cidr;
+
+	#[test]
+	fn v4_ref_into_iter() {
+		let cidr = Ipv4Cidr::new(Ipv4Addr::new(1, 2, 3, 0), 30).unwrap();
+		assert_eq!(
+			vec![
+				Ipv4Addr::new(1, 2, 3, 0),
+				Ipv4Addr::new(1, 2, 3, 1),
+				Ipv4Addr::new(1, 2, 3, 2),
+				Ipv4Addr::new(1, 2, 3, 3),
+			],
+			(&cidr).into_iter().collect::<Vec<_>>()
+		);
+	}
+
+	#[test]
+	fn v4_owned_into_iter() {
+		let cidr = Ipv4Cidr::new(Ipv4Addr::new(1, 2, 3, 0), 30).unwrap();
+		assert_eq!(
+			vec![
+				Ipv4Addr::new(1, 2, 3, 0),
+				Ipv4Addr::new(1, 2, 3, 1),
+				Ipv4Addr::new(1, 2, 3, 2),
+				Ipv4Addr::new(1, 2, 3, 3),
+			],
+			cidr.into_iter().collect::<Vec<_>>()
+		);
+	}
+}
