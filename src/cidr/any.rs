@@ -1,3 +1,4 @@
+#[cfg(feature = "bitstring")]
 use bitstring::*;
 use std::fmt;
 use std::net::IpAddr;
@@ -245,6 +246,7 @@ impl From<Ipv6Cidr> for AnyIpCidr {
 	}
 }
 
+#[cfg(feature = "bitstring")]
 impl BitString for AnyIpCidr {
 	fn get(&self, ndx: usize) -> bool {
 		assert!(!self.is_any());

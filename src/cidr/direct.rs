@@ -1,5 +1,5 @@
+#[cfg(feature = "bitstring")]
 use bitstring::*;
-use std::cmp::{min, Ordering};
 use std::fmt;
 use std::net::{Ipv4Addr, Ipv6Addr};
 use std::str::FromStr;
@@ -10,9 +10,11 @@ use super::super::inet::*;
 use super::super::traits::*;
 use super::from_str::cidr_from_str;
 use super::{Ipv4Cidr, Ipv6Cidr};
+use crate::internal_traits::*;
 
 macro_rules! impl_cidr_for {
 	($n:ident : inet $inet:ident : addr $addr:ty : family $family:expr) => {
+		#[cfg(feature = "bitstring")]
 		impl BitString for $n {
 			fn get(&self, ndx: usize) -> bool {
 				self.address.get(ndx)
@@ -37,7 +39,7 @@ macro_rules! impl_cidr_for {
 					return;
 				}
 				self.address.set_false_from(len);
-				self.network_length = min(self.network_length, len as u8);
+				self.network_length = std::cmp::min(self.network_length, len as u8);
 			}
 
 			fn append(&mut self, bit: bool) {
@@ -50,7 +52,7 @@ macro_rules! impl_cidr_for {
 			}
 
 			fn shared_prefix_len(&self, other: &Self) -> usize {
-				let max_len = min(self.network_length, other.network_length) as usize;
+				let max_len = std::cmp::min(self.network_length, other.network_length) as usize;
 				FixedBitString::shared_prefix_len(&self.address, &other.address, max_len)
 			}
 		}
@@ -62,7 +64,7 @@ macro_rules! impl_cidr_for {
 			fn new(addr: Self::Address, len: u8) -> Result<Self, NetworkParseError> {
 				if len > $family.len() {
 					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
-				} else if !addr.is_false_from(len as usize) {
+				} else if !addr.has_zero_host_part(len) {
 					Err(NetworkParseError::InvalidHostPart)
 				} else {
 					Ok($n { address: addr, network_length: len })
@@ -82,9 +84,7 @@ macro_rules! impl_cidr_for {
 			}
 
 			fn last_address(&self) -> Self::Address {
-				let mut a = self.address.clone();
-				a.set_true_from(self.network_length as usize);
-				a
+				self.address.last_address(self.network_length)
 			}
 
 			fn last(&self) -> Self::Inet {
@@ -100,13 +100,11 @@ macro_rules! impl_cidr_for {
 			}
 
 			fn mask(&self) -> Self::Address {
-				let mut a = Self::Address::new_all_true();
-				a.set_false_from(self.network_length as usize);
-				a
+				Self::Address::network_mask(self.network_length)
 			}
 
 			fn contains(&self, addr: &Self::Address) -> bool {
-				self.address.contains(self.network_length as usize, addr)
+				self.address.prefix_match(*addr, self.network_length)
 			}
 		}
 
@@ -128,14 +126,16 @@ macro_rules! impl_cidr_for {
 		}
 
 		impl PartialOrd<$n> for $n {
-			fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-				Some(self.lexicographic_cmp(other))
+			fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+				Some(self.cmp(other))
 			}
 		}
 
 		impl Ord for $n {
-			fn cmp(&self, other: &Self) -> Ordering {
-				self.lexicographic_cmp(other)
+			fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+				self.address
+					.cmp(&other.address)
+					.then(self.network_length.cmp(&other.network_length))
 			}
 		}
 

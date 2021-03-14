@@ -35,7 +35,6 @@ pub use self::inet::*;
 pub use self::inet_iterator::*;
 pub use self::traits::*;
 
-extern crate bitstring;
 #[cfg(feature = "serde")]
 extern crate serde;
 
@@ -51,5 +50,6 @@ mod errors;
 mod family;
 mod inet;
 mod inet_iterator;
+mod internal_traits;
 mod local_addr_parser;
 mod traits;

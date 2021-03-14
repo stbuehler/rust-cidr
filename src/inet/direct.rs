@@ -1,5 +1,5 @@
+#[cfg(feature = "bitstring")]
 use bitstring::*;
-use std::cmp::min;
 use std::fmt;
 use std::net::{Ipv4Addr, Ipv6Addr};
 use std::str::FromStr;
@@ -10,9 +10,11 @@ use super::super::family::Family;
 use super::super::traits::*;
 use super::from_str::inet_from_str;
 use super::{Ipv4Inet, Ipv6Inet};
+use crate::internal_traits::*;
 
 macro_rules! impl_inet_for {
 	($n:ident : cidr $cidr:ident : addr $addr:ty : family $family:expr) => {
+		#[cfg(feature = "bitstring")]
 		impl BitString for $n {
 			fn get(&self, ndx: usize) -> bool {
 				self.address.get(ndx)
@@ -37,7 +39,7 @@ macro_rules! impl_inet_for {
 					return;
 				}
 				self.address.set_false_from(len);
-				self.network_length = min(self.network_length, len as u8);
+				self.network_length = std::cmp::min(self.network_length, len as u8);
 			}
 
 			fn append(&mut self, bit: bool) {
@@ -50,7 +52,7 @@ macro_rules! impl_inet_for {
 			}
 
 			fn shared_prefix_len(&self, other: &Self) -> usize {
-				let max_len = min(self.network_length, other.network_length) as usize;
+				let max_len = std::cmp::min(self.network_length, other.network_length) as usize;
 				FixedBitString::shared_prefix_len(&self.address, &other.address, max_len)
 			}
 		}
@@ -72,7 +74,9 @@ macro_rules! impl_inet_for {
 			}
 
 			fn next(&mut self) -> bool {
-				self.address.inc(self.network_length as usize)
+				let (address, overflow) = self.address.overflowing_next(self.network_length);
+				self.address = address;
+				overflow
 			}
 
 			fn network(&self) -> Self::Cidr {
@@ -80,13 +84,11 @@ macro_rules! impl_inet_for {
 			}
 
 			fn address(&self) -> Self::Address {
-				self.address.clone()
+				self.address
 			}
 
 			fn first_address(&self) -> Self::Address {
-				let mut a = self.address.clone();
-				a.set_false_from(self.network_length as usize);
-				a
+				self.address.network_address(self.network_length)
 			}
 
 			fn first(&self) -> Self {
@@ -94,9 +96,7 @@ macro_rules! impl_inet_for {
 			}
 
 			fn last_address(&self) -> Self::Address {
-				let mut a = self.address.clone();
-				a.set_true_from(self.network_length as usize);
-				a
+				self.address.last_address(self.network_length)
 			}
 
 			fn last(&self) -> Self {
@@ -112,13 +112,11 @@ macro_rules! impl_inet_for {
 			}
 
 			fn mask(&self) -> Self::Address {
-				let mut a = Self::Address::new_all_true();
-				a.set_false_from(self.network_length as usize);
-				a
+				Self::Address::network_mask(self.network_length)
 			}
 
 			fn contains(&self, addr: &Self::Address) -> bool {
-				self.address.contains(self.network_length as usize, addr)
+				self.address.prefix_match(*addr, self.network_length)
 			}
 		}
 

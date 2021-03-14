@@ -3,7 +3,6 @@
 use crate::inet::{IpInet, Ipv4Inet, Ipv6Inet};
 use crate::serde_common;
 use crate::Inet;
-use serde;
 use std::net::IpAddr;
 
 static NAME_IPV4_CIDR: &str = "Ipv4Inet";
