@@ -7,6 +7,7 @@ use crate::InetIterator;
 use super::super::errors::*;
 use super::super::family::Family;
 use super::super::inet::*;
+use super::super::inet_pair::*;
 use super::super::internal_traits::*;
 use super::super::traits::*;
 use super::from_str::cidr_from_str;
@@ -34,7 +35,14 @@ impl HasAddressType for IpCidr {
 	type Address = IpAddr;
 }
 
-impl PrivCidr for IpCidr {}
+impl PrivCidr for IpCidr {
+	fn _range_pair(&self) -> IpInetPair {
+		match *self {
+			IpCidr::V4(c) => IpInetPair::V4(c._range_pair()),
+			IpCidr::V6(c) => IpInetPair::V6(c._range_pair()),
+		}
+	}
+}
 
 impl Cidr for IpCidr {
 	fn new(addr: IpAddr, len: u8) -> Result<Self, NetworkParseError> {

@@ -1,4 +1,4 @@
-use super::traits::HasAddressType;
+use super::traits::{Address, HasAddressType};
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
 /// Implemented for IPv4Addr, IPv6Addr AND IpAddr
@@ -20,10 +20,15 @@ pub trait PrivAddress: PrivUnspecAddress {
 }
 
 /// seal `Cidr` trait, provide internal functions
-pub trait PrivCidr: HasAddressType {}
+pub trait PrivCidr: HasAddressType {
+	fn _range_pair(&self) -> <Self::Address as Address>::InetPair;
+}
 
 /// seal `Inet` trait, provide internal functions
 pub trait PrivInet: HasAddressType {}
+
+/// seal `InetPair` trait, provide internal functions
+pub trait PrivInetPair: HasAddressType {}
 
 fn ipv4_host_mask(prefix_len: u8) -> u32 {
 	(!0u32).checked_shr(prefix_len as u32).unwrap_or(0)

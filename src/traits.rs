@@ -14,6 +14,9 @@ pub trait Address: Copy + PrivUnspecAddress {
 	/// Corresponding `Cidr` type (representing only a network, not a specific
 	/// address within)
 	type Cidr: Cidr<Address = Self>;
+
+	/// Corresponding `InetPair` type (representing two addresses in the same network)
+	type InetPair: InetPair<Address = Self>;
 }
 
 /// Maps back to basic address type
@@ -138,4 +141,27 @@ pub trait Inet: Copy + HasAddressType + PrivInet {
 
 	/// check whether an address is contained in the network
 	fn contains(&self, addr: &Self::Address) -> bool;
+}
+
+/// Pair of two addresses in the same network
+pub trait InetPair: Copy + HasAddressType + PrivInetPair {
+	/// Create new host within a network from address and prefix length.
+	/// If the network length exceeds the address length an error is
+	/// returned.
+	fn new(first: Self::Address, second: Self::Address, len: u8) -> Result<Self, InetTupleError>;
+
+	/// First address
+	fn first(&self) -> <Self::Address as Address>::Inet;
+
+	/// Second address
+	fn second(&self) -> <Self::Address as Address>::Inet;
+
+	/// network (i.e. drops the host information)
+	fn network(&self) -> <Self::Address as Address>::Cidr;
+
+	/// length in bits of the shared prefix of the contained addresses
+	fn network_length(&self) -> u8;
+
+	/// IP family of the contained address (`Ipv4` or `Ipv6`).
+	fn family(&self) -> Family;
 }

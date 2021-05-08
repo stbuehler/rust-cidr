@@ -51,6 +51,7 @@ mod errors;
 mod family;
 mod inet;
 mod inet_iterator;
+mod inet_pair;
 mod internal_traits;
 mod local_addr_parser;
 mod traits;

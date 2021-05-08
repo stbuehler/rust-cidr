@@ -13,7 +13,7 @@ use super::{Ipv4Inet, Ipv6Inet};
 use crate::internal_traits::*;
 
 macro_rules! impl_inet_for {
-	($n:ident : cidr $cidr:ident : addr $addr:ident : family $family:expr) => {
+	($n:ident : cidr $cidr:ident : addr $addr:ident : pair $pair:ident : family $family:expr) => {
 		#[cfg(feature = "bitstring")]
 		impl BitString for $n {
 			fn get(&self, ndx: usize) -> bool {
@@ -149,5 +149,5 @@ macro_rules! impl_inet_for {
 	};
 }
 
-impl_inet_for! {Ipv4Inet : cidr Ipv4Cidr : addr Ipv4Addr : family Family::Ipv4}
-impl_inet_for! {Ipv6Inet : cidr Ipv6Cidr : addr Ipv6Addr : family Family::Ipv6}
+impl_inet_for! {Ipv4Inet : cidr Ipv4Cidr : addr Ipv4Addr : pair Ipv4InetPair : family Family::Ipv4}
+impl_inet_for! {Ipv6Inet : cidr Ipv6Cidr : addr Ipv6Addr : pair Ipv6InetPair : family Family::Ipv6}

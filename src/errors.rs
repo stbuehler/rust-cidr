@@ -108,3 +108,48 @@ impl From<NetworkLengthTooLongError> for NetworkParseError {
 		NetworkParseError::NetworkLengthTooLongError(e)
 	}
 }
+
+/// Error type returned when creating Inet pair
+#[derive(Clone, PartialEq)]
+pub enum InetTupleError {
+	/// The given addresses are not in the same network
+	NotInSharedNetwork,
+	/// The network length was not valid (but was successfully parsed)
+	NetworkLengthTooLongError(NetworkLengthTooLongError),
+}
+
+impl fmt::Debug for InetTupleError {
+	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+		match *self {
+			InetTupleError::NotInSharedNetwork => write!(w, "addresses not in shared network"),
+			InetTupleError::NetworkLengthTooLongError(ref e) => {
+				write!(w, "invalid length for network: {}", e)
+			},
+		}
+	}
+}
+
+impl fmt::Display for InetTupleError {
+	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+		fmt::Debug::fmt(self, w)
+	}
+}
+
+impl Error for InetTupleError {
+	fn description(&self) -> &str {
+		"inet tuple error"
+	}
+
+	fn source(&self) -> Option<&(dyn Error + 'static)> {
+		match *self {
+			InetTupleError::NotInSharedNetwork => None,
+			InetTupleError::NetworkLengthTooLongError(ref e) => Some(e),
+		}
+	}
+}
+
+impl From<NetworkLengthTooLongError> for InetTupleError {
+	fn from(e: NetworkLengthTooLongError) -> Self {
+		InetTupleError::NetworkLengthTooLongError(e)
+	}
+}

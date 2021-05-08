@@ -7,13 +7,14 @@ use std::str::FromStr;
 use super::super::errors::*;
 use super::super::family::Family;
 use super::super::inet::*;
+use super::super::inet_pair::*;
 use super::super::traits::*;
 use super::from_str::cidr_from_str;
 use super::{Ipv4Cidr, Ipv6Cidr};
 use crate::internal_traits::*;
 
 macro_rules! impl_cidr_for {
-	($n:ident : inet $inet:ident : addr $addr:ident : family $family:expr) => {
+	($n:ident : inet $inet:ident : addr $addr:ident : pair $pair:ident : family $family:expr) => {
 		#[cfg(feature = "bitstring")]
 		impl BitString for $n {
 			fn get(&self, ndx: usize) -> bool {
@@ -61,7 +62,15 @@ macro_rules! impl_cidr_for {
 			type Address = $addr;
 		}
 
-		impl PrivCidr for $n {}
+		impl PrivCidr for $n {
+			fn _range_pair(&self) -> $pair {
+				$pair {
+					first: self.first_address(),
+					second: self.last_address(),
+					network_length: self.network_length,
+				}
+			}
+		}
 
 		impl Cidr for $n {
 			fn new(addr: $addr, len: u8) -> Result<Self, NetworkParseError> {
@@ -173,8 +182,8 @@ macro_rules! impl_cidr_for {
 	};
 }
 
-impl_cidr_for! {Ipv4Cidr : inet Ipv4Inet : addr Ipv4Addr : family Family::Ipv4}
-impl_cidr_for! {Ipv6Cidr : inet Ipv6Inet : addr Ipv6Addr : family Family::Ipv6}
+impl_cidr_for! {Ipv4Cidr : inet Ipv4Inet : addr Ipv4Addr : pair Ipv4InetPair : family Family::Ipv4}
+impl_cidr_for! {Ipv6Cidr : inet Ipv6Inet : addr Ipv6Addr : pair Ipv6InetPair : family Family::Ipv6}
 
 #[cfg(test)]
 mod tests {
