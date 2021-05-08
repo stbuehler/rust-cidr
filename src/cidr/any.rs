@@ -23,7 +23,7 @@ use super::{IpCidr, Ipv4Cidr, Ipv6Cidr};
 /// The `Cidr` trait itself cannot be implemented because `Any` has no
 /// address family, but there is a very similar interface implemented
 /// directly.
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 pub enum AnyIpCidr {
 	/// "any" network containing all IPv4 and IPv6 addresses
 	Any,

@@ -15,7 +15,7 @@ mod tests;
 ///
 /// Derived ordering, i.e. first sort by address, then by network
 /// length.
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Ipv4Inet {
 	address: Ipv4Addr,
 	network_length: u8,
@@ -25,7 +25,7 @@ pub struct Ipv4Inet {
 ///
 /// Derived ordering, i.e. first sort by address, then by network
 /// length.
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Ipv6Inet {
 	address: Ipv6Addr,
 	network_length: u8,
@@ -33,7 +33,7 @@ pub struct Ipv6Inet {
 
 /// `Inet` type representing either an IPv4 or an IPv6 host within a
 /// network
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 pub enum IpInet {
 	/// IPv4 host within network
 	V4(Ipv4Inet),

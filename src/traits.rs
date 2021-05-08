@@ -17,7 +17,7 @@ use super::inet_iterator::*;
 /// are the network part, the remaining bits are the host part.
 /// Requiring an address to be the first in a network is equivalent to
 /// requiring the host part being zero.
-pub trait Cidr: Sized {
+pub trait Cidr: Copy {
 	/// Type for the underlying address (`IpAddr`, `Ipv4Addr` or
 	/// `Ipv6Addr`).
 	type Address;
@@ -81,7 +81,7 @@ pub trait Cidr: Sized {
 /// The representation of a `Inet` type is similar to that of the
 /// corresponding `Cidr` type, but shows the host address instead of the
 /// first address of the network.
-pub trait Inet: Sized {
+pub trait Inet: Copy {
 	/// Type for the underlying address (`IpAddr`, `Ipv4Addr` or
 	/// `Ipv6Addr`).
 	type Address;
