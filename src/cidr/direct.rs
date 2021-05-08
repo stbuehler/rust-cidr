@@ -76,7 +76,7 @@ macro_rules! impl_cidr_for {
 			}
 
 			fn first_address(&self) -> Self::Address {
-				self.address.clone()
+				self.address
 			}
 
 			fn first(&self) -> Self::Inet {

@@ -26,12 +26,12 @@ where
 fn test_ipv4() {
 	let c: Ipv4Cidr = "192.0.2.0/24".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.0/24")]);
+	assert_tokens(&c.readable(), &[Token::Str("192.0.2.0/24")]);
 
-	assert_bincode(&c.clone().compact(), &[24, 192, 0, 2, 0]);
+	assert_bincode(&c.compact(), &[24, 192, 0, 2, 0]);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "Ipv4Cidr" },
 			Token::Tuple { len: 2 },
@@ -47,7 +47,7 @@ fn test_ipv4() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "Ipv4Cidr" },
 			Token::Seq { len: None },
@@ -67,12 +67,12 @@ fn test_ipv4() {
 fn test_ipv4_host() {
 	let c: Ipv4Cidr = "192.0.2.1/32".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.1")]);
+	assert_tokens(&c.readable(), &[Token::Str("192.0.2.1")]);
 
-	assert_bincode(&c.clone().compact(), &[32, 192, 0, 2, 1]);
+	assert_bincode(&c.compact(), &[32, 192, 0, 2, 1]);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "Ipv4Cidr" },
 			Token::Tuple { len: 2 },
@@ -88,7 +88,7 @@ fn test_ipv4_host() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "Ipv4Cidr" },
 			Token::Seq { len: None },
@@ -108,10 +108,10 @@ fn test_ipv4_host() {
 fn test_ipv6() {
 	let c: Ipv6Cidr = "2001:DB8:1234:5678::/64".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("2001:db8:1234:5678::/64")]);
+	assert_tokens(&c.readable(), &[Token::Str("2001:db8:1234:5678::/64")]);
 
 	assert_bincode(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			64 + 0x40,
 			0x20,
@@ -134,7 +134,7 @@ fn test_ipv6() {
 	);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "Ipv6Cidr" },
 			Token::Tuple { len: 2 },
@@ -162,7 +162,7 @@ fn test_ipv6() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "Ipv6Cidr" },
 			Token::Seq { len: None },
@@ -194,10 +194,10 @@ fn test_ipv6() {
 fn test_ipv6_host() {
 	let c: Ipv6Cidr = "2001:DB8:1234:5678:1:2:3:4/128".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("2001:db8:1234:5678:1:2:3:4")]);
+	assert_tokens(&c.readable(), &[Token::Str("2001:db8:1234:5678:1:2:3:4")]);
 
 	assert_bincode(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			128 + 0x40,
 			0x20,
@@ -220,7 +220,7 @@ fn test_ipv6_host() {
 	);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "Ipv6Cidr" },
 			Token::Tuple { len: 2 },
@@ -248,7 +248,7 @@ fn test_ipv6_host() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "Ipv6Cidr" },
 			Token::Seq { len: None },
@@ -280,12 +280,12 @@ fn test_ipv6_host() {
 fn test_cidr_v4() {
 	let c: IpCidr = "192.0.2.0/24".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.0/24")]);
+	assert_tokens(&c.readable(), &[Token::Str("192.0.2.0/24")]);
 
-	assert_bincode(&c.clone().compact(), &[24, 192, 0, 2, 0]);
+	assert_bincode(&c.compact(), &[24, 192, 0, 2, 0]);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "IpCidr" },
 			Token::Tuple { len: 2 },
@@ -301,7 +301,7 @@ fn test_cidr_v4() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "IpCidr" },
 			Token::Seq { len: None },
@@ -321,12 +321,12 @@ fn test_cidr_v4() {
 fn test_cidr_v4_host() {
 	let c: IpCidr = "192.0.2.1/32".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.1")]);
+	assert_tokens(&c.readable(), &[Token::Str("192.0.2.1")]);
 
-	assert_bincode(&c.clone().compact(), &[32, 192, 0, 2, 1]);
+	assert_bincode(&c.compact(), &[32, 192, 0, 2, 1]);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "IpCidr" },
 			Token::Tuple { len: 2 },
@@ -342,7 +342,7 @@ fn test_cidr_v4_host() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "IpCidr" },
 			Token::Seq { len: None },
@@ -362,10 +362,10 @@ fn test_cidr_v4_host() {
 fn test_cidr_v6() {
 	let c: IpCidr = "2001:DB8:1234:5678::/64".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("2001:db8:1234:5678::/64")]);
+	assert_tokens(&c.readable(), &[Token::Str("2001:db8:1234:5678::/64")]);
 
 	assert_bincode(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			64 + 0x40,
 			0x20,
@@ -388,7 +388,7 @@ fn test_cidr_v6() {
 	);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "IpCidr" },
 			Token::Tuple { len: 2 },
@@ -416,7 +416,7 @@ fn test_cidr_v6() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "IpCidr" },
 			Token::Seq { len: None },
@@ -448,10 +448,10 @@ fn test_cidr_v6() {
 fn test_cidr_v6_host() {
 	let c: IpCidr = "2001:DB8:1234:5678:1:2:3:4/128".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("2001:db8:1234:5678:1:2:3:4")]);
+	assert_tokens(&c.readable(), &[Token::Str("2001:db8:1234:5678:1:2:3:4")]);
 
 	assert_bincode(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			128 + 0x40,
 			0x20,
@@ -474,7 +474,7 @@ fn test_cidr_v6_host() {
 	);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "IpCidr" },
 			Token::Tuple { len: 2 },
@@ -502,7 +502,7 @@ fn test_cidr_v6_host() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "IpCidr" },
 			Token::Seq { len: None },
@@ -534,12 +534,12 @@ fn test_cidr_v6_host() {
 fn test_any_cidr_any() {
 	let c: AnyIpCidr = "any".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("any")]);
+	assert_tokens(&c.readable(), &[Token::Str("any")]);
 
-	assert_bincode(&c.clone().compact(), &[0xff]);
+	assert_bincode(&c.compact(), &[0xff]);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "AnyIpCidr" },
 			Token::Tuple { len: 2 },
@@ -550,7 +550,7 @@ fn test_any_cidr_any() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "AnyIpCidr" },
 			Token::Seq { len: None },
@@ -565,12 +565,12 @@ fn test_any_cidr_any() {
 fn test_any_cidr_v4() {
 	let c: AnyIpCidr = "192.0.2.0/24".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.0/24")]);
+	assert_tokens(&c.readable(), &[Token::Str("192.0.2.0/24")]);
 
-	assert_bincode(&c.clone().compact(), &[24, 192, 0, 2, 0]);
+	assert_bincode(&c.compact(), &[24, 192, 0, 2, 0]);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "AnyIpCidr" },
 			Token::Tuple { len: 2 },
@@ -586,7 +586,7 @@ fn test_any_cidr_v4() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "AnyIpCidr" },
 			Token::Seq { len: None },
@@ -606,12 +606,12 @@ fn test_any_cidr_v4() {
 fn test_any_cidr_v4_host() {
 	let c: AnyIpCidr = "192.0.2.1/32".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("192.0.2.1")]);
+	assert_tokens(&c.readable(), &[Token::Str("192.0.2.1")]);
 
-	assert_bincode(&c.clone().compact(), &[32, 192, 0, 2, 1]);
+	assert_bincode(&c.compact(), &[32, 192, 0, 2, 1]);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "AnyIpCidr" },
 			Token::Tuple { len: 2 },
@@ -627,7 +627,7 @@ fn test_any_cidr_v4_host() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "AnyIpCidr" },
 			Token::Seq { len: None },
@@ -647,10 +647,10 @@ fn test_any_cidr_v4_host() {
 fn test_any_cidr_v6() {
 	let c: AnyIpCidr = "2001:DB8:1234:5678::/64".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("2001:db8:1234:5678::/64")]);
+	assert_tokens(&c.readable(), &[Token::Str("2001:db8:1234:5678::/64")]);
 
 	assert_bincode(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			64 + 0x40,
 			0x20,
@@ -673,7 +673,7 @@ fn test_any_cidr_v6() {
 	);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "AnyIpCidr" },
 			Token::Tuple { len: 2 },
@@ -701,7 +701,7 @@ fn test_any_cidr_v6() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "AnyIpCidr" },
 			Token::Seq { len: None },
@@ -733,10 +733,10 @@ fn test_any_cidr_v6() {
 fn test_any_cidr_v6_host() {
 	let c: AnyIpCidr = "2001:DB8:1234:5678:1:2:3:4/128".parse().unwrap();
 
-	assert_tokens(&c.clone().readable(), &[Token::Str("2001:db8:1234:5678:1:2:3:4")]);
+	assert_tokens(&c.readable(), &[Token::Str("2001:db8:1234:5678:1:2:3:4")]);
 
 	assert_bincode(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			128 + 0x40,
 			0x20,
@@ -759,7 +759,7 @@ fn test_any_cidr_v6_host() {
 	);
 
 	assert_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "AnyIpCidr" },
 			Token::Tuple { len: 2 },
@@ -787,7 +787,7 @@ fn test_any_cidr_v6_host() {
 	);
 
 	assert_de_tokens(
-		&c.clone().compact(),
+		&c.compact(),
 		&[
 			Token::NewtypeStruct { name: "AnyIpCidr" },
 			Token::Seq { len: None },

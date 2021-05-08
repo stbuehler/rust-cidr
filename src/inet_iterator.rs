@@ -38,26 +38,20 @@ mod tests {
 	use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
 	fn test_v4(s: &'static str, l: &[Ipv4Addr]) {
-		assert_eq!(
-			s.parse::<Ipv4Cidr>().unwrap().iter().collect::<Vec<_>>(),
-			l.iter().map(|e| e.clone()).collect::<Vec<_>>()
-		);
+		assert_eq!(s.parse::<Ipv4Cidr>().unwrap().iter().collect::<Vec<_>>(), l);
 
 		assert_eq!(
 			s.parse::<IpCidr>().unwrap().iter().collect::<Vec<_>>(),
-			l.iter().map(|e| IpAddr::V4(e.clone())).collect::<Vec<_>>()
+			l.iter().map(|e| IpAddr::V4(*e)).collect::<Vec<_>>()
 		);
 	}
 
 	fn test_v6(s: &'static str, l: &[Ipv6Addr]) {
-		assert_eq!(
-			s.parse::<Ipv6Cidr>().unwrap().iter().collect::<Vec<_>>(),
-			l.iter().map(|e| e.clone()).collect::<Vec<_>>()
-		);
+		assert_eq!(s.parse::<Ipv6Cidr>().unwrap().iter().collect::<Vec<_>>(), l);
 
 		assert_eq!(
 			s.parse::<IpCidr>().unwrap().iter().collect::<Vec<_>>(),
-			l.iter().map(|e| IpAddr::V6(e.clone())).collect::<Vec<_>>()
+			l.iter().map(|e| IpAddr::V6(*e)).collect::<Vec<_>>()
 		);
 	}
 
