@@ -18,8 +18,8 @@ mod tests;
 /// Ordering based on lexicographic bitstring representation.
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Ipv4Cidr {
-	address: Ipv4Addr,
-	network_length: u8,
+	pub(crate) address: Ipv4Addr,
+	pub(crate) network_length: u8,
 }
 
 /// `Cidr` type representing an IPv6 network
@@ -27,8 +27,8 @@ pub struct Ipv4Cidr {
 /// Ordering based on lexicographic bitstring representation.
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Ipv6Cidr {
-	address: Ipv6Addr,
-	network_length: u8,
+	pub(crate) address: Ipv6Addr,
+	pub(crate) network_length: u8,
 }
 
 /// `Cidr` type representing either an IPv4 or an IPv6 network

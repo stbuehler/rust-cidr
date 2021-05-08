@@ -17,8 +17,8 @@ mod tests;
 /// length.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Ipv4Inet {
-	address: Ipv4Addr,
-	network_length: u8,
+	pub(crate) address: Ipv4Addr,
+	pub(crate) network_length: u8,
 }
 
 /// `Inet` type representing an IPv6 host within a network
@@ -27,8 +27,8 @@ pub struct Ipv4Inet {
 /// length.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Ipv6Inet {
-	address: Ipv6Addr,
-	network_length: u8,
+	pub(crate) address: Ipv6Addr,
+	pub(crate) network_length: u8,
 }
 
 /// `Inet` type representing either an IPv4 or an IPv6 host within a

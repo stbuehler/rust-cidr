@@ -80,7 +80,7 @@ macro_rules! impl_cidr_for {
 			}
 
 			fn first(&self) -> Self::Inet {
-				$inet::new(self.first_address(), self.network_length).unwrap()
+				$inet { address: self.first_address(), network_length: self.network_length }
 			}
 
 			fn last_address(&self) -> Self::Address {
@@ -88,7 +88,7 @@ macro_rules! impl_cidr_for {
 			}
 
 			fn last(&self) -> Self::Inet {
-				$inet::new(self.last_address(), self.network_length).unwrap()
+				$inet { address: self.last_address(), network_length: self.network_length }
 			}
 
 			fn network_length(&self) -> u8 {
