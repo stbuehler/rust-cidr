@@ -160,23 +160,21 @@ macro_rules! impl_cidr_for {
 
 		/// Iterate over all the addresses in the CIDR.
 		impl IntoIterator for $n {
-			type IntoIter = $crate::InetIterator<$inet>;
+			type IntoIter = $crate::InetIterator<$addr>;
 			type Item = $addr;
 
 			fn into_iter(self) -> Self::IntoIter {
-				use $crate::Cidr;
-				$crate::InetIterator::new(self.first())
+				$crate::InetIterator::_new(self._range_pair())
 			}
 		}
 
 		/// Iterate over all the addresses in the CIDR.
 		impl<'a> IntoIterator for &'a $n {
-			type IntoIter = $crate::InetIterator<$inet>;
+			type IntoIter = $crate::InetIterator<$addr>;
 			type Item = $addr;
 
 			fn into_iter(self) -> Self::IntoIter {
-				use $crate::Cidr;
-				$crate::InetIterator::new(self.first())
+				$crate::InetIterator::_new(self._range_pair())
 			}
 		}
 	};

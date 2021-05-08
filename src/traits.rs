@@ -55,8 +55,8 @@ pub trait Cidr: Copy + HasAddressType + PrivCidr {
 	/// Iterate over all addresses in the range.  With IPv6 addresses
 	/// this can produce really long iterations (up to 2<sup>128</sup>
 	/// addresses).
-	fn iter(&self) -> InetIterator<<Self::Address as Address>::Inet> {
-		InetIterator::new(self.first())
+	fn iter(&self) -> InetIterator<Self::Address> {
+		InetIterator::_new(self._range_pair())
 	}
 
 	/// first address in the network as plain address

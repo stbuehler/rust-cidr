@@ -151,19 +151,19 @@ impl From<Ipv6Cidr> for IpCidr {
 }
 
 impl IntoIterator for IpCidr {
-	type IntoIter = InetIterator<IpInet>;
+	type IntoIter = InetIterator<IpAddr>;
 	type Item = IpAddr;
 
 	fn into_iter(self) -> Self::IntoIter {
-		InetIterator::new(self.first())
+		InetIterator::_new(self._range_pair())
 	}
 }
 
 impl<'a> IntoIterator for &'a IpCidr {
-	type IntoIter = InetIterator<IpInet>;
+	type IntoIter = InetIterator<IpAddr>;
 	type Item = IpAddr;
 
 	fn into_iter(self) -> Self::IntoIter {
-		InetIterator::new(self.first())
+		InetIterator::_new(self._range_pair())
 	}
 }

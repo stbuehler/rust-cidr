@@ -1,3 +1,4 @@
+use super::num::NumberOfAddresses;
 use super::traits::{Address, HasAddressType};
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
@@ -28,7 +29,11 @@ pub trait PrivCidr: HasAddressType {
 pub trait PrivInet: HasAddressType {}
 
 /// seal `InetPair` trait, provide internal functions
-pub trait PrivInetPair: HasAddressType {}
+pub trait PrivInetPair: HasAddressType {
+	fn _covered_addresses(&self) -> NumberOfAddresses;
+	fn _inc_first(&mut self) -> bool;
+	fn _dec_second(&mut self) -> bool;
+}
 
 fn ipv4_host_mask(prefix_len: u8) -> u32 {
 	(!0u32).checked_shr(prefix_len as u32).unwrap_or(0)

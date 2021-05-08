@@ -6,6 +6,7 @@ use super::super::errors::*;
 use super::super::family::Family;
 use super::super::inet::*;
 use super::super::internal_traits::*;
+use super::super::num::NumberOfAddresses;
 use super::super::traits::*;
 use super::{IpInetPair, Ipv4InetPair, Ipv6InetPair};
 
@@ -31,7 +32,28 @@ impl HasAddressType for IpInetPair {
 	type Address = IpAddr;
 }
 
-impl PrivInetPair for IpInetPair {}
+impl PrivInetPair for IpInetPair {
+	fn _covered_addresses(&self) -> NumberOfAddresses {
+		match self {
+			Self::V4(p) => p._covered_addresses(),
+			Self::V6(p) => p._covered_addresses(),
+		}
+	}
+
+	fn _inc_first(&mut self) -> bool {
+		match self {
+			Self::V4(p) => p._inc_first(),
+			Self::V6(p) => p._inc_first(),
+		}
+	}
+
+	fn _dec_second(&mut self) -> bool {
+		match self {
+			Self::V4(p) => p._dec_second(),
+			Self::V6(p) => p._dec_second(),
+		}
+	}
+}
 
 impl InetPair for IpInetPair {
 	fn new(first: Self::Address, second: Self::Address, len: u8) -> Result<Self, InetTupleError> {

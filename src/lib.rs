@@ -54,4 +54,5 @@ mod inet_iterator;
 mod inet_pair;
 mod internal_traits;
 mod local_addr_parser;
+mod num;
 mod traits;

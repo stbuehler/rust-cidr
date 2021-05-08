@@ -1,34 +1,54 @@
-use super::traits::Inet;
+use super::internal_traits::PrivInetPair;
+use super::num::NumberOfAddresses;
+use super::traits::{Address, Inet, InetPair};
 
 /// Iterator type to iterate over a list of IP addresses in a network
-pub struct InetIterator<I: Inet> {
-	next: Option<I>,
+pub struct InetIterator<A: Address> {
+	state: Option<A::InetPair>,
 }
 
-impl<I: Inet> InetIterator<I> {
+impl<A: Address> InetIterator<A> {
 	#[doc(hidden)]
-	pub fn new(start: I) -> Self {
-		InetIterator { next: Some(start) }
+	pub fn _new(range_pair: A::InetPair) -> Self {
+		Self { state: Some(range_pair) }
 	}
 }
 
-impl<I: Inet + Clone> Iterator for InetIterator<I> {
-	type Item = I::Address;
+impl<A: Address> Iterator for InetIterator<A> {
+	type Item = A;
 
 	fn next(&mut self) -> Option<Self::Item> {
-		let mut overflow = false;
-		let result = match self.next {
-			None => None,
-			Some(ref mut next) => {
-				let result = Some(next.address());
-				overflow = next.next();
-				result
-			},
-		};
-		if overflow {
-			self.next = None;
+		let state = self.state.as_mut().take()?;
+		let res = state.first();
+		if !state._inc_first() {
+			self.state = None;
 		}
-		result
+		Some(res.address())
+	}
+
+	fn size_hint(&self) -> (usize, Option<usize>) {
+		let state = match &self.state {
+			None => return (0, Some(0)),
+			Some(state) => state,
+		};
+		match state._covered_addresses() {
+			NumberOfAddresses::MaxIpv6Addresses => (0, None),
+			NumberOfAddresses::Count(c) => {
+				if c > (usize::MAX as u128) {
+					(usize::MAX, None)
+				} else {
+					let c = c as usize;
+					(c, Some(c))
+				}
+			},
+		}
+	}
+
+	fn count(self) -> usize
+	where
+		Self: Sized,
+	{
+		self.size_hint().1.expect("iterator count overflow")
 	}
 }
 

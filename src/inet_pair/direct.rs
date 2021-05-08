@@ -5,16 +5,41 @@ use super::super::errors::*;
 use super::super::family::Family;
 use super::super::inet::*;
 use super::super::internal_traits::*;
+use super::super::num::NumberOfAddresses;
 use super::super::traits::*;
 use super::{Ipv4InetPair, Ipv6InetPair};
 
 macro_rules! impl_inet_pair_for {
-	($n:ident : inet $inet:ident : addr $addr:ty : family $family:expr) => {
+	($n:ident : inet $inet:ident : addr $addr:ty : native $native:ident : family $family:expr) => {
 		impl HasAddressType for $n {
 			type Address = $addr;
 		}
 
-		impl PrivInetPair for $n {}
+		impl PrivInetPair for $n {
+			fn _covered_addresses(&self) -> NumberOfAddresses {
+				let first = <$native>::from(self.first);
+				let second = <$native>::from(self.second);
+				NumberOfAddresses::count_from_distance((second - first) as u128)
+			}
+
+			fn _inc_first(&mut self) -> bool {
+				if self.first < self.second {
+					self.first = <$addr>::from(<$native>::from(self.first) + 1);
+					true
+				} else {
+					false
+				}
+			}
+
+			fn _dec_second(&mut self) -> bool {
+				if self.first < self.second {
+					self.second = <$addr>::from(<$native>::from(self.second) - 1);
+					true
+				} else {
+					false
+				}
+			}
+		}
 
 		impl InetPair for $n {
 			fn new(
@@ -72,5 +97,5 @@ macro_rules! impl_inet_pair_for {
 	};
 }
 
-impl_inet_pair_for! {Ipv4InetPair : inet Ipv4Inet : addr Ipv4Addr : family Family::Ipv4}
-impl_inet_pair_for! {Ipv6InetPair : inet Ipv6Inet : addr Ipv6Addr : family Family::Ipv6}
+impl_inet_pair_for! {Ipv4InetPair : inet Ipv4Inet : addr Ipv4Addr : native u32  : family Family::Ipv4}
+impl_inet_pair_for! {Ipv6InetPair : inet Ipv6Inet : addr Ipv6Addr : native u128 : family Family::Ipv6}
