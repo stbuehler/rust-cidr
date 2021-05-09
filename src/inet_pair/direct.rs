@@ -15,7 +15,21 @@ macro_rules! impl_inet_pair_for {
 		impl InetPair for $n {
 			type Address = $addr;
 
-			fn new(
+			fn new(first: $inet, second: $inet) -> Result<Self, InetTupleError> {
+				if first.network_length != second.network_length {
+					return Err(InetTupleError::NotInSharedNetwork);
+				}
+				if !first.address._prefix_match(second.address, first.network_length) {
+					return Err(InetTupleError::NotInSharedNetwork);
+				}
+				Ok(Self {
+					first: first.address,
+					second: second.address,
+					network_length: first.network_length,
+				})
+			}
+
+			fn new_from_addresses(
 				first: Self::Address,
 				second: Self::Address,
 				len: u8,

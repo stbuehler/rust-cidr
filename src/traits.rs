@@ -155,10 +155,22 @@ pub trait InetPair: Copy + PrivInetPair {
 	/// `Ipv6Addr`).
 	type Address: Address<InetPair = Self>;
 
-	/// Create new host within a network from address and prefix length.
-	/// If the network length exceeds the address length an error is
-	/// returned.
-	fn new(first: Self::Address, second: Self::Address, len: u8) -> Result<Self, InetTupleError>;
+	/// Create new pair from two addresses in the same network
+	///
+	/// Fails if the addresses are not in the same network.
+	fn new(
+		first: <Self::Address as Address>::Inet,
+		second: <Self::Address as Address>::Inet,
+	) -> Result<Self, InetTupleError>;
+
+	/// Create new pair from two addresses and a common length
+	///
+	/// Fails if the network length is invalid for the addresses or the addresses are not in the same network.
+	fn new_from_addresses(
+		first: Self::Address,
+		second: Self::Address,
+		len: u8,
+	) -> Result<Self, InetTupleError>;
 
 	/// First address
 	fn first(&self) -> <Self::Address as Address>::Inet;

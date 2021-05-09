@@ -29,13 +29,29 @@ impl PrivInetPair for IpInetPair {}
 impl InetPair for IpInetPair {
 	type Address = IpAddr;
 
-	fn new(first: Self::Address, second: Self::Address, len: u8) -> Result<Self, InetTupleError> {
+	fn new(first: IpInet, second: IpInet) -> Result<Self, InetTupleError> {
+		match (first, second) {
+			(IpInet::V4(first), IpInet::V4(second)) => {
+				Ok(Self::V4(Ipv4InetPair::new(first, second)?))
+			},
+			(IpInet::V6(first), IpInet::V6(second)) => {
+				Ok(Self::V6(Ipv6InetPair::new(first, second)?))
+			},
+			_ => Err(InetTupleError::NotInSharedNetwork),
+		}
+	}
+
+	fn new_from_addresses(
+		first: Self::Address,
+		second: Self::Address,
+		len: u8,
+	) -> Result<Self, InetTupleError> {
 		match (first, second) {
 			(IpAddr::V4(first), IpAddr::V4(second)) => {
-				Ok(Self::V4(Ipv4InetPair::new(first, second, len)?))
+				Ok(Self::V4(Ipv4InetPair::new_from_addresses(first, second, len)?))
 			},
 			(IpAddr::V6(first), IpAddr::V6(second)) => {
-				Ok(Self::V6(Ipv6InetPair::new(first, second, len)?))
+				Ok(Self::V6(Ipv6InetPair::new_from_addresses(first, second, len)?))
 			},
 			_ => Err(InetTupleError::NotInSharedNetwork),
 		}
