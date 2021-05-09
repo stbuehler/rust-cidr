@@ -15,8 +15,8 @@
 //!
 //! # Feature `serde`
 //!
-//! This feature is enabled by default (not using `serde-derive`, only
-//! `serde`).
+//! This feature enables various types to be serialized using `serde`
+//! (without `serde-derive`).
 //!
 //! In human readable formats the `Display` and `FromStr` interfaces are
 //! used.  Otherwise all values are serialized in the same format (apart
@@ -30,6 +30,13 @@
 //!   (`[u8; 16]`) or `()`
 //!
 //! The represenation hasn't been changed in 0.2; it is compatible with 0.1.
+//!
+//! # Feature `bitstring`
+//!
+//! This feature allows various types to be used as [`bitstring::BitString`],
+//! which allows them being in used in containers like [bitstring-trees].
+//!
+//! [bitstring-trees]: https://crates.io/crates/bitstring-trees
 //!
 //! [`Ipv4Addr`]: std::net::Ipv4Addr
 //! [`Ipv6Addr`]: std::net::Ipv6Addr
