@@ -9,8 +9,7 @@ use super::from_str::cidr_from_str;
 use crate::{
 	errors::*,
 	internal_traits::{PrivAddress, PrivCidr, PrivUnspecAddress},
-	Cidr, Family, HasAddressType, Ipv4Cidr, Ipv4Inet, Ipv4InetPair, Ipv6Cidr, Ipv6Inet,
-	Ipv6InetPair,
+	Cidr, Family, Ipv4Cidr, Ipv4Inet, Ipv4InetPair, Ipv6Cidr, Ipv6Inet, Ipv6InetPair,
 };
 
 macro_rules! impl_cidr_for {
@@ -58,21 +57,11 @@ macro_rules! impl_cidr_for {
 			}
 		}
 
-		impl HasAddressType for $n {
-			type Address = $addr;
-		}
-
-		impl PrivCidr for $n {
-			fn _range_pair(&self) -> $pair {
-				$pair {
-					first: self.first_address(),
-					second: self.last_address(),
-					network_length: self.network_length,
-				}
-			}
-		}
+		impl PrivCidr for $n {}
 
 		impl Cidr for $n {
+			type Address = $addr;
+
 			fn new(addr: $addr, len: u8) -> Result<Self, NetworkParseError> {
 				if len > $family.len() {
 					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
@@ -117,6 +106,14 @@ macro_rules! impl_cidr_for {
 
 			fn contains(&self, addr: &$addr) -> bool {
 				self.address._prefix_match(*addr, self.network_length)
+			}
+
+			fn _range_pair(&self) -> $pair {
+				$pair {
+					first: self.first_address(),
+					second: self.last_address(),
+					network_length: self.network_length,
+				}
 			}
 		}
 

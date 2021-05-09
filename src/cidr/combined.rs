@@ -4,8 +4,8 @@ use std::str::FromStr;
 
 use super::from_str::cidr_from_str;
 use crate::{
-	errors::*, internal_traits::PrivCidr, Cidr, Family, HasAddressType, InetIterator, IpCidr,
-	IpInet, IpInetPair, Ipv4Cidr, Ipv6Cidr,
+	errors::*, internal_traits::PrivCidr, Cidr, Family, InetIterator, IpCidr, IpInet, IpInetPair,
+	Ipv4Cidr, Ipv6Cidr,
 };
 
 impl IpCidr {
@@ -26,20 +26,11 @@ impl IpCidr {
 	}
 }
 
-impl HasAddressType for IpCidr {
-	type Address = IpAddr;
-}
-
-impl PrivCidr for IpCidr {
-	fn _range_pair(&self) -> IpInetPair {
-		match *self {
-			Self::V4(c) => IpInetPair::V4(c._range_pair()),
-			Self::V6(c) => IpInetPair::V6(c._range_pair()),
-		}
-	}
-}
+impl PrivCidr for IpCidr {}
 
 impl Cidr for IpCidr {
+	type Address = IpAddr;
+
 	fn new(addr: IpAddr, len: u8) -> Result<Self, NetworkParseError> {
 		Ok(match addr {
 			IpAddr::V4(a) => Self::V4(Ipv4Cidr::new(a, len)?),
@@ -113,6 +104,13 @@ impl Cidr for IpCidr {
 				IpAddr::V4(_) => false,
 				IpAddr::V6(ref a) => c.contains(a),
 			},
+		}
+	}
+
+	fn _range_pair(&self) -> IpInetPair {
+		match *self {
+			Self::V4(c) => IpInetPair::V4(c._range_pair()),
+			Self::V6(c) => IpInetPair::V6(c._range_pair()),
 		}
 	}
 }

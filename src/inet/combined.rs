@@ -4,8 +4,7 @@ use std::str::FromStr;
 
 use super::from_str::inet_from_str;
 use crate::{
-	errors::*, internal_traits::PrivInet, Family, HasAddressType, Inet, IpCidr, IpInet, Ipv4Inet,
-	Ipv6Inet,
+	errors::*, internal_traits::PrivInet, Family, Inet, IpCidr, IpInet, Ipv4Inet, Ipv6Inet,
 };
 
 impl IpInet {
@@ -26,13 +25,11 @@ impl IpInet {
 	}
 }
 
-impl HasAddressType for IpInet {
-	type Address = IpAddr;
-}
-
 impl PrivInet for IpInet {}
 
 impl Inet for IpInet {
+	type Address = IpAddr;
+
 	fn new(addr: IpAddr, len: u8) -> Result<Self, NetworkLengthTooLongError> {
 		Ok(match addr {
 			IpAddr::V4(a) => Self::V4(Ipv4Inet::new(a, len)?),

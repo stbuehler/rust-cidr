@@ -1,6 +1,7 @@
 use crate::{
 	errors::{InetTupleError, NetworkLengthTooLongError, NetworkParseError},
 	internal_traits::{PrivCidr, PrivInet, PrivInetPair, PrivUnspecAddress},
+	num::NumberOfAddresses,
 	Family, InetIterator,
 };
 
@@ -20,13 +21,6 @@ pub trait Address: Copy + PrivUnspecAddress {
 	type InetPair: InetPair<Address = Self>;
 }
 
-/// Maps back to basic address type
-pub trait HasAddressType {
-	/// Type for the underlying address (`IpAddr`, `Ipv4Addr` or
-	/// `Ipv6Addr`).
-	type Address: Address;
-}
-
 /// Types implementing Cidr represent IP networks.  An IP network in
 /// this case is a set of IP addresses which share a common prefix (when
 /// viewed as a bitstring).  The length of this prefix is called
@@ -42,7 +36,11 @@ pub trait HasAddressType {
 /// are the network part, the remaining bits are the host part.
 /// Requiring an address to be the first in a network is equivalent to
 /// requiring the host part being zero.
-pub trait Cidr: Copy + HasAddressType + PrivCidr {
+pub trait Cidr: Copy + PrivCidr {
+	/// Type for the underlying address (`IpAddr`, `Ipv4Addr` or
+	/// `Ipv6Addr`).
+	type Address: Address<Cidr = Self>;
+
 	/// Create new network from address and prefix length.  If the
 	/// network length exceeds the address length or the address is not
 	/// the first address in the network ("host part not zero") an
@@ -84,6 +82,9 @@ pub trait Cidr: Copy + HasAddressType + PrivCidr {
 
 	/// check whether an address is contained in the network
 	fn contains(&self, addr: &Self::Address) -> bool;
+
+	#[doc(hidden)]
+	fn _range_pair(&self) -> <Self::Address as Address>::InetPair;
 }
 
 /// Types implementing Inet represent IP hosts within networks.
@@ -98,7 +99,11 @@ pub trait Cidr: Copy + HasAddressType + PrivCidr {
 /// The representation of a `Inet` type is similar to that of the
 /// corresponding `Cidr` type, but shows the host address instead of the
 /// first address of the network.
-pub trait Inet: Copy + HasAddressType + PrivInet {
+pub trait Inet: Copy + PrivInet {
+	/// Type for the underlying address (`IpAddr`, `Ipv4Addr` or
+	/// `Ipv6Addr`).
+	type Address: Address<Inet = Self>;
+
 	/// Create new host within a network from address and prefix length.
 	/// If the network length exceeds the address length an error is
 	/// returned.
@@ -145,7 +150,11 @@ pub trait Inet: Copy + HasAddressType + PrivInet {
 }
 
 /// Pair of two addresses in the same network
-pub trait InetPair: Copy + HasAddressType + PrivInetPair {
+pub trait InetPair: Copy + PrivInetPair {
+	/// Type for the underlying address (`IpAddr`, `Ipv4Addr` or
+	/// `Ipv6Addr`).
+	type Address: Address<InetPair = Self>;
+
 	/// Create new host within a network from address and prefix length.
 	/// If the network length exceeds the address length an error is
 	/// returned.
@@ -165,4 +174,13 @@ pub trait InetPair: Copy + HasAddressType + PrivInetPair {
 
 	/// IP family of the contained address (`Ipv4` or `Ipv6`).
 	fn family(&self) -> Family;
+
+	#[doc(hidden)]
+	fn _covered_addresses(&self) -> NumberOfAddresses;
+
+	#[doc(hidden)]
+	fn _inc_first(&mut self) -> bool;
+
+	#[doc(hidden)]
+	fn _dec_second(&mut self) -> bool;
 }

@@ -2,8 +2,8 @@ use std::fmt;
 use std::net::IpAddr;
 
 use crate::{
-	errors::*, internal_traits::PrivInetPair, num::NumberOfAddresses, Family, HasAddressType,
-	InetPair, IpCidr, IpInet, IpInetPair, Ipv4InetPair, Ipv6InetPair,
+	errors::*, internal_traits::PrivInetPair, num::NumberOfAddresses, Family, InetPair, IpCidr,
+	IpInet, IpInetPair, Ipv4InetPair, Ipv6InetPair,
 };
 
 impl IpInetPair {
@@ -24,34 +24,11 @@ impl IpInetPair {
 	}
 }
 
-impl HasAddressType for IpInetPair {
-	type Address = IpAddr;
-}
-
-impl PrivInetPair for IpInetPair {
-	fn _covered_addresses(&self) -> NumberOfAddresses {
-		match self {
-			Self::V4(p) => p._covered_addresses(),
-			Self::V6(p) => p._covered_addresses(),
-		}
-	}
-
-	fn _inc_first(&mut self) -> bool {
-		match self {
-			Self::V4(p) => p._inc_first(),
-			Self::V6(p) => p._inc_first(),
-		}
-	}
-
-	fn _dec_second(&mut self) -> bool {
-		match self {
-			Self::V4(p) => p._dec_second(),
-			Self::V6(p) => p._dec_second(),
-		}
-	}
-}
+impl PrivInetPair for IpInetPair {}
 
 impl InetPair for IpInetPair {
+	type Address = IpAddr;
+
 	fn new(first: Self::Address, second: Self::Address, len: u8) -> Result<Self, InetTupleError> {
 		match (first, second) {
 			(IpAddr::V4(first), IpAddr::V4(second)) => {
@@ -96,6 +73,27 @@ impl InetPair for IpInetPair {
 		match *self {
 			Self::V4(_) => Family::Ipv4,
 			Self::V6(_) => Family::Ipv6,
+		}
+	}
+
+	fn _covered_addresses(&self) -> NumberOfAddresses {
+		match self {
+			Self::V4(p) => p._covered_addresses(),
+			Self::V6(p) => p._covered_addresses(),
+		}
+	}
+
+	fn _inc_first(&mut self) -> bool {
+		match self {
+			Self::V4(p) => p._inc_first(),
+			Self::V6(p) => p._inc_first(),
+		}
+	}
+
+	fn _dec_second(&mut self) -> bool {
+		match self {
+			Self::V4(p) => p._dec_second(),
+			Self::V6(p) => p._dec_second(),
 		}
 	}
 }

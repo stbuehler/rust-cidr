@@ -1,4 +1,3 @@
-use crate::{num::NumberOfAddresses, Address, HasAddressType};
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
 /// Implemented for IPv4Addr, IPv6Addr AND IpAddr
@@ -19,20 +18,14 @@ pub trait PrivAddress: PrivUnspecAddress {
 	fn _network_mask(prefix_len: u8) -> Self;
 }
 
-/// seal `Cidr` trait, provide internal functions
-pub trait PrivCidr: HasAddressType {
-	fn _range_pair(&self) -> <Self::Address as Address>::InetPair;
-}
+/// seal `Cidr` trait
+pub trait PrivCidr {}
 
-/// seal `Inet` trait, provide internal functions
-pub trait PrivInet: HasAddressType {}
+/// seal `Inet` trait
+pub trait PrivInet {}
 
-/// seal `InetPair` trait, provide internal functions
-pub trait PrivInetPair: HasAddressType {
-	fn _covered_addresses(&self) -> NumberOfAddresses;
-	fn _inc_first(&mut self) -> bool;
-	fn _dec_second(&mut self) -> bool;
-}
+/// seal `InetPair` trait
+pub trait PrivInetPair {}
 
 fn ipv4_host_mask(prefix_len: u8) -> u32 {
 	(!0u32).checked_shr(prefix_len as u32).unwrap_or(0)

@@ -1,4 +1,4 @@
-use crate::{internal_traits::PrivInetPair, num::NumberOfAddresses, Address, Inet, InetPair};
+use crate::{num::NumberOfAddresses, Address, Inet, InetPair};
 
 /// Iterator type to iterate over a list of IP addresses in a network
 pub struct InetIterator<A: Address> {

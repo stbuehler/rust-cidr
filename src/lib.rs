@@ -35,7 +35,7 @@ pub use self::{
 	inet::{IpInet, Ipv4Inet, Ipv6Inet},
 	inet_iterator::InetIterator,
 	inet_pair::{IpInetPair, Ipv4InetPair, Ipv6InetPair},
-	traits::{Address, Cidr, HasAddressType, Inet, InetPair},
+	traits::{Address, Cidr, Inet, InetPair},
 };
 
 pub mod errors;

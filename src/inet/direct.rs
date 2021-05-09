@@ -9,7 +9,7 @@ use super::from_str::inet_from_str;
 use crate::{
 	errors::*,
 	internal_traits::{PrivAddress, PrivInet, PrivUnspecAddress},
-	Family, HasAddressType, Inet, Ipv4Cidr, Ipv4Inet, Ipv6Cidr, Ipv6Inet,
+	Family, Inet, Ipv4Cidr, Ipv4Inet, Ipv6Cidr, Ipv6Inet,
 };
 
 macro_rules! impl_inet_for {
@@ -57,13 +57,11 @@ macro_rules! impl_inet_for {
 			}
 		}
 
-		impl HasAddressType for $n {
-			type Address = $addr;
-		}
-
 		impl PrivInet for $n {}
 
 		impl Inet for $n {
+			type Address = $addr;
+
 			fn new(addr: $addr, len: u8) -> Result<Self, NetworkLengthTooLongError> {
 				if len > $family.len() {
 					Err(NetworkLengthTooLongError::new(len as usize, $family).into())

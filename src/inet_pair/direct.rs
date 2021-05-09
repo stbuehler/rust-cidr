@@ -5,43 +5,16 @@ use crate::{
 	errors::*,
 	internal_traits::{PrivInetPair, PrivUnspecAddress},
 	num::NumberOfAddresses,
-	Address, Family, HasAddressType, Inet, InetPair, Ipv4Inet, Ipv4InetPair, Ipv6Inet,
-	Ipv6InetPair,
+	Address, Family, Inet, InetPair, Ipv4Inet, Ipv4InetPair, Ipv6Inet, Ipv6InetPair,
 };
 
 macro_rules! impl_inet_pair_for {
 	($n:ident : inet $inet:ident : addr $addr:ty : native $native:ident : family $family:expr) => {
-		impl HasAddressType for $n {
-			type Address = $addr;
-		}
-
-		impl PrivInetPair for $n {
-			fn _covered_addresses(&self) -> NumberOfAddresses {
-				let first = <$native>::from(self.first);
-				let second = <$native>::from(self.second);
-				NumberOfAddresses::count_from_distance((second - first) as u128)
-			}
-
-			fn _inc_first(&mut self) -> bool {
-				if self.first < self.second {
-					self.first = <$addr>::from(<$native>::from(self.first) + 1);
-					true
-				} else {
-					false
-				}
-			}
-
-			fn _dec_second(&mut self) -> bool {
-				if self.first < self.second {
-					self.second = <$addr>::from(<$native>::from(self.second) - 1);
-					true
-				} else {
-					false
-				}
-			}
-		}
+		impl PrivInetPair for $n {}
 
 		impl InetPair for $n {
+			type Address = $addr;
+
 			fn new(
 				first: Self::Address,
 				second: Self::Address,
@@ -71,6 +44,30 @@ macro_rules! impl_inet_pair_for {
 
 			fn family(&self) -> Family {
 				$family
+			}
+
+			fn _covered_addresses(&self) -> NumberOfAddresses {
+				let first = <$native>::from(self.first);
+				let second = <$native>::from(self.second);
+				NumberOfAddresses::count_from_distance((second - first) as u128)
+			}
+
+			fn _inc_first(&mut self) -> bool {
+				if self.first < self.second {
+					self.first = <$addr>::from(<$native>::from(self.first) + 1);
+					true
+				} else {
+					false
+				}
+			}
+
+			fn _dec_second(&mut self) -> bool {
+				if self.first < self.second {
+					self.second = <$addr>::from(<$native>::from(self.second) - 1);
+					true
+				} else {
+					false
+				}
 			}
 		}
 
