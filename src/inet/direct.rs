@@ -57,12 +57,11 @@ macro_rules! impl_inet_for {
 			}
 		}
 
-		impl PrivInet for $n {}
-
-		impl Inet for $n {
-			type Address = $addr;
-
-			fn new(addr: $addr, len: u8) -> Result<Self, NetworkLengthTooLongError> {
+		impl $n {
+			/// Create new host within a network from address and prefix length.
+			/// If the network length exceeds the address length an error is
+			/// returned.
+			pub fn new(addr: $addr, len: u8) -> Result<Self, NetworkLengthTooLongError> {
 				if len > $family.len() {
 					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
 				} else {
@@ -70,54 +69,136 @@ macro_rules! impl_inet_for {
 				}
 			}
 
-			fn new_host(addr: $addr) -> Self {
+			/// Create a network containing a single address as host and the
+			/// network (network length = address length).
+			pub fn new_host(addr: $addr) -> Self {
 				Self { address: addr, network_length: $family.len() }
 			}
 
-			fn next(&mut self) -> bool {
+			/// increments host part (without changing the network part);
+			/// returns true on wrap around
+			pub fn next(&mut self) -> bool {
 				let (address, overflow) = self.address._overflowing_next(self.network_length);
 				self.address = address;
 				overflow
 			}
 
-			fn network(&self) -> $cidr {
+			/// network (i.e. drops the host information)
+			pub fn network(&self) -> $cidr {
 				$cidr { address: self.first_address(), network_length: self.network_length }
 			}
 
-			fn address(&self) -> $addr {
+			/// the host
+			pub fn address(&self) -> $addr {
 				self.address
 			}
 
-			fn first_address(&self) -> $addr {
+			/// first address in the network as plain address
+			pub fn first_address(&self) -> $addr {
 				self.address._network_address(self.network_length)
 			}
 
-			fn first(&self) -> Self {
+			/// first address in the network
+			pub fn first(&self) -> Self {
 				Self { address: self.first_address(), network_length: self.network_length }
 			}
 
-			fn last_address(&self) -> $addr {
+			/// last address in the network as plain address
+			pub fn last_address(&self) -> $addr {
 				self.address._last_address(self.network_length)
 			}
 
-			fn last(&self) -> Self {
+			/// last address in the network
+			pub fn last(&self) -> Self {
 				Self { address: self.last_address(), network_length: self.network_length }
 			}
 
-			fn network_length(&self) -> u8 {
+			/// length in bits of the shared prefix of the contained addresses
+			pub fn network_length(&self) -> u8 {
 				self.network_length
 			}
 
-			fn family(&self) -> Family {
+			/// IP family of the contained address (`Ipv4` or `Ipv6`).
+			pub fn family(&self) -> Family {
 				$family
 			}
 
-			fn mask(&self) -> $addr {
+			/// whether network represents a single host address
+			pub fn is_host_address(&self) -> bool {
+				self.network_length() == self.family().len()
+			}
+
+			/// network mask: an pseudo address which has the first `network
+			/// length` bits set to 1 and the remaining to 0.
+			pub fn mask(&self) -> $addr {
 				$addr::_network_mask(self.network_length)
 			}
 
-			fn contains(&self, addr: &$addr) -> bool {
+			/// check whether an address is contained in the network
+			pub fn contains(&self, addr: &$addr) -> bool {
 				self.address._prefix_match(*addr, self.network_length)
+			}
+		}
+
+		impl PrivInet for $n {}
+
+		impl Inet for $n {
+			type Address = $addr;
+
+			fn new(addr: $addr, len: u8) -> Result<Self, NetworkLengthTooLongError> {
+				Self::new(addr, len)
+			}
+
+			fn new_host(addr: $addr) -> Self {
+				Self::new_host(addr)
+			}
+
+			fn next(&mut self) -> bool {
+				self.next()
+			}
+
+			fn network(&self) -> $cidr {
+				self.network()
+			}
+
+			fn address(&self) -> $addr {
+				self.address()
+			}
+
+			fn first_address(&self) -> $addr {
+				self.first_address()
+			}
+
+			fn first(&self) -> Self {
+				self.first()
+			}
+
+			fn last_address(&self) -> $addr {
+				self.last_address()
+			}
+
+			fn last(&self) -> Self {
+				self.last()
+			}
+
+			fn network_length(&self) -> u8 {
+				self.network_length()
+			}
+
+			fn family(&self) -> Family {
+				self.family()
+			}
+
+			fn is_host_address(&self) -> bool {
+				self.is_host_address()
+			}
+
+			fn mask(&self) -> $addr {
+				self.mask()
+			}
+
+			fn contains(&self, addr: &$addr) -> bool {
+				self.contains(addr)
 			}
 		}
 

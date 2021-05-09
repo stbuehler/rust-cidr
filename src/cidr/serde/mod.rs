@@ -2,7 +2,6 @@
 
 use crate::cidr::{AnyIpCidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
 use crate::serde_common;
-use crate::Cidr;
 use std::net::IpAddr;
 
 static NAME_IPV4_CIDR: &str = "Ipv4Cidr";

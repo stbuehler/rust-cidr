@@ -63,7 +63,7 @@ impl<A: Address> std::iter::DoubleEndedIterator for InetIterator<A> {
 
 #[cfg(test)]
 mod tests {
-	use crate::{Cidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
+	use crate::{IpCidr, Ipv4Cidr, Ipv6Cidr};
 	use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
 	fn test_v4(s: &'static str, l: &[Ipv4Addr]) {

@@ -5,17 +5,17 @@ use crate::{
 	errors::*,
 	internal_traits::{PrivInetPair, PrivUnspecAddress},
 	num::NumberOfAddresses,
-	Address, Family, Inet, InetPair, Ipv4Inet, Ipv4InetPair, Ipv6Inet, Ipv6InetPair,
+	Family, InetIterator, InetPair, Ipv4Cidr, Ipv4Inet, Ipv4InetPair, Ipv6Cidr, Ipv6Inet,
+	Ipv6InetPair,
 };
 
 macro_rules! impl_inet_pair_for {
-	($n:ident : inet $inet:ident : addr $addr:ty : native $native:ident : family $family:expr) => {
-		impl PrivInetPair for $n {}
-
-		impl InetPair for $n {
-			type Address = $addr;
-
-			fn new(first: $inet, second: $inet) -> Result<Self, InetTupleError> {
+	($n:ident : inet $inet:ident : cidr $cidr:ident : addr $addr:ty : native $native:ident : family $family:expr) => {
+		impl $n {
+			/// Create new pair from two addresses in the same network
+			///
+			/// Fails if the addresses are not in the same network.
+			pub fn new(first: $inet, second: $inet) -> Result<Self, InetTupleError> {
 				if first.network_length != second.network_length {
 					return Err(InetTupleError::NotInSharedNetwork);
 				}
@@ -29,9 +29,12 @@ macro_rules! impl_inet_pair_for {
 				})
 			}
 
-			fn new_from_addresses(
-				first: Self::Address,
-				second: Self::Address,
+			/// Create new pair from two addresses and a common length
+			///
+			/// Fails if the network length is invalid for the addresses or the addresses are not in the same network.
+			pub fn new_from_addresses(
+				first: $addr,
+				second: $addr,
 				len: u8,
 			) -> Result<Self, InetTupleError> {
 				if !first._prefix_match(second, len) {
@@ -40,24 +43,76 @@ macro_rules! impl_inet_pair_for {
 				Ok(Self { first, second, network_length: len })
 			}
 
-			fn first(&self) -> $inet {
+			/// First address
+			pub fn first(&self) -> $inet {
 				$inet { address: self.first, network_length: self.network_length }
 			}
 
-			fn second(&self) -> $inet {
+			/// Second address
+			pub fn second(&self) -> $inet {
 				$inet { address: self.second, network_length: self.network_length }
 			}
 
-			fn network(&self) -> <Self::Address as Address>::Cidr {
+			/// network (i.e. drops the host information)
+			pub fn network(&self) -> $cidr {
 				self.first().network()
 			}
 
-			fn network_length(&self) -> u8 {
+			/// length in bits of the shared prefix of the contained addresses
+			pub fn network_length(&self) -> u8 {
 				self.network_length
 			}
 
-			fn family(&self) -> Family {
+			/// IP family of the contained address (`Ipv4` or `Ipv6`).
+			pub fn family(&self) -> Family {
 				$family
+			}
+
+			/// Iterate over `first..=second` (inclusive)
+			pub fn iter(self) -> InetIterator<$addr> {
+				InetIterator::_new(self)
+			}
+		}
+
+		impl PrivInetPair for $n {}
+
+		impl InetPair for $n {
+			type Address = $addr;
+
+			fn new(first: $inet, second: $inet) -> Result<Self, InetTupleError> {
+				Self::new(first, second)
+			}
+
+			fn new_from_addresses(
+				first: Self::Address,
+				second: Self::Address,
+				len: u8,
+			) -> Result<Self, InetTupleError> {
+				Self::new_from_addresses(first, second, len)
+			}
+
+			fn first(&self) -> $inet {
+				self.first()
+			}
+
+			fn second(&self) -> $inet {
+				self.second()
+			}
+
+			fn network(&self) -> $cidr {
+				self.network()
+			}
+
+			fn network_length(&self) -> u8 {
+				self.network_length()
+			}
+
+			fn family(&self) -> Family {
+				self.family()
+			}
+
+			fn iter(self) -> InetIterator<$addr> {
+				self.iter()
 			}
 
 			fn _covered_addresses(&self) -> NumberOfAddresses {
@@ -118,5 +173,5 @@ macro_rules! impl_inet_pair_for {
 	};
 }
 
-impl_inet_pair_for! {Ipv4InetPair : inet Ipv4Inet : addr Ipv4Addr : native u32  : family Family::Ipv4}
-impl_inet_pair_for! {Ipv6InetPair : inet Ipv6Inet : addr Ipv6Addr : native u128 : family Family::Ipv6}
+impl_inet_pair_for! {Ipv4InetPair : inet Ipv4Inet : cidr Ipv4Cidr : addr Ipv4Addr : native u32  : family Family::Ipv4}
+impl_inet_pair_for! {Ipv6InetPair : inet Ipv6Inet : cidr Ipv6Cidr : addr Ipv6Addr : native u128 : family Family::Ipv6}

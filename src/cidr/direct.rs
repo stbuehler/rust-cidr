@@ -9,7 +9,7 @@ use super::from_str::cidr_from_str;
 use crate::{
 	errors::*,
 	internal_traits::{PrivAddress, PrivCidr, PrivUnspecAddress},
-	Cidr, Family, Ipv4Cidr, Ipv4Inet, Ipv4InetPair, Ipv6Cidr, Ipv6Inet, Ipv6InetPair,
+	Cidr, Family, InetIterator, Ipv4Cidr, Ipv4Inet, Ipv4InetPair, Ipv6Cidr, Ipv6Inet, Ipv6InetPair,
 };
 
 macro_rules! impl_cidr_for {
@@ -57,12 +57,12 @@ macro_rules! impl_cidr_for {
 			}
 		}
 
-		impl PrivCidr for $n {}
-
-		impl Cidr for $n {
-			type Address = $addr;
-
-			fn new(addr: $addr, len: u8) -> Result<Self, NetworkParseError> {
+		impl $n {
+			/// Create new network from address and prefix length.  If the
+			/// network length exceeds the address length or the address is not
+			/// the first address in the network ("host part not zero") an
+			/// error is returned.
+			pub fn new(addr: $addr, len: u8) -> Result<Self, NetworkParseError> {
 				if len > $family.len() {
 					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
 				} else if !addr._has_zero_host_part(len) {
@@ -72,40 +72,117 @@ macro_rules! impl_cidr_for {
 				}
 			}
 
-			fn new_host(addr: $addr) -> Self {
+			/// Create a network containing a single address (network length =
+			/// address length).
+			pub fn new_host(addr: $addr) -> Self {
 				Self { address: addr, network_length: $family.len() }
 			}
 
-			fn first_address(&self) -> $addr {
+			/// Iterate over all addresses in the range.  With IPv6 addresses
+			/// this can produce really long iterations (up to 2<sup>128</sup>
+			/// addresses).
+			pub fn iter(&self) -> InetIterator<$addr> {
+				self._range_pair().iter()
+			}
+
+			/// first address in the network as plain address
+			pub fn first_address(&self) -> $addr {
 				self.address
 			}
 
-			fn first(&self) -> $inet {
+			/// first address in the network
+			pub fn first(&self) -> $inet {
 				$inet { address: self.first_address(), network_length: self.network_length }
 			}
 
-			fn last_address(&self) -> $addr {
+			/// last address in the network as plain address
+			pub fn last_address(&self) -> $addr {
 				self.address._last_address(self.network_length)
 			}
 
-			fn last(&self) -> $inet {
+			/// last address in the network
+			pub fn last(&self) -> $inet {
 				$inet { address: self.last_address(), network_length: self.network_length }
 			}
 
-			fn network_length(&self) -> u8 {
+			/// length in bits of the shared prefix of the contained addresses
+			pub fn network_length(&self) -> u8 {
 				self.network_length
 			}
 
-			fn family(&self) -> Family {
+			/// IP family of the contained address (`Ipv4` or `Ipv6`).
+			pub fn family(&self) -> Family {
 				$family
 			}
 
-			fn mask(&self) -> $addr {
+			/// whether network represents a single host address
+			fn is_host_address(&self) -> bool {
+				self.network_length() == self.family().len()
+			}
+
+			/// network mask: an pseudo address which has the first `network
+			/// length` bits set to 1 and the remaining to 0.
+			pub fn mask(&self) -> $addr {
 				$addr::_network_mask(self.network_length)
 			}
 
-			fn contains(&self, addr: &$addr) -> bool {
+			/// check whether an address is contained in the network
+			pub fn contains(&self, addr: &$addr) -> bool {
 				self.address._prefix_match(*addr, self.network_length)
+			}
+		}
+
+		impl PrivCidr for $n {}
+
+		impl Cidr for $n {
+			type Address = $addr;
+
+			fn new(addr: $addr, len: u8) -> Result<Self, NetworkParseError> {
+				Self::new(addr, len)
+			}
+
+			fn new_host(addr: $addr) -> Self {
+				Self::new_host(addr)
+			}
+
+			fn iter(&self) -> InetIterator<$addr> {
+				self.iter()
+			}
+
+			fn first_address(&self) -> $addr {
+				self.first_address()
+			}
+
+			fn first(&self) -> $inet {
+				self.first()
+			}
+
+			fn last_address(&self) -> $addr {
+				self.last_address()
+			}
+
+			fn last(&self) -> $inet {
+				self.last()
+			}
+
+			fn network_length(&self) -> u8 {
+				self.network_length()
+			}
+
+			fn family(&self) -> Family {
+				self.family()
+			}
+
+			fn is_host_address(&self) -> bool {
+				self.is_host_address()
+			}
+
+			fn mask(&self) -> $addr {
+				self.mask()
+			}
+
+			fn contains(&self, addr: &$addr) -> bool {
+				self.contains(addr)
 			}
 
 			fn _range_pair(&self) -> $pair {
@@ -174,7 +251,7 @@ impl_cidr_for! {Ipv6Cidr : inet Ipv6Inet : addr Ipv6Addr : pair Ipv6InetPair : f
 mod tests {
 	use std::net::Ipv4Addr;
 
-	use crate::{Cidr, Ipv4Cidr};
+	use crate::Ipv4Cidr;
 
 	#[test]
 	fn v4_ref_into_iter() {
