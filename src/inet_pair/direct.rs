@@ -105,6 +105,16 @@ macro_rules! impl_inet_pair_for {
 				Ok(())
 			}
 		}
+
+		/// Iterate over all the addresses in the CIDR.
+		impl IntoIterator for $n {
+			type IntoIter = crate::InetIterator<$addr>;
+			type Item = $addr;
+
+			fn into_iter(self) -> Self::IntoIter {
+				self.iter()
+			}
+		}
 	};
 }
 

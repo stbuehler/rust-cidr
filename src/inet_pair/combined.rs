@@ -2,8 +2,8 @@ use std::fmt;
 use std::net::IpAddr;
 
 use crate::{
-	errors::*, internal_traits::PrivInetPair, num::NumberOfAddresses, Family, InetPair, IpCidr,
-	IpInet, IpInetPair, Ipv4InetPair, Ipv6InetPair,
+	errors::*, internal_traits::PrivInetPair, num::NumberOfAddresses, Family, InetIterator,
+	InetPair, IpCidr, IpInet, IpInetPair, Ipv4InetPair, Ipv6InetPair,
 };
 
 impl IpInetPair {
@@ -132,5 +132,14 @@ impl From<Ipv4InetPair> for IpInetPair {
 impl From<Ipv6InetPair> for IpInetPair {
 	fn from(c: Ipv6InetPair) -> Self {
 		Self::V6(c)
+	}
+}
+
+impl IntoIterator for IpInetPair {
+	type IntoIter = InetIterator<IpAddr>;
+	type Item = IpAddr;
+
+	fn into_iter(self) -> Self::IntoIter {
+		self.iter()
 	}
 }
