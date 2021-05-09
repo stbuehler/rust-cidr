@@ -55,7 +55,7 @@ pub trait Cidr: Copy + PrivCidr {
 	/// this can produce really long iterations (up to 2<sup>128</sup>
 	/// addresses).
 	fn iter(&self) -> InetIterator<Self::Address> {
-		InetIterator::_new(self._range_pair())
+		self._range_pair().iter()
 	}
 
 	/// first address in the network as plain address
@@ -174,6 +174,11 @@ pub trait InetPair: Copy + PrivInetPair {
 
 	/// IP family of the contained address (`Ipv4` or `Ipv6`).
 	fn family(&self) -> Family;
+
+	/// Iterate over `first..=second` (inclusive)
+	fn iter(self) -> InetIterator<Self::Address> {
+		InetIterator::_new(self)
+	}
 
 	#[doc(hidden)]
 	fn _covered_addresses(&self) -> NumberOfAddresses;
