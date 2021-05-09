@@ -1,5 +1,6 @@
 #![warn(missing_docs)]
 #![doc(html_root_url = "https://docs.rs/cidr/0.1.1")]
+#![allow(clippy::match_like_matches_macro)]
 
 //! This library provides types to represent an IP network (`Cidr`) or
 //! an IP host withing a network (`Inet`)

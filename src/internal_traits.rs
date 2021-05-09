@@ -67,7 +67,7 @@ impl PrivUnspecAddress for Ipv4Addr {
 		let step_overflow = step_u32 as u128 != step;
 		let (res, overflow) =
 			u32_overflowing_op(self, prefix_len, |addr| addr.overflowing_add(step_u32));
-		(Self::from(res), overflow || step_overflow)
+		(res, overflow || step_overflow)
 	}
 
 	fn _overflowing_prev(self, prefix_len: u8) -> (Self, bool) {
@@ -79,7 +79,7 @@ impl PrivUnspecAddress for Ipv4Addr {
 		let step_overflow = step_u32 as u128 != step;
 		let (res, overflow) =
 			u32_overflowing_op(self, prefix_len, |addr| addr.overflowing_sub(step_u32));
-		(Self::from(res), overflow || step_overflow)
+		(res, overflow || step_overflow)
 	}
 
 	fn _overflowing_sub(self, other: Self) -> (u128, bool) {

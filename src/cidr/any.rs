@@ -188,12 +188,12 @@ impl fmt::Display for AnyIpCidr {
 	}
 }
 
-impl Into<Option<IpCidr>> for AnyIpCidr {
-	fn into(self) -> Option<IpCidr> {
-		match self {
-			Self::Any => None,
-			Self::V4(c) => Some(IpCidr::V4(c)),
-			Self::V6(c) => Some(IpCidr::V6(c)),
+impl From<AnyIpCidr> for Option<IpCidr> {
+	fn from(value: AnyIpCidr) -> Option<IpCidr> {
+		match value {
+			AnyIpCidr::Any => None,
+			AnyIpCidr::V4(c) => Some(IpCidr::V4(c)),
+			AnyIpCidr::V6(c) => Some(IpCidr::V6(c)),
 		}
 	}
 }
