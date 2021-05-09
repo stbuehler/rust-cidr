@@ -45,6 +45,7 @@ extern crate serde_test;
 
 mod serde_common;
 
+mod address;
 mod cidr;
 mod errors;
 mod family;

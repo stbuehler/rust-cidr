@@ -13,7 +13,7 @@ use super::{Ipv4Cidr, Ipv6Cidr};
 use crate::internal_traits::*;
 
 macro_rules! impl_cidr_for {
-	($n:ident : inet $inet:ident : addr $addr:ty : family $family:expr) => {
+	($n:ident : inet $inet:ident : addr $addr:ident : family $family:expr) => {
 		#[cfg(feature = "bitstring")]
 		impl BitString for $n {
 			fn get(&self, ndx: usize) -> bool {
@@ -57,37 +57,40 @@ macro_rules! impl_cidr_for {
 			}
 		}
 
-		impl Cidr for $n {
+		impl HasAddressType for $n {
 			type Address = $addr;
-			type Inet = $inet;
+		}
 
-			fn new(addr: Self::Address, len: u8) -> Result<Self, NetworkParseError> {
+		impl PrivCidr for $n {}
+
+		impl Cidr for $n {
+			fn new(addr: $addr, len: u8) -> Result<Self, NetworkParseError> {
 				if len > $family.len() {
 					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
-				} else if !addr.has_zero_host_part(len) {
+				} else if !addr._has_zero_host_part(len) {
 					Err(NetworkParseError::InvalidHostPart)
 				} else {
 					Ok($n { address: addr, network_length: len })
 				}
 			}
 
-			fn new_host(addr: Self::Address) -> Self {
+			fn new_host(addr: $addr) -> Self {
 				$n { address: addr, network_length: $family.len() }
 			}
 
-			fn first_address(&self) -> Self::Address {
+			fn first_address(&self) -> $addr {
 				self.address
 			}
 
-			fn first(&self) -> Self::Inet {
+			fn first(&self) -> $inet {
 				$inet { address: self.first_address(), network_length: self.network_length }
 			}
 
-			fn last_address(&self) -> Self::Address {
-				self.address.last_address(self.network_length)
+			fn last_address(&self) -> $addr {
+				self.address._last_address(self.network_length)
 			}
 
-			fn last(&self) -> Self::Inet {
+			fn last(&self) -> $inet {
 				$inet { address: self.last_address(), network_length: self.network_length }
 			}
 
@@ -99,12 +102,12 @@ macro_rules! impl_cidr_for {
 				$family
 			}
 
-			fn mask(&self) -> Self::Address {
-				Self::Address::network_mask(self.network_length)
+			fn mask(&self) -> $addr {
+				$addr::_network_mask(self.network_length)
 			}
 
-			fn contains(&self, addr: &Self::Address) -> bool {
-				self.address.prefix_match(*addr, self.network_length)
+			fn contains(&self, addr: &$addr) -> bool {
+				self.address._prefix_match(*addr, self.network_length)
 			}
 		}
 

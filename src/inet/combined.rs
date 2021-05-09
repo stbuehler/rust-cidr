@@ -5,6 +5,7 @@ use std::str::FromStr;
 use super::super::cidr::*;
 use super::super::errors::*;
 use super::super::family::Family;
+use super::super::internal_traits::*;
 use super::super::traits::*;
 use super::from_str::inet_from_str;
 use super::{IpInet, Ipv4Inet, Ipv6Inet};
@@ -27,18 +28,21 @@ impl IpInet {
 	}
 }
 
-impl Inet for IpInet {
+impl HasAddressType for IpInet {
 	type Address = IpAddr;
-	type Cidr = IpCidr;
+}
 
-	fn new(addr: Self::Address, len: u8) -> Result<Self, NetworkLengthTooLongError> {
+impl PrivInet for IpInet {}
+
+impl Inet for IpInet {
+	fn new(addr: IpAddr, len: u8) -> Result<Self, NetworkLengthTooLongError> {
 		Ok(match addr {
 			IpAddr::V4(a) => IpInet::V4(Ipv4Inet::new(a, len)?),
 			IpAddr::V6(a) => IpInet::V6(Ipv6Inet::new(a, len)?),
 		})
 	}
 
-	fn new_host(addr: Self::Address) -> Self {
+	fn new_host(addr: IpAddr) -> Self {
 		match addr {
 			IpAddr::V4(a) => IpInet::V4(Ipv4Inet::new_host(a)),
 			IpAddr::V6(a) => IpInet::V6(Ipv6Inet::new_host(a)),
@@ -52,21 +56,21 @@ impl Inet for IpInet {
 		}
 	}
 
-	fn network(&self) -> Self::Cidr {
+	fn network(&self) -> IpCidr {
 		match *self {
 			IpInet::V4(ref c) => IpCidr::V4(c.network()),
 			IpInet::V6(ref c) => IpCidr::V6(c.network()),
 		}
 	}
 
-	fn address(&self) -> Self::Address {
+	fn address(&self) -> IpAddr {
 		match *self {
 			IpInet::V4(ref c) => IpAddr::V4(c.address()),
 			IpInet::V6(ref c) => IpAddr::V6(c.address()),
 		}
 	}
 
-	fn first_address(&self) -> Self::Address {
+	fn first_address(&self) -> IpAddr {
 		match *self {
 			IpInet::V4(ref c) => IpAddr::V4(c.first_address()),
 			IpInet::V6(ref c) => IpAddr::V6(c.first_address()),
@@ -80,7 +84,7 @@ impl Inet for IpInet {
 		}
 	}
 
-	fn last_address(&self) -> Self::Address {
+	fn last_address(&self) -> IpAddr {
 		match *self {
 			IpInet::V4(ref c) => IpAddr::V4(c.last_address()),
 			IpInet::V6(ref c) => IpAddr::V6(c.last_address()),
@@ -108,14 +112,14 @@ impl Inet for IpInet {
 		}
 	}
 
-	fn mask(&self) -> Self::Address {
+	fn mask(&self) -> IpAddr {
 		match *self {
 			IpInet::V4(ref c) => IpAddr::V4(c.mask()),
 			IpInet::V6(ref c) => IpAddr::V6(c.mask()),
 		}
 	}
 
-	fn contains(&self, addr: &Self::Address) -> bool {
+	fn contains(&self, addr: &IpAddr) -> bool {
 		match *self {
 			IpInet::V4(ref c) => match *addr {
 				IpAddr::V4(ref a) => c.contains(a),

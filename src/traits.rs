@@ -1,6 +1,27 @@
 use super::errors::*;
 use super::family::Family;
 use super::inet_iterator::*;
+use super::internal_traits::*;
+
+/// Maps IP address type to other types based on this address type
+///
+/// Implemented for `IPv4Addr`, `IPv6Addr` and `IpAddr`.
+pub trait Address: Copy + PrivUnspecAddress {
+	/// Corresponding `Inet` type (representing an address + a network
+	/// containing it)
+	type Inet: Inet<Address = Self>;
+
+	/// Corresponding `Cidr` type (representing only a network, not a specific
+	/// address within)
+	type Cidr: Cidr<Address = Self>;
+}
+
+/// Maps back to basic address type
+pub trait HasAddressType {
+	/// Type for the underlying address (`IpAddr`, `Ipv4Addr` or
+	/// `Ipv6Addr`).
+	type Address: Address;
+}
 
 /// Types implementing Cidr represent IP networks.  An IP network in
 /// this case is a set of IP addresses which share a common prefix (when
@@ -17,15 +38,7 @@ use super::inet_iterator::*;
 /// are the network part, the remaining bits are the host part.
 /// Requiring an address to be the first in a network is equivalent to
 /// requiring the host part being zero.
-pub trait Cidr: Copy {
-	/// Type for the underlying address (`IpAddr`, `Ipv4Addr` or
-	/// `Ipv6Addr`).
-	type Address;
-
-	/// Corresponding `Inet` type (representing an address + a network
-	/// containing it)
-	type Inet: Inet<Address = Self::Address>;
-
+pub trait Cidr: Copy + HasAddressType + PrivCidr {
 	/// Create new network from address and prefix length.  If the
 	/// network length exceeds the address length or the address is not
 	/// the first address in the network ("host part not zero") an
@@ -39,18 +52,18 @@ pub trait Cidr: Copy {
 	/// Iterate over all addresses in the range.  With IPv6 addresses
 	/// this can produce really long iterations (up to 2<sup>128</sup>
 	/// addresses).
-	fn iter(&self) -> InetIterator<Self::Inet> {
+	fn iter(&self) -> InetIterator<<Self::Address as Address>::Inet> {
 		InetIterator::new(self.first())
 	}
 
 	/// first address in the network as plain address
 	fn first_address(&self) -> Self::Address;
 	/// first address in the network
-	fn first(&self) -> Self::Inet;
+	fn first(&self) -> <Self::Address as Address>::Inet;
 	/// last address in the network as plain address
 	fn last_address(&self) -> Self::Address;
 	/// last address in the network
-	fn last(&self) -> Self::Inet;
+	fn last(&self) -> <Self::Address as Address>::Inet;
 	/// length in bits of the shared prefix of the contained addresses
 	fn network_length(&self) -> u8;
 	/// IP family of the contained address (`Ipv4` or `Ipv6`).
@@ -81,14 +94,7 @@ pub trait Cidr: Copy {
 /// The representation of a `Inet` type is similar to that of the
 /// corresponding `Cidr` type, but shows the host address instead of the
 /// first address of the network.
-pub trait Inet: Copy {
-	/// Type for the underlying address (`IpAddr`, `Ipv4Addr` or
-	/// `Ipv6Addr`).
-	type Address;
-
-	/// Corresponding `Cidr` type (representing only the network)
-	type Cidr: Cidr<Address = Self::Address>;
-
+pub trait Inet: Copy + HasAddressType + PrivInet {
 	/// Create new host within a network from address and prefix length.
 	/// If the network length exceeds the address length an error is
 	/// returned.
@@ -103,7 +109,7 @@ pub trait Inet: Copy {
 	fn next(&mut self) -> bool;
 
 	/// network (i.e. drops the host information)
-	fn network(&self) -> Self::Cidr;
+	fn network(&self) -> <Self::Address as Address>::Cidr;
 
 	/// the host
 	fn address(&self) -> Self::Address;
