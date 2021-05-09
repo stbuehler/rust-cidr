@@ -8,3 +8,8 @@ matrix:
     - rust: nightly
 after_success:
   - './.travis/travis-doc-upload.sh'
+script:
+  # only build with default features
+  - cargo build --verbose
+  # build and test with all features
+  - cargo test --verbose --all-features
