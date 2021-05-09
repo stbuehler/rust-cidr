@@ -91,7 +91,10 @@ impl IpInetPair {
 		}
 	}
 
-	/// IP family of the contained address (`Ipv4` or `Ipv6`).
+	/// IP family of the contained address ([`Ipv4`] or [`Ipv6`]).
+	///
+	/// [`Ipv4`]: Family::Ipv4
+	/// [`Ipv6`]: Family::Ipv6
 	pub fn family(&self) -> Family {
 		match *self {
 			Self::V4(_) => Family::Ipv4,

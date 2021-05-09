@@ -12,11 +12,10 @@ use crate::{errors::*, Cidr, Family, IpCidr, IpInet, Ipv4Cidr, Ipv6Cidr};
 /// with `true`. After the first bit the normal represenation for the
 /// picked address-family follows.
 ///
-/// Setting the first bit always truncates the bit string to length 1.
+/// Setting the first bit (using the `bitstring` API) always truncates
+/// the bit string to length 1 (i.e. `/0` in the resulting family).
 ///
-/// The `Cidr` trait itself cannot be implemented because `Any` has no
-/// address family, but there is a very similar interface implemented
-/// directly.
+/// The [`Cidr`] trait cannot be implemented for this type.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 pub enum AnyIpCidr {
 	/// "any" network containing all IPv4 and IPv6 addresses
@@ -77,7 +76,9 @@ impl AnyIpCidr {
 
 	/// first address in the network as plain address
 	///
-	/// returns None for `Any`
+	/// returns [`None`] for [`Any`]
+	///
+	/// [`Any`]: Self::Any
 	pub fn first_address(&self) -> Option<IpAddr> {
 		match *self {
 			Self::Any => None,
@@ -88,7 +89,9 @@ impl AnyIpCidr {
 
 	/// first address in the network
 	///
-	/// returns None for `Any`
+	/// returns [`None`] for [`Any`]
+	///
+	/// [`Any`]: Self::Any
 	pub fn first(&self) -> Option<IpInet> {
 		match *self {
 			Self::Any => None,
@@ -99,7 +102,9 @@ impl AnyIpCidr {
 
 	/// last address in the network as plain address
 	///
-	/// returns None for `Any`
+	/// returns [`None`] for [`Any`]
+	///
+	/// [`Any`]: Self::Any
 	pub fn last_address(&self) -> Option<IpAddr> {
 		match *self {
 			Self::Any => None,
@@ -110,7 +115,9 @@ impl AnyIpCidr {
 
 	/// last address in the network
 	///
-	/// returns None for `Any`
+	/// returns [`None`] for [`Any`]
+	///
+	/// [`Any`]: Self::Any
 	pub fn last(&self) -> Option<IpInet> {
 		match *self {
 			Self::Any => None,
@@ -121,7 +128,9 @@ impl AnyIpCidr {
 
 	/// length in bits of the shared prefix of the contained addresses
 	///
-	/// returns None for `Any`
+	/// returns [`None`] for [`Any`]
+	///
+	/// [`Any`]: Self::Any
 	pub fn network_length(&self) -> Option<u8> {
 		match *self {
 			Self::Any => None,
@@ -130,9 +139,13 @@ impl AnyIpCidr {
 		}
 	}
 
-	/// IP family of the contained address (`Ipv4` or `Ipv6`).
+	/// IP family of the contained address ([`Ipv4`] or [`Ipv6`]).
 	///
-	/// returns None for `Any`
+	/// returns [`None`] for [`Any`]
+	///
+	/// [`Any`]: Self::Any
+	/// [`Ipv4`]: Family::Ipv4
+	/// [`Ipv6`]: Family::Ipv6
 	pub fn family(&self) -> Option<Family> {
 		match *self {
 			Self::Any => None,
@@ -153,7 +166,9 @@ impl AnyIpCidr {
 	/// network mask: an pseudo address which has the first `network
 	/// length` bits set to 1 and the remaining to 0.
 	///
-	/// returns None for `Any`
+	/// returns [`None`] for [`Any`]
+	///
+	/// [`Any`]: Self::Any
 	pub fn mask(&self) -> Option<IpAddr> {
 		match *self {
 			Self::Any => None,

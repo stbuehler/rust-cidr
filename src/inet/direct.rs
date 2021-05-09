@@ -118,7 +118,10 @@ macro_rules! impl_inet_for {
 				self.network_length
 			}
 
-			/// IP family of the contained address (`Ipv4` or `Ipv6`).
+			/// IP family of the contained address ([`Ipv4`] or [`Ipv6`]).
+			///
+			/// [`Ipv4`]: Family::Ipv4
+			/// [`Ipv6`]: Family::Ipv6
 			pub fn family(&self) -> Family {
 				$family
 			}

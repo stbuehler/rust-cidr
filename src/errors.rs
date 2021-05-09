@@ -44,10 +44,12 @@ impl Error for NetworkLengthTooLongError {
 /// Error type returned when parsing IP networks
 #[derive(Clone, PartialEq)]
 pub enum NetworkParseError {
-	/// The host part wasn't zero but should have been. The `Cidr` types
+	/// The host part wasn't zero but should have been. The [`Cidr`] types
 	/// require that you use the first address in the network (and the
 	/// network length) to represent the address, but it wasn't the
 	/// first address.
+	///
+	/// [`Cidr`]: crate::Cidr
 	InvalidHostPart,
 	/// Failed to parse the address
 	AddrParseError(AddrParseError),
@@ -111,7 +113,9 @@ impl From<NetworkLengthTooLongError> for NetworkParseError {
 	}
 }
 
-/// Error type returned when creating Inet pair
+/// Error type returned when creating [`Inet`] pair
+///
+/// [`Inet`]: crate::Inet
 #[derive(Clone, PartialEq)]
 pub enum InetTupleError {
 	/// The given addresses are not in the same network

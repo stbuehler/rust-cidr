@@ -7,21 +7,25 @@ use crate::{
 
 /// Maps IP address type to other types based on this address type
 ///
-/// Implemented for `IPv4Addr`, `IPv6Addr` and `IpAddr`.
+/// Implemented for [`IPv4Addr`], [`IPv6Addr`] and [`IpAddr`].
+///
+/// [`Ipv4Addr`]: std::net::Ipv4Addr
+/// [`Ipv6Addr`]: std::net::Ipv6Addr
+/// [`IpAddr`]: std::net::IpAddr
 pub trait Address: Copy + PrivUnspecAddress {
-	/// Corresponding `Inet` type (representing an address + a network
+	/// Corresponding [`Inet`] type (representing an address + a network
 	/// containing it)
 	type Inet: Inet<Address = Self>;
 
-	/// Corresponding `Cidr` type (representing only a network, not a specific
+	/// Corresponding [`Cidr`] type (representing only a network, not a specific
 	/// address within)
 	type Cidr: Cidr<Address = Self>;
 
-	/// Corresponding `InetPair` type (representing two addresses in the same network)
+	/// Corresponding [`InetPair`] type (representing two addresses in the same network)
 	type InetPair: InetPair<Address = Self>;
 }
 
-/// Types implementing Cidr represent IP networks.  An IP network in
+/// Types implementing [`Cidr`] represent IP networks.  An IP network in
 /// this case is a set of IP addresses which share a common prefix (when
 /// viewed as a bitstring).  The length of this prefix is called
 /// `network_length`.
@@ -37,8 +41,12 @@ pub trait Address: Copy + PrivUnspecAddress {
 /// Requiring an address to be the first in a network is equivalent to
 /// requiring the host part being zero.
 pub trait Cidr: Copy + PrivCidr {
-	/// Type for the underlying address (`IpAddr`, `Ipv4Addr` or
-	/// `Ipv6Addr`).
+	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
+	/// [`Ipv6Addr`]).
+	///
+	/// [`Ipv4Addr`]: std::net::Ipv4Addr
+	/// [`Ipv6Addr`]: std::net::Ipv6Addr
+	/// [`IpAddr`]: std::net::IpAddr
 	type Address: Address<Cidr = Self>;
 
 	/// Create new network from address and prefix length.  If the
@@ -66,7 +74,10 @@ pub trait Cidr: Copy + PrivCidr {
 	fn last(&self) -> <Self::Address as Address>::Inet;
 	/// length in bits of the shared prefix of the contained addresses
 	fn network_length(&self) -> u8;
-	/// IP family of the contained address (`Ipv4` or `Ipv6`).
+	/// IP family of the contained address ([`Ipv4`] or [`Ipv6`]).
+	///
+	/// [`Ipv4`]: Family::Ipv4
+	/// [`Ipv6`]: Family::Ipv6
 	fn family(&self) -> Family;
 
 	/// whether network represents a single host address
@@ -85,19 +96,23 @@ pub trait Cidr: Copy + PrivCidr {
 
 /// Types implementing Inet represent IP hosts within networks.
 ///
-/// In addition to a network represented by the corresponding `Cidr`
-/// type, a `Inet` type also stores a single host address which is part
+/// In addition to the network represented by the corresponding [`Cidr`]
+/// type, an [`Inet`] type also stores a single host address which is part
 /// of the network.
 ///
 /// The host address is not really stored as separate data, but is
 /// stored together with the network address.
 ///
-/// The representation of a `Inet` type is similar to that of the
-/// corresponding `Cidr` type, but shows the host address instead of the
+/// The representation of a [`Inet`] type is similar to that of the
+/// corresponding [`Cidr`] type, but uses the host address instead of the
 /// first address of the network.
 pub trait Inet: Copy + PrivInet {
-	/// Type for the underlying address (`IpAddr`, `Ipv4Addr` or
-	/// `Ipv6Addr`).
+	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
+	/// [`Ipv6Addr`]).
+	///
+	/// [`Ipv4Addr`]: std::net::Ipv4Addr
+	/// [`Ipv6Addr`]: std::net::Ipv6Addr
+	/// [`IpAddr`]: std::net::IpAddr
 	type Address: Address<Inet = Self>;
 
 	/// Create new host within a network from address and prefix length.
@@ -129,7 +144,10 @@ pub trait Inet: Copy + PrivInet {
 	fn last(&self) -> Self;
 	/// length in bits of the shared prefix of the contained addresses
 	fn network_length(&self) -> u8;
-	/// IP family of the contained address (`Ipv4` or `Ipv6`).
+	/// IP family of the contained address ([`Ipv4`] or [`Ipv6`]).
+	///
+	/// [`Ipv4`]: Family::Ipv4
+	/// [`Ipv6`]: Family::Ipv6
 	fn family(&self) -> Family;
 
 	/// whether network represents a single host address
@@ -145,8 +163,12 @@ pub trait Inet: Copy + PrivInet {
 
 /// Pair of two addresses in the same network
 pub trait InetPair: Copy + PrivInetPair {
-	/// Type for the underlying address (`IpAddr`, `Ipv4Addr` or
-	/// `Ipv6Addr`).
+	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
+	/// [`Ipv6Addr`]).
+	///
+	/// [`Ipv4Addr`]: std::net::Ipv4Addr
+	/// [`Ipv6Addr`]: std::net::Ipv6Addr
+	/// [`IpAddr`]: std::net::IpAddr
 	type Address: Address<InetPair = Self>;
 
 	/// Create new pair from two addresses in the same network
@@ -178,7 +200,10 @@ pub trait InetPair: Copy + PrivInetPair {
 	/// length in bits of the shared prefix of the contained addresses
 	fn network_length(&self) -> u8;
 
-	/// IP family of the contained address (`Ipv4` or `Ipv6`).
+	/// IP family of the contained address ([`Ipv4`] or [`Ipv6`]).
+	///
+	/// [`Ipv4`]: Family::Ipv4
+	/// [`Ipv6`]: Family::Ipv6
 	fn family(&self) -> Family;
 
 	/// Iterate over `first..=second` (inclusive)
