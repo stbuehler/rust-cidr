@@ -50,6 +50,17 @@ impl<A: Address> Iterator for InetIterator<A> {
 	}
 }
 
+impl<A: Address> std::iter::DoubleEndedIterator for InetIterator<A> {
+	fn next_back(&mut self) -> Option<Self::Item> {
+		let state = self.state.as_mut().take()?;
+		let res = state.second();
+		if !state._dec_second() {
+			self.state = None;
+		}
+		Some(res.address())
+	}
+}
+
 #[cfg(test)]
 mod tests {
 	use crate::{Cidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
@@ -62,6 +73,16 @@ mod tests {
 			s.parse::<IpCidr>().unwrap().iter().collect::<Vec<_>>(),
 			l.iter().map(|e| IpAddr::V4(*e)).collect::<Vec<_>>()
 		);
+
+		assert_eq!(
+			s.parse::<Ipv4Cidr>().unwrap().iter().rev().collect::<Vec<_>>(),
+			l.iter().cloned().rev().collect::<Vec<_>>(),
+		);
+
+		assert_eq!(
+			s.parse::<IpCidr>().unwrap().iter().rev().collect::<Vec<_>>(),
+			l.iter().map(|e| IpAddr::V4(*e)).rev().collect::<Vec<_>>(),
+		);
 	}
 
 	fn test_v6(s: &'static str, l: &[Ipv6Addr]) {
@@ -69,7 +90,17 @@ mod tests {
 
 		assert_eq!(
 			s.parse::<IpCidr>().unwrap().iter().collect::<Vec<_>>(),
-			l.iter().map(|e| IpAddr::V6(*e)).collect::<Vec<_>>()
+			l.iter().map(|e| IpAddr::V6(*e)).collect::<Vec<_>>(),
+		);
+
+		assert_eq!(
+			s.parse::<Ipv6Cidr>().unwrap().iter().rev().collect::<Vec<_>>(),
+			l.iter().cloned().rev().collect::<Vec<_>>(),
+		);
+
+		assert_eq!(
+			s.parse::<IpCidr>().unwrap().iter().rev().collect::<Vec<_>>(),
+			l.iter().map(|e| IpAddr::V6(*e)).rev().collect::<Vec<_>>(),
 		);
 	}
 
