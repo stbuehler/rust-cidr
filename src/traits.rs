@@ -1,7 +1,8 @@
-use super::errors::*;
-use super::family::Family;
-use super::inet_iterator::*;
-use super::internal_traits::*;
+use crate::{
+	errors::{InetTupleError, NetworkLengthTooLongError, NetworkParseError},
+	internal_traits::{PrivCidr, PrivInet, PrivInetPair, PrivUnspecAddress},
+	Family, InetIterator,
+};
 
 /// Maps IP address type to other types based on this address type
 ///

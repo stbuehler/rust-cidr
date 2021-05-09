@@ -1,5 +1,4 @@
-use super::num::NumberOfAddresses;
-use super::traits::{Address, HasAddressType};
+use crate::{num::NumberOfAddresses, Address, HasAddressType};
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
 /// Implemented for IPv4Addr, IPv6Addr AND IpAddr

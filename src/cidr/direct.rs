@@ -1,22 +1,22 @@
 #[cfg(feature = "bitstring")]
-use bitstring::*;
+use bitstring::FixedBitString;
+
 use std::fmt;
 use std::net::{Ipv4Addr, Ipv6Addr};
 use std::str::FromStr;
 
-use super::super::errors::*;
-use super::super::family::Family;
-use super::super::inet::*;
-use super::super::inet_pair::*;
-use super::super::traits::*;
 use super::from_str::cidr_from_str;
-use super::{Ipv4Cidr, Ipv6Cidr};
-use crate::internal_traits::*;
+use crate::{
+	errors::*,
+	internal_traits::{PrivAddress, PrivCidr, PrivUnspecAddress},
+	Cidr, Family, HasAddressType, Ipv4Cidr, Ipv4Inet, Ipv4InetPair, Ipv6Cidr, Ipv6Inet,
+	Ipv6InetPair,
+};
 
 macro_rules! impl_cidr_for {
 	($n:ident : inet $inet:ident : addr $addr:ident : pair $pair:ident : family $family:expr) => {
 		#[cfg(feature = "bitstring")]
-		impl BitString for $n {
+		impl bitstring::BitString for $n {
 			fn get(&self, ndx: usize) -> bool {
 				self.address.get(ndx)
 			}
@@ -49,7 +49,7 @@ macro_rules! impl_cidr_for {
 			}
 
 			fn null() -> Self {
-				$n { address: FixedBitString::new_all_false(), network_length: 0 }
+				Self { address: FixedBitString::new_all_false(), network_length: 0 }
 			}
 
 			fn shared_prefix_len(&self, other: &Self) -> usize {
@@ -79,12 +79,12 @@ macro_rules! impl_cidr_for {
 				} else if !addr._has_zero_host_part(len) {
 					Err(NetworkParseError::InvalidHostPart)
 				} else {
-					Ok($n { address: addr, network_length: len })
+					Ok(Self { address: addr, network_length: len })
 				}
 			}
 
 			fn new_host(addr: $addr) -> Self {
-				$n { address: addr, network_length: $family.len() }
+				Self { address: addr, network_length: $family.len() }
 			}
 
 			fn first_address(&self) -> $addr {
@@ -187,9 +187,7 @@ impl_cidr_for! {Ipv6Cidr : inet Ipv6Inet : addr Ipv6Addr : pair Ipv6InetPair : f
 mod tests {
 	use std::net::Ipv4Addr;
 
-	use crate::Cidr;
-
-	use super::Ipv4Cidr;
+	use crate::{Cidr, Ipv4Cidr};
 
 	#[test]
 	fn v4_ref_into_iter() {

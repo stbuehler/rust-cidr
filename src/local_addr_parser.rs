@@ -44,7 +44,7 @@ impl ParseableAddress for IpAddr {
 		match FromStr::from_str(s) {
 			Ok(addr) => Ok(addr),
 			Err(err) => match special_ipv4_parser(s) {
-				Some(addr) => Ok(IpAddr::V4(addr)),
+				Some(addr) => Ok(Self::V4(addr)),
 				None => Err(err),
 			},
 		}

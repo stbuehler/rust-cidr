@@ -28,26 +28,21 @@
 //! - address according to `tag`: `Ipv4Addr` (`[u8; 4]`), `Ipv6Addr`
 //!   (`[u8; 16]`) or `()`
 
-pub use self::cidr::*;
-pub use self::errors::*;
-pub use self::family::*;
-pub use self::inet::*;
-pub use self::inet_iterator::*;
-pub use self::traits::*;
+pub use self::{
+	cidr::{AnyIpCidr, IpCidr, Ipv4Cidr, Ipv6Cidr},
+	family::Family,
+	inet::{IpInet, Ipv4Inet, Ipv6Inet},
+	inet_iterator::InetIterator,
+	inet_pair::{IpInetPair, Ipv4InetPair, Ipv6InetPair},
+	traits::{Address, Cidr, HasAddressType, Inet, InetPair},
+};
 
-#[cfg(feature = "serde")]
-extern crate serde;
-
-#[cfg(all(test, feature = "serde"))]
-extern crate bincode;
-#[cfg(all(test, feature = "serde"))]
-extern crate serde_test;
+pub mod errors;
 
 mod serde_common;
 
 mod address;
 mod cidr;
-mod errors;
 mod family;
 mod inet;
 mod inet_iterator;

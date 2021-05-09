@@ -1,9 +1,11 @@
+//! Various error types returned by function in this crate
+
 use std::error::Error;
 use std::fmt;
 use std::net::AddrParseError;
 use std::num::ParseIntError;
 
-use super::Family;
+use crate::Family;
 
 /// Error returned when the network length was longer than the address
 #[derive(Clone, PartialEq, Eq, Hash)]
@@ -57,14 +59,14 @@ pub enum NetworkParseError {
 impl fmt::Debug for NetworkParseError {
 	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
 		match *self {
-			NetworkParseError::InvalidHostPart => write!(w, "host part of address was not zero"),
-			NetworkParseError::AddrParseError(ref e) => {
+			Self::InvalidHostPart => write!(w, "host part of address was not zero"),
+			Self::AddrParseError(ref e) => {
 				write!(w, "couldn't parse address in network: {}", e)
 			},
-			NetworkParseError::NetworkLengthParseError(ref e) => {
+			Self::NetworkLengthParseError(ref e) => {
 				write!(w, "couldn't parse length in network: {}", e)
 			},
-			NetworkParseError::NetworkLengthTooLongError(ref e) => {
+			Self::NetworkLengthTooLongError(ref e) => {
 				write!(w, "invalid length for network: {}", e)
 			},
 		}
@@ -83,10 +85,10 @@ impl Error for NetworkParseError {
 
 	fn source(&self) -> Option<&(dyn Error + 'static)> {
 		match *self {
-			NetworkParseError::InvalidHostPart => None,
-			NetworkParseError::AddrParseError(ref e) => Some(e),
-			NetworkParseError::NetworkLengthParseError(ref e) => Some(e),
-			NetworkParseError::NetworkLengthTooLongError(ref e) => Some(e),
+			Self::InvalidHostPart => None,
+			Self::AddrParseError(ref e) => Some(e),
+			Self::NetworkLengthParseError(ref e) => Some(e),
+			Self::NetworkLengthTooLongError(ref e) => Some(e),
 		}
 	}
 }
@@ -121,8 +123,8 @@ pub enum InetTupleError {
 impl fmt::Debug for InetTupleError {
 	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
 		match *self {
-			InetTupleError::NotInSharedNetwork => write!(w, "addresses not in shared network"),
-			InetTupleError::NetworkLengthTooLongError(ref e) => {
+			Self::NotInSharedNetwork => write!(w, "addresses not in shared network"),
+			Self::NetworkLengthTooLongError(ref e) => {
 				write!(w, "invalid length for network: {}", e)
 			},
 		}
@@ -142,8 +144,8 @@ impl Error for InetTupleError {
 
 	fn source(&self) -> Option<&(dyn Error + 'static)> {
 		match *self {
-			InetTupleError::NotInSharedNetwork => None,
-			InetTupleError::NetworkLengthTooLongError(ref e) => Some(e),
+			Self::NotInSharedNetwork => None,
+			Self::NetworkLengthTooLongError(ref e) => Some(e),
 		}
 	}
 }

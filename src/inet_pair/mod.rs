@@ -1,10 +1,7 @@
-pub use self::combined::*;
-pub use self::direct::*;
-
-use std::net::{Ipv4Addr, Ipv6Addr};
-
 mod combined;
 mod direct;
+
+use std::net::{Ipv4Addr, Ipv6Addr};
 
 /// `InetPair` type representing a pair of IPv4 hosts within a network
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]

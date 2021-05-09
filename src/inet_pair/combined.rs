@@ -1,14 +1,10 @@
 use std::fmt;
 use std::net::IpAddr;
 
-use super::super::cidr::*;
-use super::super::errors::*;
-use super::super::family::Family;
-use super::super::inet::*;
-use super::super::internal_traits::*;
-use super::super::num::NumberOfAddresses;
-use super::super::traits::*;
-use super::{IpInetPair, Ipv4InetPair, Ipv6InetPair};
+use crate::{
+	errors::*, internal_traits::PrivInetPair, num::NumberOfAddresses, Family, HasAddressType,
+	InetPair, IpCidr, IpInet, IpInetPair, Ipv4InetPair, Ipv6InetPair,
+};
 
 impl IpInetPair {
 	/// Whether representing an IPv4 network

@@ -1,8 +1,4 @@
-pub use self::any::*;
-pub use self::combined::*;
-pub use self::direct::*;
-
-use std::net::{Ipv4Addr, Ipv6Addr};
+pub use self::any::AnyIpCidr;
 
 mod any;
 mod combined;
@@ -12,6 +8,8 @@ mod serde;
 
 #[cfg(test)]
 mod tests;
+
+use std::net::{Ipv4Addr, Ipv6Addr};
 
 /// `Cidr` type representing an IPv4 network
 ///

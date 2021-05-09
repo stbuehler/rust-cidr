@@ -1,8 +1,3 @@
-pub use self::combined::*;
-pub use self::direct::*;
-
-use std::net::{Ipv4Addr, Ipv6Addr};
-
 mod combined;
 mod direct;
 mod from_str;
@@ -10,6 +5,8 @@ mod serde;
 
 #[cfg(test)]
 mod tests;
+
+use std::net::{Ipv4Addr, Ipv6Addr};
 
 /// `Inet` type representing an IPv4 host within a network
 ///

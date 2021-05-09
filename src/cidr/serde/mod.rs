@@ -35,7 +35,7 @@ impl<'de> serde::Deserialize<'de> for Ipv4Cidr {
 		} else {
 			let (addr, network_length) =
 				serde_common::deserialize_v4(deserializer, NAME_IPV4_CIDR)?;
-			Ipv4Cidr::new(addr, network_length).map_err(serde::de::Error::custom)
+			Self::new(addr, network_length).map_err(serde::de::Error::custom)
 		}
 	}
 }
@@ -86,8 +86,8 @@ impl serde::Serialize for IpCidr {
 			serializer.serialize_str(&format!("{}", self))
 		} else {
 			let data = match *self {
-				IpCidr::V4(ref c) => (IpAddr::V4(c.address), c.network_length),
-				IpCidr::V6(ref c) => (IpAddr::V6(c.address), c.network_length),
+				Self::V4(ref c) => (IpAddr::V4(c.address), c.network_length),
+				Self::V6(ref c) => (IpAddr::V6(c.address), c.network_length),
 			};
 			serde_common::serialize(serializer, NAME_IP_CIDR, data)
 		}
@@ -104,7 +104,7 @@ impl<'de> serde::Deserialize<'de> for IpCidr {
 			s.parse().map_err(serde::de::Error::custom)
 		} else {
 			let (addr, network_length) = serde_common::deserialize(deserializer, NAME_IP_CIDR)?;
-			IpCidr::new(addr, network_length).map_err(serde::de::Error::custom)
+			Self::new(addr, network_length).map_err(serde::de::Error::custom)
 		}
 	}
 }
@@ -120,9 +120,9 @@ impl serde::Serialize for AnyIpCidr {
 			serializer.serialize_str(&format!("{}", self))
 		} else {
 			let data = match *self {
-				AnyIpCidr::Any => None,
-				AnyIpCidr::V4(ref c) => Some((IpAddr::V4(c.address), c.network_length)),
-				AnyIpCidr::V6(ref c) => Some((IpAddr::V6(c.address), c.network_length)),
+				Self::Any => None,
+				Self::V4(ref c) => Some((IpAddr::V4(c.address), c.network_length)),
+				Self::V6(ref c) => Some((IpAddr::V6(c.address), c.network_length)),
 			};
 			serde_common::serialize_any(serializer, NAME_ANY_IP_CIDR, data)
 		}
@@ -139,9 +139,9 @@ impl<'de> serde::Deserialize<'de> for AnyIpCidr {
 			s.parse().map_err(serde::de::Error::custom)
 		} else {
 			match serde_common::deserialize_any(deserializer, NAME_ANY_IP_CIDR)? {
-				None => Ok(AnyIpCidr::Any),
+				None => Ok(Self::Any),
 				Some((addr, network_length)) => {
-					AnyIpCidr::new(addr, network_length).map_err(serde::de::Error::custom)
+					Self::new(addr, network_length).map_err(serde::de::Error::custom)
 				},
 			}
 		}

@@ -1,6 +1,4 @@
-use super::internal_traits::PrivInetPair;
-use super::num::NumberOfAddresses;
-use super::traits::{Address, Inet, InetPair};
+use crate::{internal_traits::PrivInetPair, num::NumberOfAddresses, Address, Inet, InetPair};
 
 /// Iterator type to iterate over a list of IP addresses in a network
 pub struct InetIterator<A: Address> {
@@ -54,7 +52,7 @@ impl<A: Address> Iterator for InetIterator<A> {
 
 #[cfg(test)]
 mod tests {
-	use super::super::*;
+	use crate::{Cidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
 	use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
 	fn test_v4(s: &'static str, l: &[Ipv4Addr]) {

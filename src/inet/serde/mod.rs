@@ -86,8 +86,8 @@ impl serde::Serialize for IpInet {
 			serializer.serialize_str(&format!("{}", self))
 		} else {
 			let data = match *self {
-				IpInet::V4(ref i) => (IpAddr::V4(i.address), i.network_length),
-				IpInet::V6(ref i) => (IpAddr::V6(i.address), i.network_length),
+				Self::V4(ref i) => (IpAddr::V4(i.address), i.network_length),
+				Self::V6(ref i) => (IpAddr::V6(i.address), i.network_length),
 			};
 			serde_common::serialize(serializer, NAME_IP_CIDR, data)
 		}
@@ -104,7 +104,7 @@ impl<'de> serde::Deserialize<'de> for IpInet {
 			s.parse().map_err(serde::de::Error::custom)
 		} else {
 			let (addr, network_length) = serde_common::deserialize(deserializer, NAME_IP_CIDR)?;
-			IpInet::new(addr, network_length).map_err(serde::de::Error::custom)
+			Self::new(addr, network_length).map_err(serde::de::Error::custom)
 		}
 	}
 }

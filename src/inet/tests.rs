@@ -1,9 +1,7 @@
 use std::cmp::Ordering;
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
-use super::*;
-use crate::Cidr;
-use crate::Inet;
+use crate::{Cidr, Inet, IpInet, Ipv4Inet, Ipv6Inet};
 
 fn test_v4(
 	s: &'static str,

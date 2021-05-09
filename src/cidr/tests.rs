@@ -1,8 +1,7 @@
 use std::cmp::Ordering;
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
-use super::*;
-use crate::Cidr;
+use crate::{Cidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
 
 fn test_v4(s: &'static str, first_addr: Ipv4Addr, last_addr: Ipv4Addr, mask: Ipv4Addr, l: u8) {
 	assert_eq!(

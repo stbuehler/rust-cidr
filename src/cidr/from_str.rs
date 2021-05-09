@@ -1,8 +1,6 @@
-use crate::local_addr_parser::ParseableAddress;
 use std::str::FromStr;
 
-use super::super::errors::*;
-use super::super::traits::*;
+use crate::{errors::*, local_addr_parser::ParseableAddress, Cidr};
 
 pub fn cidr_from_str<C>(s: &str) -> Result<C, NetworkParseError>
 where

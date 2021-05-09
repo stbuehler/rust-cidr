@@ -1,13 +1,13 @@
 use std::fmt;
 use std::net::{Ipv4Addr, Ipv6Addr};
 
-use super::super::errors::*;
-use super::super::family::Family;
-use super::super::inet::*;
-use super::super::internal_traits::*;
-use super::super::num::NumberOfAddresses;
-use super::super::traits::*;
-use super::{Ipv4InetPair, Ipv6InetPair};
+use crate::{
+	errors::*,
+	internal_traits::{PrivInetPair, PrivUnspecAddress},
+	num::NumberOfAddresses,
+	Address, Family, HasAddressType, Inet, InetPair, Ipv4Inet, Ipv4InetPair, Ipv6Inet,
+	Ipv6InetPair,
+};
 
 macro_rules! impl_inet_pair_for {
 	($n:ident : inet $inet:ident : addr $addr:ty : native $native:ident : family $family:expr) => {

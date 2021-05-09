@@ -1,21 +1,21 @@
 #[cfg(feature = "bitstring")]
-use bitstring::*;
+use bitstring::FixedBitString;
+
 use std::fmt;
 use std::net::{Ipv4Addr, Ipv6Addr};
 use std::str::FromStr;
 
-use super::super::cidr::*;
-use super::super::errors::*;
-use super::super::family::Family;
-use super::super::traits::*;
 use super::from_str::inet_from_str;
-use super::{Ipv4Inet, Ipv6Inet};
-use crate::internal_traits::*;
+use crate::{
+	errors::*,
+	internal_traits::{PrivAddress, PrivInet, PrivUnspecAddress},
+	Family, HasAddressType, Inet, Ipv4Cidr, Ipv4Inet, Ipv6Cidr, Ipv6Inet,
+};
 
 macro_rules! impl_inet_for {
 	($n:ident : cidr $cidr:ident : addr $addr:ident : pair $pair:ident : family $family:expr) => {
 		#[cfg(feature = "bitstring")]
-		impl BitString for $n {
+		impl bitstring::BitString for $n {
 			fn get(&self, ndx: usize) -> bool {
 				self.address.get(ndx)
 			}
@@ -48,7 +48,7 @@ macro_rules! impl_inet_for {
 			}
 
 			fn null() -> Self {
-				$n { address: FixedBitString::new_all_false(), network_length: 0 }
+				Self { address: FixedBitString::new_all_false(), network_length: 0 }
 			}
 
 			fn shared_prefix_len(&self, other: &Self) -> usize {
@@ -68,12 +68,12 @@ macro_rules! impl_inet_for {
 				if len > $family.len() {
 					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
 				} else {
-					Ok($n { address: addr, network_length: len })
+					Ok(Self { address: addr, network_length: len })
 				}
 			}
 
 			fn new_host(addr: $addr) -> Self {
-				$n { address: addr, network_length: $family.len() }
+				Self { address: addr, network_length: $family.len() }
 			}
 
 			fn next(&mut self) -> bool {
@@ -95,7 +95,7 @@ macro_rules! impl_inet_for {
 			}
 
 			fn first(&self) -> Self {
-				$n { address: self.first_address(), network_length: self.network_length }
+				Self { address: self.first_address(), network_length: self.network_length }
 			}
 
 			fn last_address(&self) -> $addr {
@@ -103,7 +103,7 @@ macro_rules! impl_inet_for {
 			}
 
 			fn last(&self) -> Self {
-				$n { address: self.last_address(), network_length: self.network_length }
+				Self { address: self.last_address(), network_length: self.network_length }
 			}
 
 			fn network_length(&self) -> u8 {
@@ -142,7 +142,7 @@ macro_rules! impl_inet_for {
 
 		impl FromStr for $n {
 			type Err = NetworkParseError;
-			fn from_str(s: &str) -> Result<$n, NetworkParseError> {
+			fn from_str(s: &str) -> Result<Self, NetworkParseError> {
 				inet_from_str(s)
 			}
 		}
