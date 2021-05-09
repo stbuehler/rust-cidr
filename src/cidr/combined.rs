@@ -125,13 +125,13 @@ impl IpCidr {
 	/// check whether an address is contained in the network
 	pub fn contains(&self, addr: &IpAddr) -> bool {
 		match self {
-			Self::V4(c) => match *addr {
-				IpAddr::V4(ref a) => c.contains(a),
+			Self::V4(c) => match addr {
+				IpAddr::V4(a) => c.contains(a),
 				IpAddr::V6(_) => false,
 			},
-			Self::V6(c) => match *addr {
+			Self::V6(c) => match addr {
 				IpAddr::V4(_) => false,
-				IpAddr::V6(ref a) => c.contains(a),
+				IpAddr::V6(a) => c.contains(a),
 			},
 		}
 	}

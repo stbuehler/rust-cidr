@@ -9,7 +9,7 @@ use crate::{
 impl IpInetPair {
 	/// Whether representing an IPv4 network
 	pub fn is_ipv4(&self) -> bool {
-		match *self {
+		match self {
 			Self::V4(_) => true,
 			Self::V6(_) => false,
 		}
@@ -17,7 +17,7 @@ impl IpInetPair {
 
 	/// Whether representing an IPv6 network
 	pub fn is_ipv6(&self) -> bool {
-		match *self {
+		match self {
 			Self::V4(_) => false,
 			Self::V6(_) => true,
 		}
@@ -96,7 +96,7 @@ impl IpInetPair {
 	/// [`Ipv4`]: Family::Ipv4
 	/// [`Ipv6`]: Family::Ipv6
 	pub fn family(&self) -> Family {
-		match *self {
+		match self {
 			Self::V4(_) => Family::Ipv4,
 			Self::V6(_) => Family::Ipv6,
 		}
@@ -166,7 +166,7 @@ impl InetPair for IpInetPair {
 	}
 
 	fn family(&self) -> Family {
-		match *self {
+		match self {
 			Self::V4(_) => Family::Ipv4,
 			Self::V6(_) => Family::Ipv6,
 		}
@@ -200,9 +200,9 @@ impl InetPair for IpInetPair {
 
 impl fmt::Display for IpInetPair {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		match *self {
-			Self::V4(ref c) => fmt::Display::fmt(c, f),
-			Self::V6(ref c) => fmt::Display::fmt(c, f),
+		match self {
+			Self::V4(c) => fmt::Display::fmt(c, f),
+			Self::V6(c) => fmt::Display::fmt(c, f),
 		}
 	}
 }

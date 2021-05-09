@@ -84,9 +84,9 @@ impl serde::Serialize for IpCidr {
 		if serializer.is_human_readable() {
 			serializer.serialize_str(&format!("{}", self))
 		} else {
-			let data = match *self {
-				Self::V4(ref c) => (IpAddr::V4(c.address), c.network_length),
-				Self::V6(ref c) => (IpAddr::V6(c.address), c.network_length),
+			let data = match self {
+				Self::V4(c) => (IpAddr::V4(c.address), c.network_length),
+				Self::V6(c) => (IpAddr::V6(c.address), c.network_length),
 			};
 			serde_common::serialize(serializer, NAME_IP_CIDR, data)
 		}
@@ -118,10 +118,10 @@ impl serde::Serialize for AnyIpCidr {
 		if serializer.is_human_readable() {
 			serializer.serialize_str(&format!("{}", self))
 		} else {
-			let data = match *self {
+			let data = match self {
 				Self::Any => None,
-				Self::V4(ref c) => Some((IpAddr::V4(c.address), c.network_length)),
-				Self::V6(ref c) => Some((IpAddr::V6(c.address), c.network_length)),
+				Self::V4(c) => Some((IpAddr::V4(c.address), c.network_length)),
+				Self::V6(c) => Some((IpAddr::V6(c.address), c.network_length)),
 			};
 			serde_common::serialize_any(serializer, NAME_ANY_IP_CIDR, data)
 		}

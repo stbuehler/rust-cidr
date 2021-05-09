@@ -84,9 +84,9 @@ impl serde::Serialize for IpInet {
 		if serializer.is_human_readable() {
 			serializer.serialize_str(&format!("{}", self))
 		} else {
-			let data = match *self {
-				Self::V4(ref i) => (IpAddr::V4(i.address), i.network_length),
-				Self::V6(ref i) => (IpAddr::V6(i.address), i.network_length),
+			let data = match self {
+				Self::V4(i) => (IpAddr::V4(i.address), i.network_length),
+				Self::V6(i) => (IpAddr::V6(i.address), i.network_length),
 			};
 			serde_common::serialize(serializer, NAME_IP_CIDR, data)
 		}

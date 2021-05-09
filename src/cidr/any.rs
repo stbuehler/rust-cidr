@@ -29,7 +29,7 @@ pub enum AnyIpCidr {
 impl AnyIpCidr {
 	/// Whether representing any address
 	pub fn is_any(&self) -> bool {
-		match *self {
+		match self {
 			Self::Any => true,
 			_ => false,
 		}
@@ -37,7 +37,7 @@ impl AnyIpCidr {
 
 	/// Whether representing an IPv4 network
 	pub fn is_ipv4(&self) -> bool {
-		match *self {
+		match self {
 			Self::V4(_) => true,
 			_ => false,
 		}
@@ -45,7 +45,7 @@ impl AnyIpCidr {
 
 	/// Whether representing an IPv6 network
 	pub fn is_ipv6(&self) -> bool {
-		match *self {
+		match self {
 			Self::V4(_) => false,
 			_ => true,
 		}
@@ -80,10 +80,10 @@ impl AnyIpCidr {
 	///
 	/// [`Any`]: Self::Any
 	pub fn first_address(&self) -> Option<IpAddr> {
-		match *self {
+		match self {
 			Self::Any => None,
-			Self::V4(ref c) => Some(IpAddr::V4(c.first_address())),
-			Self::V6(ref c) => Some(IpAddr::V6(c.first_address())),
+			Self::V4(c) => Some(IpAddr::V4(c.first_address())),
+			Self::V6(c) => Some(IpAddr::V6(c.first_address())),
 		}
 	}
 
@@ -93,10 +93,10 @@ impl AnyIpCidr {
 	///
 	/// [`Any`]: Self::Any
 	pub fn first(&self) -> Option<IpInet> {
-		match *self {
+		match self {
 			Self::Any => None,
-			Self::V4(ref c) => Some(IpInet::V4(c.first())),
-			Self::V6(ref c) => Some(IpInet::V6(c.first())),
+			Self::V4(c) => Some(IpInet::V4(c.first())),
+			Self::V6(c) => Some(IpInet::V6(c.first())),
 		}
 	}
 
@@ -106,10 +106,10 @@ impl AnyIpCidr {
 	///
 	/// [`Any`]: Self::Any
 	pub fn last_address(&self) -> Option<IpAddr> {
-		match *self {
+		match self {
 			Self::Any => None,
-			Self::V4(ref c) => Some(IpAddr::V4(c.last_address())),
-			Self::V6(ref c) => Some(IpAddr::V6(c.last_address())),
+			Self::V4(c) => Some(IpAddr::V4(c.last_address())),
+			Self::V6(c) => Some(IpAddr::V6(c.last_address())),
 		}
 	}
 
@@ -119,10 +119,10 @@ impl AnyIpCidr {
 	///
 	/// [`Any`]: Self::Any
 	pub fn last(&self) -> Option<IpInet> {
-		match *self {
+		match self {
 			Self::Any => None,
-			Self::V4(ref c) => Some(IpInet::V4(c.last())),
-			Self::V6(ref c) => Some(IpInet::V6(c.last())),
+			Self::V4(c) => Some(IpInet::V4(c.last())),
+			Self::V6(c) => Some(IpInet::V6(c.last())),
 		}
 	}
 
@@ -132,10 +132,10 @@ impl AnyIpCidr {
 	///
 	/// [`Any`]: Self::Any
 	pub fn network_length(&self) -> Option<u8> {
-		match *self {
+		match self {
 			Self::Any => None,
-			Self::V4(ref c) => Some(c.network_length()),
-			Self::V6(ref c) => Some(c.network_length()),
+			Self::V4(c) => Some(c.network_length()),
+			Self::V6(c) => Some(c.network_length()),
 		}
 	}
 
@@ -147,7 +147,7 @@ impl AnyIpCidr {
 	/// [`Ipv4`]: Family::Ipv4
 	/// [`Ipv6`]: Family::Ipv6
 	pub fn family(&self) -> Option<Family> {
-		match *self {
+		match self {
 			Self::Any => None,
 			Self::V4(_) => Some(Family::Ipv4),
 			Self::V6(_) => Some(Family::Ipv6),
@@ -156,10 +156,10 @@ impl AnyIpCidr {
 
 	/// whether network represents a single host address
 	pub fn is_host_address(&self) -> bool {
-		match *self {
+		match self {
 			Self::Any => false,
-			Self::V4(ref c) => c.is_host_address(),
-			Self::V6(ref c) => c.is_host_address(),
+			Self::V4(c) => c.is_host_address(),
+			Self::V6(c) => c.is_host_address(),
 		}
 	}
 
@@ -170,24 +170,24 @@ impl AnyIpCidr {
 	///
 	/// [`Any`]: Self::Any
 	pub fn mask(&self) -> Option<IpAddr> {
-		match *self {
+		match self {
 			Self::Any => None,
-			Self::V4(ref c) => Some(IpAddr::V4(c.mask())),
-			Self::V6(ref c) => Some(IpAddr::V6(c.mask())),
+			Self::V4(c) => Some(IpAddr::V4(c.mask())),
+			Self::V6(c) => Some(IpAddr::V6(c.mask())),
 		}
 	}
 
 	/// check whether an address is contained in the network
 	pub fn contains(&self, addr: &IpAddr) -> bool {
-		match *self {
+		match self {
 			Self::Any => true,
-			Self::V4(ref c) => match *addr {
-				IpAddr::V4(ref a) => c.contains(a),
+			Self::V4(c) => match addr {
+				IpAddr::V4(a) => c.contains(a),
 				IpAddr::V6(_) => false,
 			},
-			Self::V6(ref c) => match *addr {
+			Self::V6(c) => match addr {
 				IpAddr::V4(_) => false,
-				IpAddr::V6(ref a) => c.contains(a),
+				IpAddr::V6(a) => c.contains(a),
 			},
 		}
 	}
@@ -195,10 +195,10 @@ impl AnyIpCidr {
 
 impl fmt::Display for AnyIpCidr {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		match *self {
+		match self {
 			Self::Any => write!(f, "any"),
-			Self::V4(ref c) => fmt::Display::fmt(c, f),
-			Self::V6(ref c) => fmt::Display::fmt(c, f),
+			Self::V4(c) => fmt::Display::fmt(c, f),
+			Self::V6(c) => fmt::Display::fmt(c, f),
 		}
 	}
 }
@@ -262,10 +262,10 @@ impl bitstring::BitString for AnyIpCidr {
 		if 0 == ndx {
 			self.is_ipv6()
 		} else {
-			match *self {
+			match self {
 				Self::Any => unreachable!(),
-				Self::V4(ref c) => c.get(ndx - 1),
-				Self::V6(ref c) => c.get(ndx - 1),
+				Self::V4(c) => c.get(ndx - 1),
+				Self::V6(c) => c.get(ndx - 1),
 			}
 		}
 	}
@@ -279,10 +279,10 @@ impl bitstring::BitString for AnyIpCidr {
 				*self = Self::V4(Ipv4Cidr::null());
 			}
 		} else {
-			match *self {
+			match self {
 				Self::Any => unreachable!(),
-				Self::V4(ref mut c) => c.set(ndx - 1, bit),
-				Self::V6(ref mut c) => c.set(ndx - 1, bit),
+				Self::V4(mut c) => c.set(ndx - 1, bit),
+				Self::V6(mut c) => c.set(ndx - 1, bit),
 			}
 		}
 	}
@@ -296,19 +296,19 @@ impl bitstring::BitString for AnyIpCidr {
 				*self = Self::V6(Ipv6Cidr::null())
 			}
 		} else {
-			match *self {
+			match self {
 				Self::Any => unreachable!(),
-				Self::V4(ref mut c) => c.flip(ndx - 1),
-				Self::V6(ref mut c) => c.flip(ndx - 1),
+				Self::V4(mut c) => c.flip(ndx - 1),
+				Self::V6(mut c) => c.flip(ndx - 1),
 			}
 		}
 	}
 
 	fn len(&self) -> usize {
-		match *self {
+		match self {
 			Self::Any => 0,
-			Self::V4(ref c) => c.len() + 1,
-			Self::V6(ref c) => c.len() + 1,
+			Self::V4(c) => c.len() + 1,
+			Self::V6(c) => c.len() + 1,
 		}
 	}
 
@@ -320,16 +320,16 @@ impl bitstring::BitString for AnyIpCidr {
 		if 0 == len {
 			*self = Self::Any;
 		} else {
-			match *self {
+			match self {
 				Self::Any => (),
-				Self::V4(ref mut c) => c.clip(len - 1),
-				Self::V6(ref mut c) => c.clip(len - 1),
+				Self::V4(mut c) => c.clip(len - 1),
+				Self::V6(mut c) => c.clip(len - 1),
 			}
 		}
 	}
 
 	fn append(&mut self, bit: bool) {
-		match *self {
+		match self {
 			Self::Any => {
 				if bit {
 					*self = Self::V6(Ipv6Cidr::null());
@@ -337,8 +337,8 @@ impl bitstring::BitString for AnyIpCidr {
 					*self = Self::V4(Ipv4Cidr::null());
 				}
 			},
-			Self::V4(ref mut c) => c.append(bit),
-			Self::V6(ref mut c) => c.append(bit),
+			Self::V4(mut c) => c.append(bit),
+			Self::V6(mut c) => c.append(bit),
 		}
 	}
 
@@ -348,8 +348,8 @@ impl bitstring::BitString for AnyIpCidr {
 
 	fn shared_prefix_len(&self, other: &Self) -> usize {
 		match (self, other) {
-			(&Self::V4(ref a), &Self::V4(ref b)) => 1 + a.shared_prefix_len(b),
-			(&Self::V6(ref a), &Self::V6(ref b)) => 1 + a.shared_prefix_len(b),
+			(Self::V4(a), Self::V4(b)) => 1 + a.shared_prefix_len(b),
+			(Self::V6(a), Self::V6(b)) => 1 + a.shared_prefix_len(b),
 			_ => 0,
 		}
 	}

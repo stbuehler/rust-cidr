@@ -60,15 +60,15 @@ pub enum NetworkParseError {
 }
 impl fmt::Debug for NetworkParseError {
 	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
-		match *self {
+		match self {
 			Self::InvalidHostPart => write!(w, "host part of address was not zero"),
-			Self::AddrParseError(ref e) => {
+			Self::AddrParseError(e) => {
 				write!(w, "couldn't parse address in network: {}", e)
 			},
-			Self::NetworkLengthParseError(ref e) => {
+			Self::NetworkLengthParseError(e) => {
 				write!(w, "couldn't parse length in network: {}", e)
 			},
-			Self::NetworkLengthTooLongError(ref e) => {
+			Self::NetworkLengthTooLongError(e) => {
 				write!(w, "invalid length for network: {}", e)
 			},
 		}
@@ -86,11 +86,11 @@ impl Error for NetworkParseError {
 	}
 
 	fn source(&self) -> Option<&(dyn Error + 'static)> {
-		match *self {
+		match self {
 			Self::InvalidHostPart => None,
-			Self::AddrParseError(ref e) => Some(e),
-			Self::NetworkLengthParseError(ref e) => Some(e),
-			Self::NetworkLengthTooLongError(ref e) => Some(e),
+			Self::AddrParseError(e) => Some(e),
+			Self::NetworkLengthParseError(e) => Some(e),
+			Self::NetworkLengthTooLongError(e) => Some(e),
 		}
 	}
 }
@@ -126,9 +126,9 @@ pub enum InetTupleError {
 
 impl fmt::Debug for InetTupleError {
 	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
-		match *self {
+		match self {
 			Self::NotInSharedNetwork => write!(w, "addresses not in shared network"),
-			Self::NetworkLengthTooLongError(ref e) => {
+			Self::NetworkLengthTooLongError(e) => {
 				write!(w, "invalid length for network: {}", e)
 			},
 		}
@@ -147,9 +147,9 @@ impl Error for InetTupleError {
 	}
 
 	fn source(&self) -> Option<&(dyn Error + 'static)> {
-		match *self {
+		match self {
 			Self::NotInSharedNetwork => None,
-			Self::NetworkLengthTooLongError(ref e) => Some(e),
+			Self::NetworkLengthTooLongError(e) => Some(e),
 		}
 	}
 }
