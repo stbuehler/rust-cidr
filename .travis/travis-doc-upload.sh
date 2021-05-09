@@ -7,7 +7,7 @@ set -e
 
 echo "Building docs..."
 
-cargo doc
+cargo doc --no-deps --all-features
 
 if [ "${TRAVIS_RUST_VERSION}" != "stable" ]; then
 	echo "Only uploading docs for stable, not ${TRAVIS_RUST_VERSION}"
