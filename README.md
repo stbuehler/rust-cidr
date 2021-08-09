@@ -1,5 +1,4 @@
 [![Rust CI](https://github.com/stbuehler/rust-cidr/actions/workflows/rust.yml/badge.svg?branch=master&event=push)](https://github.com/stbuehler/rust-cidr/actions/workflows/rust.yml)
-[![Travis Build Status](https://travis-ci.org/stbuehler/rust-cidr.svg?branch=master)](https://travis-ci.org/stbuehler/rust-cidr)
 [![AppVeyor Status](https://ci.appveyor.com/api/projects/status/m37iv2rue63lamfd?svg=true)](https://ci.appveyor.com/project/stbuehler/rust-cidr)
 [![crates.io](https://img.shields.io/crates/v/cidr.svg)](https://crates.io/crates/cidr)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
