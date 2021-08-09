@@ -77,7 +77,7 @@ macro_rules! impl_inet_for {
 
 			/// increments host part (without changing the network part);
 			/// returns true on wrap around
-			pub fn next(&mut self) -> bool {
+			pub fn increment(&mut self) -> bool {
 				let (address, overflow) = self.address._overflowing_next(self.network_length);
 				self.address = address;
 				overflow
@@ -156,8 +156,8 @@ macro_rules! impl_inet_for {
 				Self::new_host(addr)
 			}
 
-			fn next(&mut self) -> bool {
-				self.next()
+			fn increment(&mut self) -> bool {
+				self.increment()
 			}
 
 			fn network(&self) -> $cidr {

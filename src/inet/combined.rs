@@ -47,10 +47,10 @@ impl IpInet {
 
 	/// increments host part (without changing the network part);
 	/// returns true on wrap around
-	pub fn next(&mut self) -> bool {
+	pub fn increment(&mut self) -> bool {
 		match self {
-			Self::V4(mut c) => c.next(),
-			Self::V6(mut c) => c.next(),
+			Self::V4(mut c) => c.increment(),
+			Self::V6(mut c) => c.increment(),
 		}
 	}
 
@@ -166,8 +166,8 @@ impl Inet for IpInet {
 		Self::new_host(addr)
 	}
 
-	fn next(&mut self) -> bool {
-		self.next()
+	fn increment(&mut self) -> bool {
+		self.increment()
 	}
 
 	fn network(&self) -> IpCidr {

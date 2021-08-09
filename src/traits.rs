@@ -126,7 +126,7 @@ pub trait Inet: Copy + PrivInet {
 
 	/// increments host part (without changing the network part);
 	/// returns true on wrap around
-	fn next(&mut self) -> bool;
+	fn increment(&mut self) -> bool;
 
 	/// network (i.e. drops the host information)
 	fn network(&self) -> <Self::Address as Address>::Cidr;
