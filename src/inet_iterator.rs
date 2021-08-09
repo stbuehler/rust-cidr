@@ -74,6 +74,8 @@ impl<A: Address> std::iter::DoubleEndedIterator for InetIterator<A> {
 	}
 }
 
+impl<A: Address> std::iter::FusedIterator for InetIterator<A> {}
+
 /// Iterator type to iterate over a list of IP addresses in a network
 #[derive(Clone, Copy)]
 pub struct InetAddressIterator<A: Address> {
@@ -104,6 +106,8 @@ impl<A: Address> std::iter::DoubleEndedIterator for InetAddressIterator<A> {
 		Some(self.inner.next_back()?.address())
 	}
 }
+
+impl<A: Address> std::iter::FusedIterator for InetAddressIterator<A> {}
 
 #[cfg(test)]
 mod tests {
