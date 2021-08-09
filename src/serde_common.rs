@@ -99,23 +99,28 @@ where
 		where
 			A: de::SeqAccess<'de>,
 		{
-			let tag: u8 = seq.next_element()?.ok_or_else(|| de::Error::invalid_length(0, &self))?;
+			let tag: u8 = seq
+				.next_element()?
+				.ok_or_else(|| de::Error::invalid_length(0, &self))?;
 			match tag {
 				0xff => {
-					let _data: () =
-						seq.next_element()?.ok_or_else(|| de::Error::invalid_length(1, &self))?;
+					let _data: () = seq
+						.next_element()?
+						.ok_or_else(|| de::Error::invalid_length(1, &self))?;
 					Ok(None)
 				},
 				0x00..=0x20 => {
 					let network_length = tag;
-					let addr: Ipv4Addr =
-						seq.next_element()?.ok_or_else(|| de::Error::invalid_length(1, &self))?;
+					let addr: Ipv4Addr = seq
+						.next_element()?
+						.ok_or_else(|| de::Error::invalid_length(1, &self))?;
 					Ok(Some((IpAddr::V4(addr), network_length)))
 				},
 				0x40..=0xc0 => {
 					let network_length = tag - 0x40;
-					let addr: Ipv6Addr =
-						seq.next_element()?.ok_or_else(|| de::Error::invalid_length(1, &self))?;
+					let addr: Ipv6Addr = seq
+						.next_element()?
+						.ok_or_else(|| de::Error::invalid_length(1, &self))?;
 					Ok(Some((IpAddr::V6(addr), network_length)))
 				},
 				_ => Err(de::Error::custom("invalid tag")),

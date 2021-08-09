@@ -62,7 +62,10 @@ macro_rules! impl_inet_for {
 			}
 
 			fn null() -> Self {
-				Self { address: FixedBitString::new_all_false(), network_length: 0 }
+				Self {
+					address: FixedBitString::new_all_false(),
+					network_length: 0,
+				}
 			}
 
 			fn shared_prefix_len(&self, other: &Self) -> usize {
@@ -79,14 +82,20 @@ macro_rules! impl_inet_for {
 				if len > $family.len() {
 					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
 				} else {
-					Ok(Self { address: addr, network_length: len })
+					Ok(Self {
+						address: addr,
+						network_length: len,
+					})
 				}
 			}
 
 			/// Create a network containing a single address as host and the
 			/// network (network length = address length).
 			pub fn new_host(addr: $addr) -> Self {
-				Self { address: addr, network_length: $family.len() }
+				Self {
+					address: addr,
+					network_length: $family.len(),
+				}
 			}
 
 			/// increments host part (without changing the network part);
@@ -99,7 +108,10 @@ macro_rules! impl_inet_for {
 
 			/// network (i.e. drops the host information)
 			pub fn network(&self) -> $cidr {
-				$cidr { address: self.first_address(), network_length: self.network_length }
+				$cidr {
+					address: self.first_address(),
+					network_length: self.network_length,
+				}
 			}
 
 			/// the host
@@ -114,7 +126,10 @@ macro_rules! impl_inet_for {
 
 			/// first address in the network
 			pub fn first(&self) -> Self {
-				Self { address: self.first_address(), network_length: self.network_length }
+				Self {
+					address: self.first_address(),
+					network_length: self.network_length,
+				}
 			}
 
 			/// last address in the network as plain address
@@ -124,7 +139,10 @@ macro_rules! impl_inet_for {
 
 			/// last address in the network
 			pub fn last(&self) -> Self {
-				Self { address: self.last_address(), network_length: self.network_length }
+				Self {
+					address: self.last_address(),
+					network_length: self.network_length,
+				}
 			}
 
 			/// length in bits of the shared prefix of the contained addresses

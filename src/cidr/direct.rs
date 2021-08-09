@@ -65,7 +65,10 @@ macro_rules! impl_cidr_for {
 			}
 
 			fn null() -> Self {
-				Self { address: FixedBitString::new_all_false(), network_length: 0 }
+				Self {
+					address: FixedBitString::new_all_false(),
+					network_length: 0,
+				}
 			}
 
 			fn shared_prefix_len(&self, other: &Self) -> usize {
@@ -85,14 +88,20 @@ macro_rules! impl_cidr_for {
 				} else if !addr._has_zero_host_part(len) {
 					Err(NetworkParseError::InvalidHostPart)
 				} else {
-					Ok(Self { address: addr, network_length: len })
+					Ok(Self {
+						address: addr,
+						network_length: len,
+					})
 				}
 			}
 
 			/// Create a network containing a single address (network length =
 			/// address length).
 			pub fn new_host(addr: $addr) -> Self {
-				Self { address: addr, network_length: $family.len() }
+				Self {
+					address: addr,
+					network_length: $family.len(),
+				}
 			}
 
 			/// Iterate over all addresses in the range.  With IPv6 addresses
@@ -109,7 +118,10 @@ macro_rules! impl_cidr_for {
 
 			/// first address in the network
 			pub fn first(&self) -> $inet {
-				$inet { address: self.first_address(), network_length: self.network_length }
+				$inet {
+					address: self.first_address(),
+					network_length: self.network_length,
+				}
 			}
 
 			/// last address in the network as plain address
@@ -119,7 +131,10 @@ macro_rules! impl_cidr_for {
 
 			/// last address in the network
 			pub fn last(&self) -> $inet {
-				$inet { address: self.last_address(), network_length: self.network_length }
+				$inet {
+					address: self.last_address(),
+					network_length: self.network_length,
+				}
 			}
 
 			/// length in bits of the shared prefix of the contained addresses

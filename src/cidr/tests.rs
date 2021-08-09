@@ -16,7 +16,10 @@ use crate::{
 fn test_v4(s: &'static str, first_addr: Ipv4Addr, last_addr: Ipv4Addr, mask: Ipv4Addr, l: u8) {
 	assert_eq!(
 		s.parse::<Ipv4Cidr>().unwrap(),
-		Ipv4Cidr { address: first_addr, network_length: l },
+		Ipv4Cidr {
+			address: first_addr,
+			network_length: l
+		},
 		"internal data through Ipv4Cidr"
 	);
 
@@ -32,11 +35,18 @@ fn test_v4(s: &'static str, first_addr: Ipv4Addr, last_addr: Ipv4Addr, mask: Ipv
 		"last address through Ipv4Cidr"
 	);
 
-	assert_eq!(s.parse::<Ipv4Cidr>().unwrap().mask(), mask, "mask through Ipv4Cidr");
+	assert_eq!(
+		s.parse::<Ipv4Cidr>().unwrap().mask(),
+		mask,
+		"mask through Ipv4Cidr"
+	);
 
 	assert_eq!(
 		s.parse::<IpCidr>().unwrap(),
-		IpCidr::V4(Ipv4Cidr { address: first_addr, network_length: l }),
+		IpCidr::V4(Ipv4Cidr {
+			address: first_addr,
+			network_length: l
+		}),
 		"internal data through IpCidr"
 	);
 
@@ -52,20 +62,39 @@ fn test_v4(s: &'static str, first_addr: Ipv4Addr, last_addr: Ipv4Addr, mask: Ipv
 		"last address through IpCidr"
 	);
 
-	assert_eq!(s.parse::<IpCidr>().unwrap().mask(), IpAddr::V4(mask), "mask through IpCidr");
+	assert_eq!(
+		s.parse::<IpCidr>().unwrap().mask(),
+		IpAddr::V4(mask),
+		"mask through IpCidr"
+	);
 }
 
 fn test_v4_contains(s: &'static str, addr: Ipv4Addr) {
 	let c1 = s.parse::<Ipv4Cidr>().unwrap();
-	assert!(c1.contains(&addr), "{:?} must include {:?} (through Ipv4Cidr)", c1, addr);
+	assert!(
+		c1.contains(&addr),
+		"{:?} must include {:?} (through Ipv4Cidr)",
+		c1,
+		addr
+	);
 
 	let c2 = s.parse::<IpCidr>().unwrap();
-	assert!(c2.contains(&IpAddr::V4(addr)), "{:?} must include {:?} (through IpCidr)", c2, addr);
+	assert!(
+		c2.contains(&IpAddr::V4(addr)),
+		"{:?} must include {:?} (through IpCidr)",
+		c2,
+		addr
+	);
 }
 
 fn test_v4_contains_not(s: &'static str, addr: Ipv4Addr) {
 	let c1 = s.parse::<Ipv4Cidr>().unwrap();
-	assert!(!c1.contains(&addr), "{:?} must not include {:?} (through Ipv4Cidr)", c1, addr);
+	assert!(
+		!c1.contains(&addr),
+		"{:?} must not include {:?} (through Ipv4Cidr)",
+		c1,
+		addr
+	);
 
 	let c2 = s.parse::<IpCidr>().unwrap();
 	assert!(
@@ -79,7 +108,10 @@ fn test_v4_contains_not(s: &'static str, addr: Ipv4Addr) {
 fn test_v6(s: &'static str, first_addr: Ipv6Addr, last_addr: Ipv6Addr, mask: Ipv6Addr, l: u8) {
 	assert_eq!(
 		s.parse::<Ipv6Cidr>().unwrap(),
-		Ipv6Cidr { address: first_addr, network_length: l },
+		Ipv6Cidr {
+			address: first_addr,
+			network_length: l
+		},
 		"internal data through Ipv6Cidr"
 	);
 
@@ -95,11 +127,18 @@ fn test_v6(s: &'static str, first_addr: Ipv6Addr, last_addr: Ipv6Addr, mask: Ipv
 		"last address through Ipv6Cidr"
 	);
 
-	assert_eq!(s.parse::<Ipv6Cidr>().unwrap().mask(), mask, "mask through Ipv6Cidr");
+	assert_eq!(
+		s.parse::<Ipv6Cidr>().unwrap().mask(),
+		mask,
+		"mask through Ipv6Cidr"
+	);
 
 	assert_eq!(
 		s.parse::<IpCidr>().unwrap(),
-		IpCidr::V6(Ipv6Cidr { address: first_addr, network_length: l }),
+		IpCidr::V6(Ipv6Cidr {
+			address: first_addr,
+			network_length: l
+		}),
 		"internal data through IpCidr"
 	);
 
@@ -115,20 +154,39 @@ fn test_v6(s: &'static str, first_addr: Ipv6Addr, last_addr: Ipv6Addr, mask: Ipv
 		"last address through IpCidr"
 	);
 
-	assert_eq!(s.parse::<IpCidr>().unwrap().mask(), IpAddr::V6(mask), "mask through IpCidr");
+	assert_eq!(
+		s.parse::<IpCidr>().unwrap().mask(),
+		IpAddr::V6(mask),
+		"mask through IpCidr"
+	);
 }
 
 fn test_v6_contains(s: &'static str, addr: Ipv6Addr) {
 	let c1 = s.parse::<Ipv6Cidr>().unwrap();
-	assert!(c1.contains(&addr), "{:?} must include {:?} (through Ipv6Cidr)", c1, addr);
+	assert!(
+		c1.contains(&addr),
+		"{:?} must include {:?} (through Ipv6Cidr)",
+		c1,
+		addr
+	);
 
 	let c2 = s.parse::<IpCidr>().unwrap();
-	assert!(c2.contains(&IpAddr::V6(addr)), "{:?} must include {:?} (through IpCidr)", c2, addr);
+	assert!(
+		c2.contains(&IpAddr::V6(addr)),
+		"{:?} must include {:?} (through IpCidr)",
+		c2,
+		addr
+	);
 }
 
 fn test_v6_contains_not(s: &'static str, addr: Ipv6Addr) {
 	let c1 = s.parse::<Ipv6Cidr>().unwrap();
-	assert!(!c1.contains(&addr), "{:?} must not include {:?} (through Ipv6Cidr)", c1, addr);
+	assert!(
+		!c1.contains(&addr),
+		"{:?} must not include {:?} (through Ipv6Cidr)",
+		c1,
+		addr
+	);
 
 	let c2 = s.parse::<IpCidr>().unwrap();
 	assert!(
@@ -140,7 +198,10 @@ fn test_v6_contains_not(s: &'static str, addr: Ipv6Addr) {
 }
 
 fn test_v4_order(o: Ordering, a: &'static str, b: &'static str) {
-	let r1 = a.parse::<Ipv4Cidr>().unwrap().cmp(&b.parse::<Ipv4Cidr>().unwrap());
+	let r1 = a
+		.parse::<Ipv4Cidr>()
+		.unwrap()
+		.cmp(&b.parse::<Ipv4Cidr>().unwrap());
 	assert!(
 		o == r1,
 		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through Ipv4Cidr)",
@@ -150,7 +211,10 @@ fn test_v4_order(o: Ordering, a: &'static str, b: &'static str) {
 		o
 	);
 
-	let r2 = a.parse::<IpCidr>().unwrap().cmp(&b.parse::<IpCidr>().unwrap());
+	let r2 = a
+		.parse::<IpCidr>()
+		.unwrap()
+		.cmp(&b.parse::<IpCidr>().unwrap());
 	assert!(
 		o == r2,
 		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through IpCidr)",
@@ -167,7 +231,10 @@ fn test_v4_order(o: Ordering, a: &'static str, b: &'static str) {
 }
 
 fn test_v6_order(o: Ordering, a: &'static str, b: &'static str) {
-	let r1 = a.parse::<Ipv6Cidr>().unwrap().cmp(&b.parse::<Ipv6Cidr>().unwrap());
+	let r1 = a
+		.parse::<Ipv6Cidr>()
+		.unwrap()
+		.cmp(&b.parse::<Ipv6Cidr>().unwrap());
 	assert!(
 		o == r1,
 		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through Ipv6Cidr)",
@@ -177,7 +244,10 @@ fn test_v6_order(o: Ordering, a: &'static str, b: &'static str) {
 		o
 	);
 
-	let r2 = a.parse::<IpCidr>().unwrap().cmp(&b.parse::<IpCidr>().unwrap());
+	let r2 = a
+		.parse::<IpCidr>()
+		.unwrap()
+		.cmp(&b.parse::<IpCidr>().unwrap());
 	assert!(
 		o == r2,
 		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through IpCidr)",
@@ -194,7 +264,10 @@ fn test_v6_order(o: Ordering, a: &'static str, b: &'static str) {
 }
 
 fn test_order(o: Ordering, a: &'static str, b: &'static str) {
-	let r = a.parse::<IpCidr>().unwrap().cmp(&b.parse::<IpCidr>().unwrap());
+	let r = a
+		.parse::<IpCidr>()
+		.unwrap()
+		.cmp(&b.parse::<IpCidr>().unwrap());
 	assert!(
 		o == r,
 		"Unexpected comparison outcome '{:?}' for {:?} <=> {:?}, expected '{:?}' (through IpCidr)",
@@ -228,39 +301,84 @@ fn parse_v4_33bit_2() {
 
 #[test]
 fn test_v4_representations_32bit() {
-	assert_eq!(format!("{}", "127.0.0.1".parse::<Ipv4Cidr>().unwrap()), "127.0.0.1");
-	assert_eq!(format!("{:#}", "127.0.0.1".parse::<Ipv4Cidr>().unwrap()), "127.0.0.1/32");
+	assert_eq!(
+		format!("{}", "127.0.0.1".parse::<Ipv4Cidr>().unwrap()),
+		"127.0.0.1"
+	);
+	assert_eq!(
+		format!("{:#}", "127.0.0.1".parse::<Ipv4Cidr>().unwrap()),
+		"127.0.0.1/32"
+	);
 
-	assert_eq!(format!("{}", "127.0.0.1".parse::<IpCidr>().unwrap()), "127.0.0.1");
-	assert_eq!(format!("{:#}", "127.0.0.1".parse::<IpCidr>().unwrap()), "127.0.0.1/32");
+	assert_eq!(
+		format!("{}", "127.0.0.1".parse::<IpCidr>().unwrap()),
+		"127.0.0.1"
+	);
+	assert_eq!(
+		format!("{:#}", "127.0.0.1".parse::<IpCidr>().unwrap()),
+		"127.0.0.1/32"
+	);
 
-	assert_eq!(format!("{:?}", "127.0.0.1".parse::<Ipv4Cidr>().unwrap()), "127.0.0.1/32");
+	assert_eq!(
+		format!("{:?}", "127.0.0.1".parse::<Ipv4Cidr>().unwrap()),
+		"127.0.0.1/32"
+	);
 
-	assert_eq!(format!("{:?}", "127.0.0.1".parse::<IpCidr>().unwrap()), "V4(127.0.0.1/32)");
+	assert_eq!(
+		format!("{:?}", "127.0.0.1".parse::<IpCidr>().unwrap()),
+		"V4(127.0.0.1/32)"
+	);
 
-	assert_eq!(format!("{:#}", "127.0.0.1".parse::<IpCidr>().unwrap()), "127.0.0.1/32");
+	assert_eq!(
+		format!("{:#}", "127.0.0.1".parse::<IpCidr>().unwrap()),
+		"127.0.0.1/32"
+	);
 }
 
 #[test]
 fn test_v4_representations_8bit() {
-	assert_eq!(format!("{}", "10.0.0.0/8".parse::<Ipv4Cidr>().unwrap()), "10.0.0.0/8");
+	assert_eq!(
+		format!("{}", "10.0.0.0/8".parse::<Ipv4Cidr>().unwrap()),
+		"10.0.0.0/8"
+	);
 
-	assert_eq!(format!("{}", "10.0.0.0/8".parse::<IpCidr>().unwrap()), "10.0.0.0/8");
+	assert_eq!(
+		format!("{}", "10.0.0.0/8".parse::<IpCidr>().unwrap()),
+		"10.0.0.0/8"
+	);
 
-	assert_eq!(format!("{:?}", "10.0.0.0/8".parse::<Ipv4Cidr>().unwrap()), "10.0.0.0/8");
+	assert_eq!(
+		format!("{:?}", "10.0.0.0/8".parse::<Ipv4Cidr>().unwrap()),
+		"10.0.0.0/8"
+	);
 
-	assert_eq!(format!("{:?}", "10.0.0.0/8".parse::<IpCidr>().unwrap()), "V4(10.0.0.0/8)");
+	assert_eq!(
+		format!("{:?}", "10.0.0.0/8".parse::<IpCidr>().unwrap()),
+		"V4(10.0.0.0/8)"
+	);
 }
 
 #[test]
 fn test_v4_representations_0bit() {
-	assert_eq!(format!("{}", "0.0.0.0/0".parse::<Ipv4Cidr>().unwrap()), "0.0.0.0/0");
+	assert_eq!(
+		format!("{}", "0.0.0.0/0".parse::<Ipv4Cidr>().unwrap()),
+		"0.0.0.0/0"
+	);
 
-	assert_eq!(format!("{}", "0.0.0.0/0".parse::<IpCidr>().unwrap()), "0.0.0.0/0");
+	assert_eq!(
+		format!("{}", "0.0.0.0/0".parse::<IpCidr>().unwrap()),
+		"0.0.0.0/0"
+	);
 
-	assert_eq!(format!("{:?}", "0.0.0.0/0".parse::<Ipv4Cidr>().unwrap()), "0.0.0.0/0");
+	assert_eq!(
+		format!("{:?}", "0.0.0.0/0".parse::<Ipv4Cidr>().unwrap()),
+		"0.0.0.0/0"
+	);
 
-	assert_eq!(format!("{:?}", "0.0.0.0/0".parse::<IpCidr>().unwrap()), "V4(0.0.0.0/0)");
+	assert_eq!(
+		format!("{:?}", "0.0.0.0/0".parse::<IpCidr>().unwrap()),
+		"V4(0.0.0.0/0)"
+	);
 }
 
 #[test]
@@ -421,7 +539,10 @@ fn test_v6_representations_128bit() {
 
 	assert_eq!(format!("{:?}", "::".parse::<Ipv6Cidr>().unwrap()), "::/128");
 
-	assert_eq!(format!("{:?}", "::".parse::<IpCidr>().unwrap()), "V6(::/128)");
+	assert_eq!(
+		format!("{:?}", "::".parse::<IpCidr>().unwrap()),
+		"V6(::/128)"
+	);
 
 	assert_eq!(format!("{:#}", "::".parse::<IpCidr>().unwrap()), "::/128");
 }
@@ -439,7 +560,10 @@ fn test_v6_representations_64bit() {
 	);
 
 	assert_eq!(
-		format!("{:?}", "2001:DB8:1234:5678::/64".parse::<Ipv6Cidr>().unwrap()),
+		format!(
+			"{:?}",
+			"2001:DB8:1234:5678::/64".parse::<Ipv6Cidr>().unwrap()
+		),
 		"2001:db8:1234:5678::/64"
 	);
 
@@ -457,7 +581,10 @@ fn test_v6_representations_0bit() {
 
 	assert_eq!(format!("{:?}", "::/0".parse::<Ipv6Cidr>().unwrap()), "::/0");
 
-	assert_eq!(format!("{:?}", "::/0".parse::<IpCidr>().unwrap()), "V6(::/0)");
+	assert_eq!(
+		format!("{:?}", "::/0".parse::<IpCidr>().unwrap()),
+		"V6(::/0)"
+	);
 }
 
 #[test]
@@ -566,9 +693,21 @@ fn order_v4() {
 
 #[test]
 fn order_v6() {
-	test_v6_order(Ordering::Equal, "2001:DB8:1234:5678::/64", "2001:DB8:1234:5678::/64");
-	test_v6_order(Ordering::Less, "2001:DB8:1234:5678:1000::/80", "2001:DB8:1234:5678:1001::/80");
-	test_v6_order(Ordering::Less, "2001:DB8:1234:5678:1000::/80", "2001:DB8:1234:5678:1000::/81");
+	test_v6_order(
+		Ordering::Equal,
+		"2001:DB8:1234:5678::/64",
+		"2001:DB8:1234:5678::/64",
+	);
+	test_v6_order(
+		Ordering::Less,
+		"2001:DB8:1234:5678:1000::/80",
+		"2001:DB8:1234:5678:1001::/80",
+	);
+	test_v6_order(
+		Ordering::Less,
+		"2001:DB8:1234:5678:1000::/80",
+		"2001:DB8:1234:5678:1000::/81",
+	);
 	test_v6_order(
 		Ordering::Less,
 		"2001:DB8:1234:5678:1000::/80",

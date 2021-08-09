@@ -10,9 +10,6 @@ use_try_shorthand = true
 # Use field initialize shorthand if possible.
 use_field_init_shorthand = true
 
-# Use max width for all single-line constructs
-use_small_heuristics = "Max"
-
 ### UNSTABLE FEATURES
 
 # Convert /* */ comments to // comments where possible

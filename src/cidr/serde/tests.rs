@@ -22,7 +22,11 @@ where
 		panic!("failed serializing {:?}: {}", value, e);
 	});
 
-	assert_eq!(&s as &[u8], raw, "unexpected result serializing {:?}", value);
+	assert_eq!(
+		&s as &[u8], raw,
+		"unexpected result serializing {:?}",
+		value
+	);
 
 	assert_eq!(
 		&bincode::deserialize::<T>(raw).unwrap(),

@@ -60,12 +60,12 @@ impl IpInetPair {
 		len: u8,
 	) -> Result<Self, InetTupleError> {
 		match (first, second) {
-			(IpAddr::V4(first), IpAddr::V4(second)) => {
-				Ok(Self::V4(Ipv4InetPair::new_from_addresses(first, second, len)?))
-			},
-			(IpAddr::V6(first), IpAddr::V6(second)) => {
-				Ok(Self::V6(Ipv6InetPair::new_from_addresses(first, second, len)?))
-			},
+			(IpAddr::V4(first), IpAddr::V4(second)) => Ok(Self::V4(
+				Ipv4InetPair::new_from_addresses(first, second, len)?,
+			)),
+			(IpAddr::V6(first), IpAddr::V6(second)) => Ok(Self::V6(
+				Ipv6InetPair::new_from_addresses(first, second, len)?,
+			)),
 			_ => Err(InetTupleError::NotInSharedNetwork),
 		}
 	}
@@ -138,12 +138,12 @@ impl InetPair for IpInetPair {
 
 	fn new_from_addresses(first: IpAddr, second: IpAddr, len: u8) -> Result<Self, InetTupleError> {
 		match (first, second) {
-			(IpAddr::V4(first), IpAddr::V4(second)) => {
-				Ok(Self::V4(Ipv4InetPair::new_from_addresses(first, second, len)?))
-			},
-			(IpAddr::V6(first), IpAddr::V6(second)) => {
-				Ok(Self::V6(Ipv6InetPair::new_from_addresses(first, second, len)?))
-			},
+			(IpAddr::V4(first), IpAddr::V4(second)) => Ok(Self::V4(
+				Ipv4InetPair::new_from_addresses(first, second, len)?,
+			)),
+			(IpAddr::V6(first), IpAddr::V6(second)) => Ok(Self::V6(
+				Ipv6InetPair::new_from_addresses(first, second, len)?,
+			)),
 			_ => Err(InetTupleError::NotInSharedNetwork),
 		}
 	}

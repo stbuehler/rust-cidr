@@ -34,7 +34,10 @@ macro_rules! impl_inet_pair_for {
 				if first.network_length != second.network_length {
 					return Err(InetTupleError::NotInSharedNetwork);
 				}
-				if !first.address._prefix_match(second.address, first.network_length) {
+				if !first
+					.address
+					._prefix_match(second.address, first.network_length)
+				{
 					return Err(InetTupleError::NotInSharedNetwork);
 				}
 				Ok(Self {
@@ -55,17 +58,27 @@ macro_rules! impl_inet_pair_for {
 				if !first._prefix_match(second, len) {
 					return Err(InetTupleError::NotInSharedNetwork);
 				}
-				Ok(Self { first, second, network_length: len })
+				Ok(Self {
+					first,
+					second,
+					network_length: len,
+				})
 			}
 
 			/// First address
 			pub fn first(&self) -> $inet {
-				$inet { address: self.first, network_length: self.network_length }
+				$inet {
+					address: self.first,
+					network_length: self.network_length,
+				}
 			}
 
 			/// Second address
 			pub fn second(&self) -> $inet {
-				$inet { address: self.second, network_length: self.network_length }
+				$inet {
+					address: self.second,
+					network_length: self.network_length,
+				}
 			}
 
 			/// network (i.e. drops the host information)

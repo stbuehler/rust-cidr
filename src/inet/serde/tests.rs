@@ -21,7 +21,11 @@ where
 		panic!("failed serializing {:?}: {}", value, e);
 	});
 
-	assert_eq!(&s as &[u8], raw, "unexpected result serializing {:?}", value);
+	assert_eq!(
+		&s as &[u8], raw,
+		"unexpected result serializing {:?}",
+		value
+	);
 
 	assert_eq!(
 		&bincode::deserialize::<T>(raw).unwrap(),
@@ -117,7 +121,10 @@ fn test_ipv4_host() {
 fn test_ipv6() {
 	let c: Ipv6Inet = "2001:DB8:1234:5678:1:2:3:4/64".parse().unwrap();
 
-	assert_tokens(&c.readable(), &[Token::Str("2001:db8:1234:5678:1:2:3:4/64")]);
+	assert_tokens(
+		&c.readable(),
+		&[Token::Str("2001:db8:1234:5678:1:2:3:4/64")],
+	);
 
 	assert_bincode(
 		&c.compact(),
@@ -371,7 +378,10 @@ fn test_inet_v4_host() {
 fn test_inet_v6() {
 	let c: IpInet = "2001:DB8:1234:5678:1:2:3:4/64".parse().unwrap();
 
-	assert_tokens(&c.readable(), &[Token::Str("2001:db8:1234:5678:1:2:3:4/64")]);
+	assert_tokens(
+		&c.readable(),
+		&[Token::Str("2001:db8:1234:5678:1:2:3:4/64")],
+	);
 
 	assert_bincode(
 		&c.compact(),

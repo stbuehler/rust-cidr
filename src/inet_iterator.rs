@@ -13,7 +13,9 @@ pub struct InetIterator<A: Address> {
 impl<A: Address> InetIterator<A> {
 	#[doc(hidden)]
 	pub fn _new(range_pair: A::InetPair) -> Self {
-		Self { state: Some(range_pair) }
+		Self {
+			state: Some(range_pair),
+		}
 	}
 }
 
@@ -88,12 +90,20 @@ mod tests {
 		);
 
 		assert_eq!(
-			s.parse::<Ipv4Cidr>().unwrap().iter().rev().collect::<Vec<_>>(),
+			s.parse::<Ipv4Cidr>()
+				.unwrap()
+				.iter()
+				.rev()
+				.collect::<Vec<_>>(),
 			l.iter().cloned().rev().collect::<Vec<_>>(),
 		);
 
 		assert_eq!(
-			s.parse::<IpCidr>().unwrap().iter().rev().collect::<Vec<_>>(),
+			s.parse::<IpCidr>()
+				.unwrap()
+				.iter()
+				.rev()
+				.collect::<Vec<_>>(),
 			l.iter().map(|e| IpAddr::V4(*e)).rev().collect::<Vec<_>>(),
 		);
 	}
@@ -107,12 +117,20 @@ mod tests {
 		);
 
 		assert_eq!(
-			s.parse::<Ipv6Cidr>().unwrap().iter().rev().collect::<Vec<_>>(),
+			s.parse::<Ipv6Cidr>()
+				.unwrap()
+				.iter()
+				.rev()
+				.collect::<Vec<_>>(),
 			l.iter().cloned().rev().collect::<Vec<_>>(),
 		);
 
 		assert_eq!(
-			s.parse::<IpCidr>().unwrap().iter().rev().collect::<Vec<_>>(),
+			s.parse::<IpCidr>()
+				.unwrap()
+				.iter()
+				.rev()
+				.collect::<Vec<_>>(),
 			l.iter().map(|e| IpAddr::V6(*e)).rev().collect::<Vec<_>>(),
 		);
 	}
