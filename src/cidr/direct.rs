@@ -271,7 +271,7 @@ macro_rules! impl_cidr_for {
 		/// Iterate over all the addresses in the CIDR.
 		impl IntoIterator for $n {
 			type IntoIter = $crate::InetIterator<$addr>;
-			type Item = $addr;
+			type Item = $inet;
 
 			fn into_iter(self) -> Self::IntoIter {
 				$crate::InetIterator::_new(self._range_pair())
@@ -299,7 +299,7 @@ mod tests {
 				Ipv4Addr::new(1, 2, 3, 2),
 				Ipv4Addr::new(1, 2, 3, 3),
 			],
-			(&cidr).into_iter().collect::<Vec<_>>()
+			(&cidr).into_iter().addresses().collect::<Vec<_>>()
 		);
 	}
 
@@ -313,7 +313,7 @@ mod tests {
 				Ipv4Addr::new(1, 2, 3, 2),
 				Ipv4Addr::new(1, 2, 3, 3),
 			],
-			cidr.into_iter().collect::<Vec<_>>()
+			cidr.into_iter().addresses().collect::<Vec<_>>()
 		);
 	}
 }

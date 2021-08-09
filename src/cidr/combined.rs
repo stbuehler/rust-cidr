@@ -239,7 +239,7 @@ impl From<Ipv6Cidr> for IpCidr {
 
 impl IntoIterator for IpCidr {
 	type IntoIter = InetIterator<IpAddr>;
-	type Item = IpAddr;
+	type Item = IpInet;
 
 	fn into_iter(self) -> Self::IntoIter {
 		InetIterator::_new(self._range_pair())

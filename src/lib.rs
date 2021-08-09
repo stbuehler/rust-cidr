@@ -54,7 +54,10 @@ pub use self::{
 		Ipv4Inet,
 		Ipv6Inet,
 	},
-	inet_iterator::InetIterator,
+	inet_iterator::{
+		InetAddressIterator,
+		InetIterator,
+	},
 	inet_pair::{
 		IpInetPair,
 		Ipv4InetPair,

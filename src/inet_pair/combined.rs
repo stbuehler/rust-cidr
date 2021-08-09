@@ -232,7 +232,7 @@ impl From<Ipv6InetPair> for IpInetPair {
 
 impl IntoIterator for IpInetPair {
 	type IntoIter = InetIterator<IpAddr>;
-	type Item = IpAddr;
+	type Item = IpInet;
 
 	fn into_iter(self) -> Self::IntoIter {
 		self.iter()

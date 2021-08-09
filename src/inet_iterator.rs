@@ -5,7 +5,8 @@ use crate::{
 	InetPair,
 };
 
-/// Iterator type to iterate over a list of IP addresses in a network
+/// Iterator type to iterate over a list of IP addresses within a network
+#[derive(Clone, Copy)]
 pub struct InetIterator<A: Address> {
 	state: Option<A::InetPair>,
 }
@@ -17,10 +18,15 @@ impl<A: Address> InetIterator<A> {
 			state: Some(range_pair),
 		}
 	}
+
+	/// Iterate only over addresses (without network prefix length)
+	pub fn addresses(self) -> InetAddressIterator<A> {
+		InetAddressIterator { inner: self }
+	}
 }
 
 impl<A: Address> Iterator for InetIterator<A> {
-	type Item = A;
+	type Item = A::Inet;
 
 	fn next(&mut self) -> Option<Self::Item> {
 		let state = self.state.as_mut().take()?;
@@ -28,7 +34,7 @@ impl<A: Address> Iterator for InetIterator<A> {
 		if !state._inc_first() {
 			self.state = None;
 		}
-		Some(res.address())
+		Some(res)
 	}
 
 	fn size_hint(&self) -> (usize, Option<usize>) {
@@ -64,7 +70,38 @@ impl<A: Address> std::iter::DoubleEndedIterator for InetIterator<A> {
 		if !state._dec_second() {
 			self.state = None;
 		}
-		Some(res.address())
+		Some(res)
+	}
+}
+
+/// Iterator type to iterate over a list of IP addresses in a network
+#[derive(Clone, Copy)]
+pub struct InetAddressIterator<A: Address> {
+	inner: InetIterator<A>,
+}
+
+impl<A: Address> Iterator for InetAddressIterator<A> {
+	type Item = A;
+
+	fn next(&mut self) -> Option<Self::Item> {
+		Some(self.inner.next()?.address())
+	}
+
+	fn size_hint(&self) -> (usize, Option<usize>) {
+		self.inner.size_hint()
+	}
+
+	fn count(self) -> usize
+	where
+		Self: Sized,
+	{
+		self.inner.count()
+	}
+}
+
+impl<A: Address> std::iter::DoubleEndedIterator for InetAddressIterator<A> {
+	fn next_back(&mut self) -> Option<Self::Item> {
+		Some(self.inner.next_back()?.address())
 	}
 }
 
@@ -82,10 +119,21 @@ mod tests {
 	};
 
 	fn test_v4(s: &'static str, l: &[Ipv4Addr]) {
-		assert_eq!(s.parse::<Ipv4Cidr>().unwrap().iter().collect::<Vec<_>>(), l);
+		assert_eq!(
+			s.parse::<Ipv4Cidr>()
+				.unwrap()
+				.iter()
+				.addresses()
+				.collect::<Vec<_>>(),
+			l
+		);
 
 		assert_eq!(
-			s.parse::<IpCidr>().unwrap().iter().collect::<Vec<_>>(),
+			s.parse::<IpCidr>()
+				.unwrap()
+				.iter()
+				.addresses()
+				.collect::<Vec<_>>(),
 			l.iter().map(|e| IpAddr::V4(*e)).collect::<Vec<_>>()
 		);
 
@@ -93,6 +141,7 @@ mod tests {
 			s.parse::<Ipv4Cidr>()
 				.unwrap()
 				.iter()
+				.addresses()
 				.rev()
 				.collect::<Vec<_>>(),
 			l.iter().cloned().rev().collect::<Vec<_>>(),
@@ -102,6 +151,7 @@ mod tests {
 			s.parse::<IpCidr>()
 				.unwrap()
 				.iter()
+				.addresses()
 				.rev()
 				.collect::<Vec<_>>(),
 			l.iter().map(|e| IpAddr::V4(*e)).rev().collect::<Vec<_>>(),
@@ -109,10 +159,21 @@ mod tests {
 	}
 
 	fn test_v6(s: &'static str, l: &[Ipv6Addr]) {
-		assert_eq!(s.parse::<Ipv6Cidr>().unwrap().iter().collect::<Vec<_>>(), l);
+		assert_eq!(
+			s.parse::<Ipv6Cidr>()
+				.unwrap()
+				.iter()
+				.addresses()
+				.collect::<Vec<_>>(),
+			l
+		);
 
 		assert_eq!(
-			s.parse::<IpCidr>().unwrap().iter().collect::<Vec<_>>(),
+			s.parse::<IpCidr>()
+				.unwrap()
+				.iter()
+				.addresses()
+				.collect::<Vec<_>>(),
 			l.iter().map(|e| IpAddr::V6(*e)).collect::<Vec<_>>(),
 		);
 
@@ -120,6 +181,7 @@ mod tests {
 			s.parse::<Ipv6Cidr>()
 				.unwrap()
 				.iter()
+				.addresses()
 				.rev()
 				.collect::<Vec<_>>(),
 			l.iter().cloned().rev().collect::<Vec<_>>(),
@@ -129,6 +191,7 @@ mod tests {
 			s.parse::<IpCidr>()
 				.unwrap()
 				.iter()
+				.addresses()
 				.rev()
 				.collect::<Vec<_>>(),
 			l.iter().map(|e| IpAddr::V6(*e)).rev().collect::<Vec<_>>(),
