@@ -6,7 +6,7 @@ use crate::{
 };
 
 /// Iterator type to iterate over a list of IP addresses within a network
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct InetIterator<A: Address> {
 	state: Option<A::InetPair>,
 }
@@ -77,7 +77,7 @@ impl<A: Address> std::iter::DoubleEndedIterator for InetIterator<A> {
 impl<A: Address> std::iter::FusedIterator for InetIterator<A> {}
 
 /// Iterator type to iterate over a list of IP addresses in a network
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct InetAddressIterator<A: Address> {
 	inner: InetIterator<A>,
 }

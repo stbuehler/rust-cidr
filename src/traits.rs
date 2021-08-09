@@ -14,6 +14,7 @@ use crate::{
 	Family,
 	InetIterator,
 };
+use std::fmt::Debug;
 
 /// Maps IP address type to other types based on this address type
 ///
@@ -22,7 +23,7 @@ use crate::{
 /// [`Ipv4Addr`]: std::net::Ipv4Addr
 /// [`Ipv6Addr`]: std::net::Ipv6Addr
 /// [`IpAddr`]: std::net::IpAddr
-pub trait Address: Copy + PrivUnspecAddress {
+pub trait Address: Copy + Debug + PrivUnspecAddress {
 	/// Corresponding [`Inet`] type (representing an address + a network
 	/// containing it)
 	type Inet: Inet<Address = Self>;
@@ -50,7 +51,7 @@ pub trait Address: Copy + PrivUnspecAddress {
 /// are the network part, the remaining bits are the host part.
 /// Requiring an address to be the first in a network is equivalent to
 /// requiring the host part being zero.
-pub trait Cidr: Copy + PrivCidr {
+pub trait Cidr: Copy + Debug + PrivCidr {
 	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
 	/// [`Ipv6Addr`]).
 	///
@@ -116,7 +117,7 @@ pub trait Cidr: Copy + PrivCidr {
 /// The representation of a [`Inet`] type is similar to that of the
 /// corresponding [`Cidr`] type, but uses the host address instead of the
 /// first address of the network.
-pub trait Inet: Copy + PrivInet {
+pub trait Inet: Copy + Debug + PrivInet {
 	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
 	/// [`Ipv6Addr`]).
 	///
@@ -172,7 +173,7 @@ pub trait Inet: Copy + PrivInet {
 }
 
 /// Pair of two addresses in the same network
-pub trait InetPair: Copy + PrivInetPair {
+pub trait InetPair: Copy + Debug + PrivInetPair {
 	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
 	/// [`Ipv6Addr`]).
 	///
