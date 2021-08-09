@@ -1,8 +1,8 @@
-use std::{
+use core::{
 	fmt,
-	net::IpAddr,
 	str::FromStr,
 };
+use std::net::IpAddr;
 
 use super::from_str::cidr_from_str;
 use crate::{

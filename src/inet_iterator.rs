@@ -63,7 +63,7 @@ impl<A: Address> Iterator for InetIterator<A> {
 	}
 }
 
-impl<A: Address> std::iter::DoubleEndedIterator for InetIterator<A> {
+impl<A: Address> core::iter::DoubleEndedIterator for InetIterator<A> {
 	fn next_back(&mut self) -> Option<Self::Item> {
 		let state = self.state.as_mut().take()?;
 		let res = state.second();
@@ -74,7 +74,7 @@ impl<A: Address> std::iter::DoubleEndedIterator for InetIterator<A> {
 	}
 }
 
-impl<A: Address> std::iter::FusedIterator for InetIterator<A> {}
+impl<A: Address> core::iter::FusedIterator for InetIterator<A> {}
 
 /// Iterator type to iterate over a list of IP addresses in a network
 #[derive(Clone, Copy, Debug)]
@@ -101,13 +101,13 @@ impl<A: Address> Iterator for InetAddressIterator<A> {
 	}
 }
 
-impl<A: Address> std::iter::DoubleEndedIterator for InetAddressIterator<A> {
+impl<A: Address> core::iter::DoubleEndedIterator for InetAddressIterator<A> {
 	fn next_back(&mut self) -> Option<Self::Item> {
 		Some(self.inner.next_back()?.address())
 	}
 }
 
-impl<A: Address> std::iter::FusedIterator for InetAddressIterator<A> {}
+impl<A: Address> core::iter::FusedIterator for InetAddressIterator<A> {}
 
 #[cfg(test)]
 mod tests {

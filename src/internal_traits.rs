@@ -5,7 +5,7 @@ use std::net::{
 };
 
 /// Implemented for IPv4Addr, IPv6Addr AND IpAddr
-pub trait PrivUnspecAddress: Sized + Copy + Eq + Ord + std::fmt::Display + std::fmt::Debug {
+pub trait PrivUnspecAddress: Sized {
 	fn _overflowing_next(self, prefix_len: u8) -> (Self, bool);
 	fn _overflowing_inc(self, prefix_len: u8, step: u128) -> (Self, bool);
 	fn _overflowing_prev(self, prefix_len: u8) -> (Self, bool);

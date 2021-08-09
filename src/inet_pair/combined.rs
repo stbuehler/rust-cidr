@@ -1,7 +1,5 @@
-use std::{
-	fmt,
-	net::IpAddr,
-};
+use core::fmt;
+use std::net::IpAddr;
 
 use crate::{
 	errors::*,

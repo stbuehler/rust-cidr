@@ -1,9 +1,7 @@
-use std::{
-	fmt,
-	net::{
-		Ipv4Addr,
-		Ipv6Addr,
-	},
+use core::fmt;
+use std::net::{
+	Ipv4Addr,
+	Ipv6Addr,
 };
 
 use crate::{
@@ -182,7 +180,7 @@ macro_rules! impl_inet_pair_for {
 
 		impl fmt::Display for $n {
 			fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-				use std::fmt::Write;
+				use core::fmt::Write;
 				f.write_char('(')?;
 				self.first().fmt(f)?;
 				f.write_str(", ")?;

@@ -14,7 +14,7 @@ use crate::{
 	Family,
 	InetIterator,
 };
-use std::{
+use core::{
 	fmt::Debug,
 	hash::Hash,
 };

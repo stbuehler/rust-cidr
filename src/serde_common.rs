@@ -1,17 +1,15 @@
 #![cfg(feature = "serde")]
 #![cfg_attr(doc_cfg, doc(cfg(feature = "serde")))]
 
+use core::fmt;
 use serde::{
 	de,
 	ser,
 };
-use std::{
-	fmt,
-	net::{
-		IpAddr,
-		Ipv4Addr,
-		Ipv6Addr,
-	},
+use std::net::{
+	IpAddr,
+	Ipv4Addr,
+	Ipv6Addr,
 };
 
 pub fn serialize_any<S>(

@@ -2,13 +2,13 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "bitstring")))]
 use bitstring::FixedBitString;
 
-use std::{
+use core::{
 	fmt,
-	net::{
-		Ipv4Addr,
-		Ipv6Addr,
-	},
 	str::FromStr,
+};
+use std::net::{
+	Ipv4Addr,
+	Ipv6Addr,
 };
 
 use super::from_str::cidr_from_str;
@@ -58,7 +58,7 @@ macro_rules! impl_cidr_for {
 					return;
 				}
 				self.address.set_false_from(len);
-				self.network_length = std::cmp::min(self.network_length, len as u8);
+				self.network_length = core::cmp::min(self.network_length, len as u8);
 			}
 
 			fn append(&mut self, bit: bool) {
@@ -74,7 +74,7 @@ macro_rules! impl_cidr_for {
 			}
 
 			fn shared_prefix_len(&self, other: &Self) -> usize {
-				let max_len = std::cmp::min(self.network_length, other.network_length) as usize;
+				let max_len = core::cmp::min(self.network_length, other.network_length) as usize;
 				FixedBitString::shared_prefix_len(&self.address, &other.address, max_len)
 			}
 		}
@@ -249,13 +249,13 @@ macro_rules! impl_cidr_for {
 		}
 
 		impl PartialOrd<$n> for $n {
-			fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+			fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
 				Some(self.cmp(other))
 			}
 		}
 
 		impl Ord for $n {
-			fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+			fn cmp(&self, other: &Self) -> core::cmp::Ordering {
 				self.address
 					.cmp(&other.address)
 					.then(self.network_length.cmp(&other.network_length))

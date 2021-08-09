@@ -12,7 +12,7 @@ use serde_test::{
 
 pub fn assert_bincode<'de, T>(value: &T, raw: &'de [u8])
 where
-	T: serde::Serialize + serde::Deserialize<'de> + PartialEq + ::std::fmt::Debug,
+	T: serde::Serialize + serde::Deserialize<'de> + PartialEq + ::core::fmt::Debug,
 {
 	use bincode::Options;
 	let config = bincode::options().with_limit(256.max(raw.len() as u64));

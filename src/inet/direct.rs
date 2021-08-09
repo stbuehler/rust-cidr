@@ -2,13 +2,13 @@
 #[cfg_attr(doc_cfg, doc(cfg(feature = "bitstring")))]
 use bitstring::FixedBitString;
 
-use std::{
+use core::{
 	fmt,
-	net::{
-		Ipv4Addr,
-		Ipv6Addr,
-	},
 	str::FromStr,
+};
+use std::net::{
+	Ipv4Addr,
+	Ipv6Addr,
 };
 
 use super::from_str::inet_from_str;
@@ -55,7 +55,7 @@ macro_rules! impl_inet_for {
 					return;
 				}
 				self.address.set_false_from(len);
-				self.network_length = std::cmp::min(self.network_length, len as u8);
+				self.network_length = core::cmp::min(self.network_length, len as u8);
 			}
 
 			fn append(&mut self, bit: bool) {
@@ -71,7 +71,7 @@ macro_rules! impl_inet_for {
 			}
 
 			fn shared_prefix_len(&self, other: &Self) -> usize {
-				let max_len = std::cmp::min(self.network_length, other.network_length) as usize;
+				let max_len = core::cmp::min(self.network_length, other.network_length) as usize;
 				FixedBitString::shared_prefix_len(&self.address, &other.address, max_len)
 			}
 		}

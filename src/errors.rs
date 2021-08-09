@@ -1,10 +1,12 @@
 //! Various error types returned by function in this crate
 
+use core::{
+	fmt,
+	num::ParseIntError,
+};
 use std::{
 	error::Error,
-	fmt,
 	net::AddrParseError,
-	num::ParseIntError,
 };
 
 use crate::Family;
