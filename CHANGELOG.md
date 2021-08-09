@@ -17,3 +17,5 @@
 - Seal trait implementations
 - Renamed `Inet::next` to `Inet::increment`
 - Iterators (on `IpCidr` structs) now return `Inet` items instead of flat addresses. Use `.addresses()` on the iterator type to only iterate over the addresses.
+
+[0.2.0]: https://github.com/stbuehler/rust-cidr/compare/cidr-0.1.1...cidr-0.2.0
