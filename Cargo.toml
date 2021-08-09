@@ -1,7 +1,7 @@
 [package]
 name = "cidr"
 # also bump version in html_root_url in src/lib.rs
-version = "0.1.1"
+version = "0.2.0"
 edition = "2018"
 authors = ["Stefan Bühler <stbuehler@web.de>"]
 description = "IP network and IP host within network types"
