@@ -1,4 +1,5 @@
 #[cfg(feature = "bitstring")]
+#[cfg_attr(doc_cfg, doc(cfg(feature = "bitstring")))]
 use bitstring::FixedBitString;
 
 use std::{
@@ -29,6 +30,7 @@ use crate::{
 macro_rules! impl_inet_for {
 	($n:ident : cidr $cidr:ident : addr $addr:ident : pair $pair:ident : family $family:expr) => {
 		#[cfg(feature = "bitstring")]
+		#[cfg_attr(doc_cfg, doc(cfg(feature = "bitstring")))]
 		impl bitstring::BitString for $n {
 			fn get(&self, ndx: usize) -> bool {
 				self.address.get(ndx)
