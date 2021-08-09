@@ -1,5 +1,5 @@
-[![Travis Build Status](https://travis-ci.org/stbuehler/rust-cidr.svg?branch=master)](https://travis-ci.org/stbuehler/rust-cidr)
-[![AppVeyor Status](https://ci.appveyor.com/api/projects/status/m37iv2rue63lamfd?svg=true)](https://ci.appveyor.com/project/stbuehler/rust-cidr)
+[![Rust CI](https://github.com/stbuehler/rust-cidr/actions/workflows/rust.yml/badge.svg?branch=release-0.1.x&event=push)](https://github.com/stbuehler/rust-cidr/actions/workflows/rust.yml)
+[![AppVeyor Status](https://ci.appveyor.com/api/projects/status/m37iv2rue63lamfd/branch/release-0.1.x?svg=true)](https://ci.appveyor.com/project/stbuehler/rust-cidr/branch/release-0.1.x)
 [![crates.io](https://img.shields.io/crates/v/cidr.svg)](https://crates.io/crates/cidr)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
@@ -8,4 +8,4 @@ host withing a network (`Inet`).
 
 The naming follows the names of the [PostgreSQL data types](https://www.postgresql.org/docs/current/static/datatype-net-types.html)
 
-The documentation for `master` is located at [https://stbuehler.github.io/rustdocs/cidr/cidr/](https://stbuehler.github.io/rustdocs/cidr/cidr/); released versions are documented at [https://docs.rs/cidr](https://docs.rs/cidr).
+This is the maintenance branch for 0.1.x; documentation is only available for released versions at [https://docs.rs/cidr](https://docs.rs/cidr).
