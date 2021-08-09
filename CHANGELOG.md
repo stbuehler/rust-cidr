@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.2.0 - unreleased
+## [0.2.0] - 2021-08-09
 
 ### Added
 
