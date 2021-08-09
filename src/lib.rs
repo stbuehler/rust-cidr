@@ -1,4 +1,5 @@
 #![cfg_attr(doc_cfg, feature(doc_cfg))]
+#![cfg_attr(not(feature = "std"), no_std)]
 #![warn(missing_docs)]
 #![doc(html_root_url = "https://docs.rs/cidr/0.2.0")]
 #![allow(clippy::match_like_matches_macro)]
@@ -13,6 +14,11 @@
 //!
 //! If the `#` flag is used with the `Display` formatting (i.e. `{:#}`) the
 //! prefix will be shown even for host addresses (added in `0.1.1`).
+//!
+//! # Feature `std`
+//!
+//! Enabled by default, also mandatory right now because [`std::net`] isn't
+//! available in [`core`].
 //!
 //! # Feature `serde`
 //!

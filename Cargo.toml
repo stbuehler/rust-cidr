@@ -19,7 +19,8 @@ travis-ci = { repository = "stbuehler/rust-cidr" }
 appveyor = { repository = "stbuehler/rust-cidr" }
 
 [features]
-default = []
+default = ["std"]
+std = []
 
 [dependencies]
 bitstring = { version = "0.1.0", optional = true }
