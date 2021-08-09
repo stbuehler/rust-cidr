@@ -7,9 +7,7 @@ use core::{
 #[cfg(feature = "std")]
 #[cfg_attr(doc_cfg, doc(cfg(feature = "std")))]
 use std::error::Error;
-use std::{
-	net::AddrParseError,
-};
+use std::net::AddrParseError;
 
 use crate::Family;
 
