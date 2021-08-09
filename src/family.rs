@@ -14,7 +14,7 @@ pub enum Family {
 }
 
 impl Family {
-	/// The length of an address in the given family
+	/// The length of an address (as bitstring) in the given family
 	#[allow(clippy::len_without_is_empty)]
 	pub fn len(&self) -> u8 {
 		match self {
