@@ -9,7 +9,10 @@ mod serde;
 #[cfg(test)]
 mod tests;
 
-use std::net::{Ipv4Addr, Ipv6Addr};
+use std::net::{
+	Ipv4Addr,
+	Ipv6Addr,
+};
 
 /// [`Cidr`] type representing an IPv4 network
 ///

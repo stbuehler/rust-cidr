@@ -6,7 +6,10 @@ mod serde;
 #[cfg(test)]
 mod tests;
 
-use std::net::{Ipv4Addr, Ipv6Addr};
+use std::net::{
+	Ipv4Addr,
+	Ipv6Addr,
+};
 
 /// [`Inet`] type representing an IPv4 host within a network
 ///

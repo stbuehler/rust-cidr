@@ -1,9 +1,19 @@
-use std::fmt;
-use std::net::IpAddr;
-use std::str::FromStr;
+use std::{
+	fmt,
+	net::IpAddr,
+	str::FromStr,
+};
 
 use super::from_str::cidr_from_str;
-use crate::{errors::*, Cidr, Family, IpCidr, IpInet, Ipv4Cidr, Ipv6Cidr};
+use crate::{
+	errors::*,
+	Cidr,
+	Family,
+	IpCidr,
+	IpInet,
+	Ipv4Cidr,
+	Ipv6Cidr,
+};
 
 /// Represents either an IPv4 or an IPv6 network or "any".
 ///
@@ -225,6 +235,7 @@ impl From<Option<IpCidr>> for AnyIpCidr {
 
 impl FromStr for AnyIpCidr {
 	type Err = NetworkParseError;
+
 	fn from_str(s: &str) -> Result<Self, NetworkParseError> {
 		if s == "any" {
 			Ok(Self::Any)

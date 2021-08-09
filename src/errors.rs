@@ -1,9 +1,11 @@
 //! Various error types returned by function in this crate
 
-use std::error::Error;
-use std::fmt;
-use std::net::AddrParseError;
-use std::num::ParseIntError;
+use std::{
+	error::Error,
+	fmt,
+	net::AddrParseError,
+	num::ParseIntError,
+};
 
 use crate::Family;
 

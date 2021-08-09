@@ -1,11 +1,26 @@
-use std::fmt;
-use std::net::{Ipv4Addr, Ipv6Addr};
+use std::{
+	fmt,
+	net::{
+		Ipv4Addr,
+		Ipv6Addr,
+	},
+};
 
 use crate::{
 	errors::*,
-	internal_traits::{PrivInetPair, PrivUnspecAddress},
+	internal_traits::{
+		PrivInetPair,
+		PrivUnspecAddress,
+	},
 	num::NumberOfAddresses,
-	Family, InetIterator, InetPair, Ipv4Cidr, Ipv4Inet, Ipv4InetPair, Ipv6Cidr, Ipv6Inet,
+	Family,
+	InetIterator,
+	InetPair,
+	Ipv4Cidr,
+	Ipv4Inet,
+	Ipv4InetPair,
+	Ipv6Cidr,
+	Ipv6Inet,
 	Ipv6InetPair,
 };
 

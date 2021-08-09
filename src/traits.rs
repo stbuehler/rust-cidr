@@ -1,8 +1,18 @@
 use crate::{
-	errors::{InetTupleError, NetworkLengthTooLongError, NetworkParseError},
-	internal_traits::{PrivCidr, PrivInet, PrivInetPair, PrivUnspecAddress},
+	errors::{
+		InetTupleError,
+		NetworkLengthTooLongError,
+		NetworkParseError,
+	},
+	internal_traits::{
+		PrivCidr,
+		PrivInet,
+		PrivInetPair,
+		PrivUnspecAddress,
+	},
 	num::NumberOfAddresses,
-	Family, InetIterator,
+	Family,
+	InetIterator,
 };
 
 /// Maps IP address type to other types based on this address type

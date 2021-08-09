@@ -1,10 +1,19 @@
-use std::fmt;
-use std::net::IpAddr;
-use std::str::FromStr;
+use std::{
+	fmt,
+	net::IpAddr,
+	str::FromStr,
+};
 
 use super::from_str::inet_from_str;
 use crate::{
-	errors::*, internal_traits::PrivInet, Family, Inet, IpCidr, IpInet, Ipv4Inet, Ipv6Inet,
+	errors::*,
+	internal_traits::PrivInet,
+	Family,
+	Inet,
+	IpCidr,
+	IpInet,
+	Ipv4Inet,
+	Ipv6Inet,
 };
 
 impl IpInet {
@@ -226,6 +235,7 @@ impl fmt::Display for IpInet {
 
 impl FromStr for IpInet {
 	type Err = NetworkParseError;
+
 	fn from_str(s: &str) -> Result<Self, NetworkParseError> {
 		inet_from_str(s)
 	}

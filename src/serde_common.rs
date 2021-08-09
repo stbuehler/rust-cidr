@@ -1,8 +1,17 @@
 #![cfg(feature = "serde")]
 
-use serde::{de, ser};
-use std::fmt;
-use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
+use serde::{
+	de,
+	ser,
+};
+use std::{
+	fmt,
+	net::{
+		IpAddr,
+		Ipv4Addr,
+		Ipv6Addr,
+	},
+};
 
 pub fn serialize_any<S>(
 	serializer: S,

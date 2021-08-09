@@ -1,7 +1,13 @@
 #![cfg(feature = "serde")]
 
-use crate::inet::{IpInet, Ipv4Inet, Ipv6Inet};
-use crate::serde_common;
+use crate::{
+	inet::{
+		IpInet,
+		Ipv4Inet,
+		Ipv6Inet,
+	},
+	serde_common,
+};
 use std::net::IpAddr;
 
 static NAME_IPV4_CIDR: &str = "Ipv4Inet";

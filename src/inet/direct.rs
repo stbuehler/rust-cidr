@@ -1,15 +1,29 @@
 #[cfg(feature = "bitstring")]
 use bitstring::FixedBitString;
 
-use std::fmt;
-use std::net::{Ipv4Addr, Ipv6Addr};
-use std::str::FromStr;
+use std::{
+	fmt,
+	net::{
+		Ipv4Addr,
+		Ipv6Addr,
+	},
+	str::FromStr,
+};
 
 use super::from_str::inet_from_str;
 use crate::{
 	errors::*,
-	internal_traits::{PrivAddress, PrivInet, PrivUnspecAddress},
-	Family, Inet, Ipv4Cidr, Ipv4Inet, Ipv6Cidr, Ipv6Inet,
+	internal_traits::{
+		PrivAddress,
+		PrivInet,
+		PrivUnspecAddress,
+	},
+	Family,
+	Inet,
+	Ipv4Cidr,
+	Ipv4Inet,
+	Ipv6Cidr,
+	Ipv6Inet,
 };
 
 macro_rules! impl_inet_for {
@@ -224,6 +238,7 @@ macro_rules! impl_inet_for {
 
 		impl FromStr for $n {
 			type Err = NetworkParseError;
+
 			fn from_str(s: &str) -> Result<Self, NetworkParseError> {
 				inet_from_str(s)
 			}

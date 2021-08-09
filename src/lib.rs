@@ -42,12 +42,30 @@
 //! [`Ipv6Addr`]: std::net::Ipv6Addr
 
 pub use self::{
-	cidr::{AnyIpCidr, IpCidr, Ipv4Cidr, Ipv6Cidr},
+	cidr::{
+		AnyIpCidr,
+		IpCidr,
+		Ipv4Cidr,
+		Ipv6Cidr,
+	},
 	family::Family,
-	inet::{IpInet, Ipv4Inet, Ipv6Inet},
+	inet::{
+		IpInet,
+		Ipv4Inet,
+		Ipv6Inet,
+	},
 	inet_iterator::InetIterator,
-	inet_pair::{IpInetPair, Ipv4InetPair, Ipv6InetPair},
-	traits::{Address, Cidr, Inet, InetPair},
+	inet_pair::{
+		IpInetPair,
+		Ipv4InetPair,
+		Ipv6InetPair,
+	},
+	traits::{
+		Address,
+		Cidr,
+		Inet,
+		InetPair,
+	},
 };
 
 pub mod errors;

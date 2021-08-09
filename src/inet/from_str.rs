@@ -1,6 +1,10 @@
 use std::str::FromStr;
 
-use crate::{errors::NetworkParseError, local_addr_parser::ParseableAddress, Inet};
+use crate::{
+	errors::NetworkParseError,
+	local_addr_parser::ParseableAddress,
+	Inet,
+};
 
 pub fn inet_from_str<I>(s: &str) -> Result<I, NetworkParseError>
 where

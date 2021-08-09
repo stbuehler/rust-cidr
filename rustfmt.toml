@@ -1,7 +1,34 @@
+# Maximum width of each line
+max_width = 100
+
 # Use tab characters for indentation, spaces for alignment
 hard_tabs = true
+
+# Replace uses of the try! macro by the ? shorthand
+use_try_shorthand = true
+
+# Use field initialize shorthand if possible.
+use_field_init_shorthand = true
+
+# Use max width for all single-line constructs
+use_small_heuristics = "Max"
+
+### UNSTABLE FEATURES
+
+# Convert /* */ comments to // comments where possible
+normalize_comments = false
 
 # Put a trailing comma after a block based match arm (non-block arms are not affected)
 match_block_trailing_comma = true
 
-use_small_heuristics = "Max"
+# Item layout inside a imports block
+imports_layout = "Vertical"
+
+# Error if unable to get all lines within max_width
+error_on_line_overflow = false
+
+# How imports should be grouped into use statements. Imports will be merged or split to the configured level of granularity.
+imports_granularity = "Crate"
+
+# Reorder impl items. type and const are put first, then macros and methods.
+reorder_impl_items = true

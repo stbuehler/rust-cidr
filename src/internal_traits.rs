@@ -1,4 +1,8 @@
-use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
+use std::net::{
+	IpAddr,
+	Ipv4Addr,
+	Ipv6Addr,
+};
 
 /// Implemented for IPv4Addr, IPv6Addr AND IpAddr
 pub trait PrivUnspecAddress: Sized + Copy + Eq + Ord + std::fmt::Display + std::fmt::Debug {

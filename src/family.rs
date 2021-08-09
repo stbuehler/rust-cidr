@@ -1,4 +1,8 @@
-use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
+use std::net::{
+	IpAddr,
+	Ipv4Addr,
+	Ipv6Addr,
+};
 
 /// Represents the type of an IP address
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]

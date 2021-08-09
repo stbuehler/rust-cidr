@@ -1,11 +1,21 @@
-use std::fmt;
-use std::net::IpAddr;
-use std::str::FromStr;
+use std::{
+	fmt,
+	net::IpAddr,
+	str::FromStr,
+};
 
 use super::from_str::cidr_from_str;
 use crate::{
-	errors::*, internal_traits::PrivCidr, Cidr, Family, InetIterator, IpCidr, IpInet, IpInetPair,
-	Ipv4Cidr, Ipv6Cidr,
+	errors::*,
+	internal_traits::PrivCidr,
+	Cidr,
+	Family,
+	InetIterator,
+	IpCidr,
+	IpInet,
+	IpInetPair,
+	Ipv4Cidr,
+	Ipv6Cidr,
 };
 
 impl IpCidr {
@@ -209,6 +219,7 @@ impl fmt::Display for IpCidr {
 
 impl FromStr for IpCidr {
 	type Err = NetworkParseError;
+
 	fn from_str(s: &str) -> Result<Self, NetworkParseError> {
 		cidr_from_str(s)
 	}

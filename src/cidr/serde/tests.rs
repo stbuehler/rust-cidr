@@ -1,5 +1,15 @@
-use crate::{AnyIpCidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
-use serde_test::{assert_de_tokens, assert_tokens, Configure, Token};
+use crate::{
+	AnyIpCidr,
+	IpCidr,
+	Ipv4Cidr,
+	Ipv6Cidr,
+};
+use serde_test::{
+	assert_de_tokens,
+	assert_tokens,
+	Configure,
+	Token,
+};
 
 pub fn assert_bincode<'de, T>(value: &T, raw: &'de [u8])
 where

@@ -1,9 +1,20 @@
-use std::fmt;
-use std::net::IpAddr;
+use std::{
+	fmt,
+	net::IpAddr,
+};
 
 use crate::{
-	errors::*, internal_traits::PrivInetPair, num::NumberOfAddresses, Family, InetIterator,
-	InetPair, IpCidr, IpInet, IpInetPair, Ipv4InetPair, Ipv6InetPair,
+	errors::*,
+	internal_traits::PrivInetPair,
+	num::NumberOfAddresses,
+	Family,
+	InetIterator,
+	InetPair,
+	IpCidr,
+	IpInet,
+	IpInetPair,
+	Ipv4InetPair,
+	Ipv6InetPair,
 };
 
 impl IpInetPair {

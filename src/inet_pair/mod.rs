@@ -1,7 +1,10 @@
 mod combined;
 mod direct;
 
-use std::net::{Ipv4Addr, Ipv6Addr};
+use std::net::{
+	Ipv4Addr,
+	Ipv6Addr,
+};
 
 /// [`InetPair`] type representing a pair of IPv4 hosts within a network
 ///

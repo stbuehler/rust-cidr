@@ -1,7 +1,14 @@
 #![cfg(feature = "serde")]
 
-use crate::cidr::{AnyIpCidr, IpCidr, Ipv4Cidr, Ipv6Cidr};
-use crate::serde_common;
+use crate::{
+	cidr::{
+		AnyIpCidr,
+		IpCidr,
+		Ipv4Cidr,
+		Ipv6Cidr,
+	},
+	serde_common,
+};
 use std::net::IpAddr;
 
 static NAME_IPV4_CIDR: &str = "Ipv4Cidr";

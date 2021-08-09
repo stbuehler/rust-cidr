@@ -1,4 +1,9 @@
-use crate::{num::NumberOfAddresses, Address, Inet, InetPair};
+use crate::{
+	num::NumberOfAddresses,
+	Address,
+	Inet,
+	InetPair,
+};
 
 /// Iterator type to iterate over a list of IP addresses in a network
 pub struct InetIterator<A: Address> {
@@ -63,8 +68,16 @@ impl<A: Address> std::iter::DoubleEndedIterator for InetIterator<A> {
 
 #[cfg(test)]
 mod tests {
-	use crate::{IpCidr, Ipv4Cidr, Ipv6Cidr};
-	use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
+	use crate::{
+		IpCidr,
+		Ipv4Cidr,
+		Ipv6Cidr,
+	};
+	use std::net::{
+		IpAddr,
+		Ipv4Addr,
+		Ipv6Addr,
+	};
 
 	fn test_v4(s: &'static str, l: &[Ipv4Addr]) {
 		assert_eq!(s.parse::<Ipv4Cidr>().unwrap().iter().collect::<Vec<_>>(), l);
