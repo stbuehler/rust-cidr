@@ -293,8 +293,8 @@ impl bitstring::BitString for AnyIpCidr {
 		} else {
 			match self {
 				Self::Any => unreachable!(),
-				Self::V4(mut c) => c.set(ndx - 1, bit),
-				Self::V6(mut c) => c.set(ndx - 1, bit),
+				Self::V4(ref mut c) => c.set(ndx - 1, bit),
+				Self::V6(ref mut c) => c.set(ndx - 1, bit),
 			}
 		}
 	}
@@ -310,8 +310,8 @@ impl bitstring::BitString for AnyIpCidr {
 		} else {
 			match self {
 				Self::Any => unreachable!(),
-				Self::V4(mut c) => c.flip(ndx - 1),
-				Self::V6(mut c) => c.flip(ndx - 1),
+				Self::V4(ref mut c) => c.flip(ndx - 1),
+				Self::V6(ref mut c) => c.flip(ndx - 1),
 			}
 		}
 	}
@@ -334,8 +334,8 @@ impl bitstring::BitString for AnyIpCidr {
 		} else {
 			match self {
 				Self::Any => (),
-				Self::V4(mut c) => c.clip(len - 1),
-				Self::V6(mut c) => c.clip(len - 1),
+				Self::V4(ref mut c) => c.clip(len - 1),
+				Self::V6(ref mut c) => c.clip(len - 1),
 			}
 		}
 	}
@@ -349,8 +349,8 @@ impl bitstring::BitString for AnyIpCidr {
 					*self = Self::V4(Ipv4Cidr::null());
 				}
 			},
-			Self::V4(mut c) => c.append(bit),
-			Self::V6(mut c) => c.append(bit),
+			Self::V4(ref mut c) => c.append(bit),
+			Self::V6(ref mut c) => c.append(bit),
 		}
 	}
 

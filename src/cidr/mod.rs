@@ -8,6 +8,9 @@ mod serde;
 
 #[cfg(test)]
 mod tests;
+#[cfg(feature = "bitstring")]
+#[cfg(test)]
+mod bitstring_tests;
 
 use std::net::{
 	Ipv4Addr,
