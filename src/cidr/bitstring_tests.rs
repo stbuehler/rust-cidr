@@ -40,4 +40,3 @@ fn ipv6_any_clip() {
 	assert_eq!(c.len(), 4);
 	assert_eq!(c, "2000::/3".parse::<AnyIpCidr>().unwrap());
 }
-

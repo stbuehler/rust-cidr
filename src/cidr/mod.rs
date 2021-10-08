@@ -6,11 +6,11 @@ mod direct;
 mod from_str;
 mod serde;
 
-#[cfg(test)]
-mod tests;
 #[cfg(feature = "bitstring")]
 #[cfg(test)]
 mod bitstring_tests;
+#[cfg(test)]
+mod tests;
 
 use std::net::{
 	Ipv4Addr,
