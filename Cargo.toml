@@ -15,7 +15,6 @@ license = "MIT"
 exclude = ["CHECKLIST.md"]
 
 [badges]
-travis-ci = { repository = "stbuehler/rust-cidr" }
 appveyor = { repository = "stbuehler/rust-cidr" }
 
 [features]
