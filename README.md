@@ -6,7 +6,7 @@
 # cidr crate
 
 This library provides types to represent an IP network (`Cidr`) or an IP
-host withing a network (`Inet`).
+host within a network (`Inet`).
 
 The naming follows the names of the [PostgreSQL data types](https://www.postgresql.org/docs/current/static/datatype-net-types.html)
 
