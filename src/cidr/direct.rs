@@ -15,7 +15,6 @@ use super::from_str::cidr_from_str;
 use crate::{
 	errors::*,
 	internal_traits::{
-		PrivAddress,
 		PrivCidr,
 		PrivUnspecAddress,
 	},
@@ -87,7 +86,7 @@ macro_rules! impl_cidr_for {
 			pub fn new(addr: $addr, len: u8) -> Result<Self, NetworkParseError> {
 				if len > $family.len() {
 					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
-				} else if !addr._has_zero_host_part(len) {
+				} else if !<$addr as PrivUnspecAddress>::_Tools::_has_zero_host_part(addr, len) {
 					Err(NetworkParseError::InvalidHostPart)
 				} else {
 					Ok(Self {
@@ -128,7 +127,10 @@ macro_rules! impl_cidr_for {
 
 			/// last address in the network as plain address
 			pub fn last_address(&self) -> $addr {
-				self.address._last_address(self.network_length)
+				<$addr as PrivUnspecAddress>::_Tools::_last_address(
+					self.address,
+					self.network_length,
+				)
 			}
 
 			/// last address in the network
@@ -160,12 +162,16 @@ macro_rules! impl_cidr_for {
 			/// network mask: an pseudo address which has the first `network
 			/// length` bits set to 1 and the remaining to 0.
 			pub fn mask(&self) -> $addr {
-				$addr::_network_mask(self.network_length)
+				<$addr as PrivUnspecAddress>::_Tools::_network_mask(self.network_length)
 			}
 
 			/// check whether an address is contained in the network
 			pub fn contains(&self, addr: &$addr) -> bool {
-				self.address._prefix_match(*addr, self.network_length)
+				<$addr as PrivUnspecAddress>::_Tools::_prefix_match(
+					self.address,
+					*addr,
+					self.network_length,
+				)
 			}
 		}
 

@@ -32,10 +32,11 @@ macro_rules! impl_inet_pair_for {
 				if first.network_length != second.network_length {
 					return Err(InetTupleError::NotInSharedNetwork);
 				}
-				if !first
-					.address
-					._prefix_match(second.address, first.network_length)
-				{
+				if !<$addr as PrivUnspecAddress>::_Tools::_prefix_match(
+					first.address,
+					second.address,
+					first.network_length,
+				) {
 					return Err(InetTupleError::NotInSharedNetwork);
 				}
 				Ok(Self {
@@ -53,7 +54,7 @@ macro_rules! impl_inet_pair_for {
 				second: $addr,
 				len: u8,
 			) -> Result<Self, InetTupleError> {
-				if !first._prefix_match(second, len) {
+				if !<$addr as PrivUnspecAddress>::_Tools::_prefix_match(first, second, len) {
 					return Err(InetTupleError::NotInSharedNetwork);
 				}
 				Ok(Self {
@@ -145,14 +146,15 @@ macro_rules! impl_inet_pair_for {
 			}
 
 			fn _covered_addresses(&self) -> NumberOfAddresses {
-				let first = <$native>::from(self.first);
-				let second = <$native>::from(self.second);
+				let first: $native = <$addr as PrivUnspecAddress>::_Tools::to_native(self.first);
+				let second: $native = <$addr as PrivUnspecAddress>::_Tools::to_native(self.second);
 				NumberOfAddresses::count_from_distance((second - first) as u128)
 			}
 
 			fn _inc_first(&mut self) -> bool {
 				if self.first < self.second {
-					self.first = <$addr>::from(<$native>::from(self.first) + 1);
+					let current = <$addr as PrivUnspecAddress>::_Tools::to_native(self.first);
+					self.first = <$addr as PrivUnspecAddress>::_Tools::from_native(current + 1);
 					true
 				} else {
 					false
@@ -161,7 +163,8 @@ macro_rules! impl_inet_pair_for {
 
 			fn _dec_second(&mut self) -> bool {
 				if self.first < self.second {
-					self.second = <$addr>::from(<$native>::from(self.second) - 1);
+					let current = <$addr as PrivUnspecAddress>::_Tools::to_native(self.second);
+					self.second = <$addr as PrivUnspecAddress>::_Tools::from_native(current - 1);
 					true
 				} else {
 					false

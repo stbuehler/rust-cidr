@@ -15,7 +15,6 @@ use super::from_str::inet_from_str;
 use crate::{
 	errors::*,
 	internal_traits::{
-		PrivAddress,
 		PrivInet,
 		PrivUnspecAddress,
 	},
@@ -103,7 +102,10 @@ macro_rules! impl_inet_for {
 			/// increments host part (without changing the network part);
 			/// returns true on wrap around
 			pub fn increment(&mut self) -> bool {
-				let (address, overflow) = self.address._overflowing_next(self.network_length);
+				let (address, overflow) = <$addr as PrivUnspecAddress>::_Tools::_overflowing_next(
+					self.address,
+					self.network_length,
+				);
 				self.address = address;
 				overflow
 			}
@@ -123,7 +125,10 @@ macro_rules! impl_inet_for {
 
 			/// first address in the network as plain address
 			pub fn first_address(&self) -> $addr {
-				self.address._network_address(self.network_length)
+				<$addr as PrivUnspecAddress>::_Tools::_network_address(
+					self.address,
+					self.network_length,
+				)
 			}
 
 			/// first address in the network
@@ -136,7 +141,10 @@ macro_rules! impl_inet_for {
 
 			/// last address in the network as plain address
 			pub fn last_address(&self) -> $addr {
-				self.address._last_address(self.network_length)
+				<$addr as PrivUnspecAddress>::_Tools::_last_address(
+					self.address,
+					self.network_length,
+				)
 			}
 
 			/// last address in the network
@@ -168,12 +176,16 @@ macro_rules! impl_inet_for {
 			/// network mask: an pseudo address which has the first `network
 			/// length` bits set to 1 and the remaining to 0.
 			pub fn mask(&self) -> $addr {
-				$addr::_network_mask(self.network_length)
+				<$addr as PrivUnspecAddress>::_Tools::_network_mask(self.network_length)
 			}
 
 			/// check whether an address is contained in the network
 			pub fn contains(&self, addr: &$addr) -> bool {
-				self.address._prefix_match(*addr, self.network_length)
+				<$addr as PrivUnspecAddress>::_Tools::_prefix_match(
+					self.address,
+					*addr,
+					self.network_length,
+				)
 			}
 		}
 
