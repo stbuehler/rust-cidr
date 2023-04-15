@@ -1,4 +1,5 @@
 use crate::{
+	internal_traits::PrivInetPair,
 	num::NumberOfAddresses,
 	Address,
 	Inet,
@@ -12,8 +13,7 @@ pub struct InetIterator<A: Address> {
 }
 
 impl<A: Address> InetIterator<A> {
-	#[doc(hidden)]
-	pub fn _new(range_pair: A::InetPair) -> Self {
+	pub(crate) fn _new(range_pair: A::InetPair) -> Self {
 		Self {
 			state: Some(range_pair),
 		}

@@ -16,8 +16,7 @@ use crate::Family;
 pub struct NetworkLengthTooLongError(usize, Family);
 
 impl NetworkLengthTooLongError {
-	#[doc(hidden)]
-	pub fn new(len: usize, family: Family) -> Self {
+	pub(crate) fn new(len: usize, family: Family) -> Self {
 		NetworkLengthTooLongError(len, family)
 	}
 }

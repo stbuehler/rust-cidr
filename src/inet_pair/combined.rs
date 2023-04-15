@@ -117,7 +117,28 @@ impl IpInetPair {
 	}
 }
 
-impl PrivInetPair for IpInetPair {}
+impl PrivInetPair for IpInetPair {
+	fn _covered_addresses(&self) -> NumberOfAddresses {
+		match self {
+			Self::V4(p) => p._covered_addresses(),
+			Self::V6(p) => p._covered_addresses(),
+		}
+	}
+
+	fn _inc_first(&mut self) -> bool {
+		match self {
+			Self::V4(p) => p._inc_first(),
+			Self::V6(p) => p._inc_first(),
+		}
+	}
+
+	fn _dec_second(&mut self) -> bool {
+		match self {
+			Self::V4(p) => p._dec_second(),
+			Self::V6(p) => p._dec_second(),
+		}
+	}
+}
 
 impl InetPair for IpInetPair {
 	type Address = IpAddr;
@@ -183,27 +204,6 @@ impl InetPair for IpInetPair {
 
 	fn iter(self) -> InetIterator<IpAddr> {
 		self.iter()
-	}
-
-	fn _covered_addresses(&self) -> NumberOfAddresses {
-		match self {
-			Self::V4(p) => p._covered_addresses(),
-			Self::V6(p) => p._covered_addresses(),
-		}
-	}
-
-	fn _inc_first(&mut self) -> bool {
-		match self {
-			Self::V4(p) => p._inc_first(),
-			Self::V6(p) => p._inc_first(),
-		}
-	}
-
-	fn _dec_second(&mut self) -> bool {
-		match self {
-			Self::V4(p) => p._dec_second(),
-			Self::V6(p) => p._dec_second(),
-		}
 	}
 }
 

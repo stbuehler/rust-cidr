@@ -10,7 +10,6 @@ use crate::{
 		PrivInetPair,
 		PrivUnspecAddress,
 	},
-	num::NumberOfAddresses,
 	Family,
 	InetIterator,
 };
@@ -219,13 +218,4 @@ pub trait InetPair: Copy + Debug + Eq + Hash + PrivInetPair {
 
 	/// Iterate over `first..=second` (inclusive)
 	fn iter(self) -> InetIterator<Self::Address>;
-
-	#[doc(hidden)]
-	fn _covered_addresses(&self) -> NumberOfAddresses;
-
-	#[doc(hidden)]
-	fn _inc_first(&mut self) -> bool;
-
-	#[doc(hidden)]
-	fn _dec_second(&mut self) -> bool;
 }

@@ -4,6 +4,8 @@ use std::net::{
 	Ipv6Addr,
 };
 
+use crate::num::NumberOfAddresses;
+
 /// Implemented for IPv4Addr, IPv6Addr AND IpAddr
 pub trait PrivUnspecAddress: Sized {
 	type _Tools;
@@ -19,7 +21,11 @@ pub trait PrivCidr {}
 pub trait PrivInet {}
 
 /// seal `InetPair` trait
-pub trait PrivInetPair {}
+pub trait PrivInetPair {
+	fn _covered_addresses(&self) -> NumberOfAddresses;
+	fn _inc_first(&mut self) -> bool;
+	fn _dec_second(&mut self) -> bool;
+}
 
 #[derive(Clone, Copy)]
 struct Ipv4OverflowingOp {

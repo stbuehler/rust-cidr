@@ -104,7 +104,33 @@ macro_rules! impl_inet_pair_for {
 			}
 		}
 
-		impl PrivInetPair for $n {}
+		impl PrivInetPair for $n {
+			fn _covered_addresses(&self) -> NumberOfAddresses {
+				let first: $native = <$addr as PrivUnspecAddress>::_Tools::to_native(self.first);
+				let second: $native = <$addr as PrivUnspecAddress>::_Tools::to_native(self.second);
+				NumberOfAddresses::count_from_distance((second - first) as u128)
+			}
+
+			fn _inc_first(&mut self) -> bool {
+				if self.first < self.second {
+					let current = <$addr as PrivUnspecAddress>::_Tools::to_native(self.first);
+					self.first = <$addr as PrivUnspecAddress>::_Tools::from_native(current + 1);
+					true
+				} else {
+					false
+				}
+			}
+
+			fn _dec_second(&mut self) -> bool {
+				if self.first < self.second {
+					let current = <$addr as PrivUnspecAddress>::_Tools::to_native(self.second);
+					self.second = <$addr as PrivUnspecAddress>::_Tools::from_native(current - 1);
+					true
+				} else {
+					false
+				}
+			}
+		}
 
 		impl InetPair for $n {
 			type Address = $addr;
@@ -143,32 +169,6 @@ macro_rules! impl_inet_pair_for {
 
 			fn iter(self) -> InetIterator<$addr> {
 				self.iter()
-			}
-
-			fn _covered_addresses(&self) -> NumberOfAddresses {
-				let first: $native = <$addr as PrivUnspecAddress>::_Tools::to_native(self.first);
-				let second: $native = <$addr as PrivUnspecAddress>::_Tools::to_native(self.second);
-				NumberOfAddresses::count_from_distance((second - first) as u128)
-			}
-
-			fn _inc_first(&mut self) -> bool {
-				if self.first < self.second {
-					let current = <$addr as PrivUnspecAddress>::_Tools::to_native(self.first);
-					self.first = <$addr as PrivUnspecAddress>::_Tools::from_native(current + 1);
-					true
-				} else {
-					false
-				}
-			}
-
-			fn _dec_second(&mut self) -> bool {
-				if self.first < self.second {
-					let current = <$addr as PrivUnspecAddress>::_Tools::to_native(self.second);
-					self.second = <$addr as PrivUnspecAddress>::_Tools::from_native(current - 1);
-					true
-				} else {
-					false
-				}
 			}
 		}
 
