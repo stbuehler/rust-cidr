@@ -69,6 +69,20 @@ impl IpInet {
 		}
 	}
 
+	/// Returns next address in network or `None` if it was the last address in the network
+	pub const fn next(self) -> Option<Self> {
+		match self {
+			Self::V4(c) => match c.next() {
+				Some(c) => Some(Self::V4(c)),
+				None => None,
+			},
+			Self::V6(c) => match c.next() {
+				Some(c) => Some(Self::V6(c)),
+				None => None,
+			},
+		}
+	}
+
 	/// network (i.e. drops the host information)
 	pub const fn network(&self) -> IpCidr {
 		match self {
@@ -183,6 +197,10 @@ impl Inet for IpInet {
 
 	fn increment(&mut self) -> bool {
 		self.increment()
+	}
+
+	fn next(self) -> Option<Self> {
+		self.next()
 	}
 
 	fn network(&self) -> IpCidr {

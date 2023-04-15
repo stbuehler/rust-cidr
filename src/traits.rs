@@ -138,6 +138,9 @@ pub trait Inet: Copy + Debug + Ord + Hash + PrivInet {
 	/// returns true on wrap around
 	fn increment(&mut self) -> bool;
 
+	/// Returns next address in network or `None` if it was the last address in the network
+	fn next(self) -> Option<Self>;
+
 	/// network (i.e. drops the host information)
 	fn network(&self) -> <Self::Address as Address>::Cidr;
 

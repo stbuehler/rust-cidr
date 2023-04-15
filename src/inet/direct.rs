@@ -110,6 +110,22 @@ macro_rules! impl_inet_for {
 				overflow
 			}
 
+			/// Returns next address in network or `None` if it was the last address in the network
+			pub const fn next(self) -> Option<Self> {
+				let (address, overflow) = <$addr as PrivUnspecAddress>::_Tools::_overflowing_next(
+					self.address,
+					self.network_length,
+				);
+				if overflow {
+					None
+				} else {
+					Some(Self {
+						address,
+						network_length: self.network_length,
+					})
+				}
+			}
+
 			/// network (i.e. drops the host information)
 			pub const fn network(&self) -> $cidr {
 				$cidr {
@@ -204,6 +220,10 @@ macro_rules! impl_inet_for {
 
 			fn increment(&mut self) -> bool {
 				self.increment()
+			}
+
+			fn next(self) -> Option<Self> {
+				self.next()
 			}
 
 			fn network(&self) -> $cidr {
