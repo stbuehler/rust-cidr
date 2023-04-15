@@ -7,7 +7,6 @@ use std::net::IpAddr;
 use super::from_str::cidr_from_str;
 use crate::{
 	errors::*,
-	Cidr,
 	Family,
 	IpCidr,
 	IpInet,
@@ -26,6 +25,8 @@ use crate::{
 /// the bit string to length 1 (i.e. `/0` in the resulting family).
 ///
 /// The [`Cidr`] trait cannot be implemented for this type.
+///
+/// [`Cidr`]: crate::Cidr
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 pub enum AnyIpCidr {
 	/// "any" network containing all IPv4 and IPv6 addresses

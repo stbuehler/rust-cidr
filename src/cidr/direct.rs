@@ -155,7 +155,7 @@ macro_rules! impl_cidr_for {
 			}
 
 			/// whether network represents a single host address
-			fn is_host_address(&self) -> bool {
+			pub fn is_host_address(&self) -> bool {
 				self.network_length() == self.family().len()
 			}
 
