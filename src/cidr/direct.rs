@@ -173,6 +173,14 @@ macro_rules! impl_cidr_for {
 					self.network_length,
 				)
 			}
+
+			pub(crate) fn _range_pair(&self) -> $pair {
+				$pair {
+					first: self.first_address(),
+					second: self.last_address(),
+					network_length: self.network_length,
+				}
+			}
 		}
 
 		impl PrivCidr for $n {}
@@ -227,14 +235,6 @@ macro_rules! impl_cidr_for {
 			fn contains(&self, addr: &$addr) -> bool {
 				self.contains(addr)
 			}
-
-			fn _range_pair(&self) -> $pair {
-				$pair {
-					first: self.first_address(),
-					second: self.last_address(),
-					network_length: self.network_length,
-				}
-			}
 		}
 
 		impl fmt::Debug for $n {
@@ -282,7 +282,7 @@ macro_rules! impl_cidr_for {
 			type Item = $inet;
 
 			fn into_iter(self) -> Self::IntoIter {
-				$crate::InetIterator::_new(self._range_pair())
+				self._range_pair().iter()
 			}
 		}
 	};

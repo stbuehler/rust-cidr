@@ -145,6 +145,13 @@ impl IpCidr {
 			},
 		}
 	}
+
+	pub(crate) fn _range_pair(&self) -> IpInetPair {
+		match self {
+			Self::V4(c) => IpInetPair::V4(c._range_pair()),
+			Self::V6(c) => IpInetPair::V6(c._range_pair()),
+		}
+	}
 }
 
 impl PrivCidr for IpCidr {}
@@ -198,13 +205,6 @@ impl Cidr for IpCidr {
 
 	fn contains(&self, addr: &IpAddr) -> bool {
 		self.contains(addr)
-	}
-
-	fn _range_pair(&self) -> IpInetPair {
-		match self {
-			Self::V4(c) => IpInetPair::V4(c._range_pair()),
-			Self::V6(c) => IpInetPair::V6(c._range_pair()),
-		}
 	}
 }
 

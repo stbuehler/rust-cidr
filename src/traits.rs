@@ -103,9 +103,6 @@ pub trait Cidr: Copy + Debug + Ord + Hash + PrivCidr {
 
 	/// check whether an address is contained in the network
 	fn contains(&self, addr: &Self::Address) -> bool;
-
-	#[doc(hidden)]
-	fn _range_pair(&self) -> <Self::Address as Address>::InetPair;
 }
 
 /// Types implementing Inet represent IP hosts within networks.
