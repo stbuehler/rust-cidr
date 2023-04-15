@@ -83,9 +83,11 @@ macro_rules! impl_cidr_for {
 			/// network length exceeds the address length or the address is not
 			/// the first address in the network ("host part not zero") an
 			/// error is returned.
-			pub fn new(addr: $addr, len: u8) -> Result<Self, NetworkParseError> {
+			pub const fn new(addr: $addr, len: u8) -> Result<Self, NetworkParseError> {
 				if len > $family.len() {
-					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
+					Err(NetworkParseError::NetworkLengthTooLongError(
+						NetworkLengthTooLongError::new(len as usize, $family),
+					))
 				} else if !<$addr as PrivUnspecAddress>::_Tools::_has_zero_host_part(addr, len) {
 					Err(NetworkParseError::InvalidHostPart)
 				} else {
@@ -98,7 +100,7 @@ macro_rules! impl_cidr_for {
 
 			/// Create a network containing a single address (network length =
 			/// address length).
-			pub fn new_host(addr: $addr) -> Self {
+			pub const fn new_host(addr: $addr) -> Self {
 				Self {
 					address: addr,
 					network_length: $family.len(),
@@ -108,17 +110,17 @@ macro_rules! impl_cidr_for {
 			/// Iterate over all addresses in the range.  With IPv6 addresses
 			/// this can produce really long iterations (up to 2<sup>128</sup>
 			/// addresses).
-			pub fn iter(&self) -> InetIterator<$addr> {
+			pub const fn iter(&self) -> InetIterator<$addr> {
 				self._range_pair().iter()
 			}
 
 			/// first address in the network as plain address
-			pub fn first_address(&self) -> $addr {
+			pub const fn first_address(&self) -> $addr {
 				self.address
 			}
 
 			/// first address in the network
-			pub fn first(&self) -> $inet {
+			pub const fn first(&self) -> $inet {
 				$inet {
 					address: self.first_address(),
 					network_length: self.network_length,
@@ -126,7 +128,7 @@ macro_rules! impl_cidr_for {
 			}
 
 			/// last address in the network as plain address
-			pub fn last_address(&self) -> $addr {
+			pub const fn last_address(&self) -> $addr {
 				<$addr as PrivUnspecAddress>::_Tools::_last_address(
 					self.address,
 					self.network_length,
@@ -134,7 +136,7 @@ macro_rules! impl_cidr_for {
 			}
 
 			/// last address in the network
-			pub fn last(&self) -> $inet {
+			pub const fn last(&self) -> $inet {
 				$inet {
 					address: self.last_address(),
 					network_length: self.network_length,
@@ -142,7 +144,7 @@ macro_rules! impl_cidr_for {
 			}
 
 			/// length in bits of the shared prefix of the contained addresses
-			pub fn network_length(&self) -> u8 {
+			pub const fn network_length(&self) -> u8 {
 				self.network_length
 			}
 
@@ -150,23 +152,23 @@ macro_rules! impl_cidr_for {
 			///
 			/// [`Ipv4`]: Family::Ipv4
 			/// [`Ipv6`]: Family::Ipv6
-			pub fn family(&self) -> Family {
+			pub const fn family(&self) -> Family {
 				$family
 			}
 
 			/// whether network represents a single host address
-			pub fn is_host_address(&self) -> bool {
+			pub const fn is_host_address(&self) -> bool {
 				self.network_length() == self.family().len()
 			}
 
 			/// network mask: an pseudo address which has the first `network
 			/// length` bits set to 1 and the remaining to 0.
-			pub fn mask(&self) -> $addr {
+			pub const fn mask(&self) -> $addr {
 				<$addr as PrivUnspecAddress>::_Tools::_network_mask(self.network_length)
 			}
 
 			/// check whether an address is contained in the network
-			pub fn contains(&self, addr: &$addr) -> bool {
+			pub const fn contains(&self, addr: &$addr) -> bool {
 				<$addr as PrivUnspecAddress>::_Tools::_prefix_match(
 					self.address,
 					*addr,
@@ -174,7 +176,7 @@ macro_rules! impl_cidr_for {
 				)
 			}
 
-			pub(crate) fn _range_pair(&self) -> $pair {
+			pub(crate) const fn _range_pair(&self) -> $pair {
 				$pair {
 					first: self.first_address(),
 					second: self.last_address(),

@@ -13,14 +13,14 @@ pub struct InetIterator<A: Address> {
 }
 
 impl<A: Address> InetIterator<A> {
-	pub(crate) fn _new(range_pair: A::InetPair) -> Self {
+	pub(crate) const fn _new(range_pair: A::InetPair) -> Self {
 		Self {
 			state: Some(range_pair),
 		}
 	}
 
 	/// Iterate only over addresses (without network prefix length)
-	pub fn addresses(self) -> InetAddressIterator<A> {
+	pub const fn addresses(self) -> InetAddressIterator<A> {
 		InetAddressIterator { inner: self }
 	}
 }

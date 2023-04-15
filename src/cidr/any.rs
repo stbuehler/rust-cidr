@@ -39,7 +39,7 @@ pub enum AnyIpCidr {
 
 impl AnyIpCidr {
 	/// Whether representing any address
-	pub fn is_any(&self) -> bool {
+	pub const fn is_any(&self) -> bool {
 		match self {
 			Self::Any => true,
 			_ => false,
@@ -47,7 +47,7 @@ impl AnyIpCidr {
 	}
 
 	/// Whether representing an IPv4 network
-	pub fn is_ipv4(&self) -> bool {
+	pub const fn is_ipv4(&self) -> bool {
 		match self {
 			Self::V4(_) => true,
 			_ => false,
@@ -55,7 +55,7 @@ impl AnyIpCidr {
 	}
 
 	/// Whether representing an IPv6 network
-	pub fn is_ipv6(&self) -> bool {
+	pub const fn is_ipv6(&self) -> bool {
 		match self {
 			Self::V4(_) => false,
 			_ => true,
@@ -69,16 +69,22 @@ impl AnyIpCidr {
 	/// network length exceeds the address length or the address is not
 	/// the first address in the network ("host part not zero") an error
 	/// is returned.
-	pub fn new(addr: IpAddr, len: u8) -> Result<Self, NetworkParseError> {
-		Ok(match addr {
-			IpAddr::V4(a) => Self::V4(Ipv4Cidr::new(a, len)?),
-			IpAddr::V6(a) => Self::V6(Ipv6Cidr::new(a, len)?),
-		})
+	pub const fn new(addr: IpAddr, len: u8) -> Result<Self, NetworkParseError> {
+		match addr {
+			IpAddr::V4(a) => match Ipv4Cidr::new(a, len) {
+				Ok(cidr) => Ok(Self::V4(cidr)),
+				Err(e) => Err(e),
+			},
+			IpAddr::V6(a) => match Ipv6Cidr::new(a, len) {
+				Ok(cidr) => Ok(Self::V6(cidr)),
+				Err(e) => Err(e),
+			},
+		}
 	}
 
 	/// Create a network containing a single address (network length =
 	/// address length).
-	pub fn new_host(addr: IpAddr) -> Self {
+	pub const fn new_host(addr: IpAddr) -> Self {
 		match addr {
 			IpAddr::V4(a) => Self::V4(Ipv4Cidr::new_host(a)),
 			IpAddr::V6(a) => Self::V6(Ipv6Cidr::new_host(a)),
@@ -90,7 +96,7 @@ impl AnyIpCidr {
 	/// returns [`None`] for [`Any`]
 	///
 	/// [`Any`]: Self::Any
-	pub fn first_address(&self) -> Option<IpAddr> {
+	pub const fn first_address(&self) -> Option<IpAddr> {
 		match self {
 			Self::Any => None,
 			Self::V4(c) => Some(IpAddr::V4(c.first_address())),
@@ -103,7 +109,7 @@ impl AnyIpCidr {
 	/// returns [`None`] for [`Any`]
 	///
 	/// [`Any`]: Self::Any
-	pub fn first(&self) -> Option<IpInet> {
+	pub const fn first(&self) -> Option<IpInet> {
 		match self {
 			Self::Any => None,
 			Self::V4(c) => Some(IpInet::V4(c.first())),
@@ -116,7 +122,7 @@ impl AnyIpCidr {
 	/// returns [`None`] for [`Any`]
 	///
 	/// [`Any`]: Self::Any
-	pub fn last_address(&self) -> Option<IpAddr> {
+	pub const fn last_address(&self) -> Option<IpAddr> {
 		match self {
 			Self::Any => None,
 			Self::V4(c) => Some(IpAddr::V4(c.last_address())),
@@ -129,7 +135,7 @@ impl AnyIpCidr {
 	/// returns [`None`] for [`Any`]
 	///
 	/// [`Any`]: Self::Any
-	pub fn last(&self) -> Option<IpInet> {
+	pub const fn last(&self) -> Option<IpInet> {
 		match self {
 			Self::Any => None,
 			Self::V4(c) => Some(IpInet::V4(c.last())),
@@ -142,7 +148,7 @@ impl AnyIpCidr {
 	/// returns [`None`] for [`Any`]
 	///
 	/// [`Any`]: Self::Any
-	pub fn network_length(&self) -> Option<u8> {
+	pub const fn network_length(&self) -> Option<u8> {
 		match self {
 			Self::Any => None,
 			Self::V4(c) => Some(c.network_length()),
@@ -157,7 +163,7 @@ impl AnyIpCidr {
 	/// [`Any`]: Self::Any
 	/// [`Ipv4`]: Family::Ipv4
 	/// [`Ipv6`]: Family::Ipv6
-	pub fn family(&self) -> Option<Family> {
+	pub const fn family(&self) -> Option<Family> {
 		match self {
 			Self::Any => None,
 			Self::V4(_) => Some(Family::Ipv4),
@@ -166,7 +172,7 @@ impl AnyIpCidr {
 	}
 
 	/// whether network represents a single host address
-	pub fn is_host_address(&self) -> bool {
+	pub const fn is_host_address(&self) -> bool {
 		match self {
 			Self::Any => false,
 			Self::V4(c) => c.is_host_address(),
@@ -180,7 +186,7 @@ impl AnyIpCidr {
 	/// returns [`None`] for [`Any`]
 	///
 	/// [`Any`]: Self::Any
-	pub fn mask(&self) -> Option<IpAddr> {
+	pub const fn mask(&self) -> Option<IpAddr> {
 		match self {
 			Self::Any => None,
 			Self::V4(c) => Some(IpAddr::V4(c.mask())),
@@ -189,7 +195,7 @@ impl AnyIpCidr {
 	}
 
 	/// check whether an address is contained in the network
-	pub fn contains(&self, addr: &IpAddr) -> bool {
+	pub const fn contains(&self, addr: &IpAddr) -> bool {
 		match self {
 			Self::Any => true,
 			Self::V4(c) => match addr {

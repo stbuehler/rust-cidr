@@ -79,9 +79,9 @@ macro_rules! impl_inet_for {
 			/// Create new host within a network from address and prefix length.
 			/// If the network length exceeds the address length an error is
 			/// returned.
-			pub fn new(addr: $addr, len: u8) -> Result<Self, NetworkLengthTooLongError> {
+			pub const fn new(addr: $addr, len: u8) -> Result<Self, NetworkLengthTooLongError> {
 				if len > $family.len() {
-					Err(NetworkLengthTooLongError::new(len as usize, $family).into())
+					Err(NetworkLengthTooLongError::new(len as usize, $family))
 				} else {
 					Ok(Self {
 						address: addr,
@@ -92,7 +92,7 @@ macro_rules! impl_inet_for {
 
 			/// Create a network containing a single address as host and the
 			/// network (network length = address length).
-			pub fn new_host(addr: $addr) -> Self {
+			pub const fn new_host(addr: $addr) -> Self {
 				Self {
 					address: addr,
 					network_length: $family.len(),
@@ -111,7 +111,7 @@ macro_rules! impl_inet_for {
 			}
 
 			/// network (i.e. drops the host information)
-			pub fn network(&self) -> $cidr {
+			pub const fn network(&self) -> $cidr {
 				$cidr {
 					address: self.first_address(),
 					network_length: self.network_length,
@@ -119,12 +119,12 @@ macro_rules! impl_inet_for {
 			}
 
 			/// the host
-			pub fn address(&self) -> $addr {
+			pub const fn address(&self) -> $addr {
 				self.address
 			}
 
 			/// first address in the network as plain address
-			pub fn first_address(&self) -> $addr {
+			pub const fn first_address(&self) -> $addr {
 				<$addr as PrivUnspecAddress>::_Tools::_network_address(
 					self.address,
 					self.network_length,
@@ -132,7 +132,7 @@ macro_rules! impl_inet_for {
 			}
 
 			/// first address in the network
-			pub fn first(&self) -> Self {
+			pub const fn first(&self) -> Self {
 				Self {
 					address: self.first_address(),
 					network_length: self.network_length,
@@ -140,7 +140,7 @@ macro_rules! impl_inet_for {
 			}
 
 			/// last address in the network as plain address
-			pub fn last_address(&self) -> $addr {
+			pub const fn last_address(&self) -> $addr {
 				<$addr as PrivUnspecAddress>::_Tools::_last_address(
 					self.address,
 					self.network_length,
@@ -148,7 +148,7 @@ macro_rules! impl_inet_for {
 			}
 
 			/// last address in the network
-			pub fn last(&self) -> Self {
+			pub const fn last(&self) -> Self {
 				Self {
 					address: self.last_address(),
 					network_length: self.network_length,
@@ -156,7 +156,7 @@ macro_rules! impl_inet_for {
 			}
 
 			/// length in bits of the shared prefix of the contained addresses
-			pub fn network_length(&self) -> u8 {
+			pub const fn network_length(&self) -> u8 {
 				self.network_length
 			}
 
@@ -164,23 +164,23 @@ macro_rules! impl_inet_for {
 			///
 			/// [`Ipv4`]: Family::Ipv4
 			/// [`Ipv6`]: Family::Ipv6
-			pub fn family(&self) -> Family {
+			pub const fn family(&self) -> Family {
 				$family
 			}
 
 			/// whether network represents a single host address
-			pub fn is_host_address(&self) -> bool {
+			pub const fn is_host_address(&self) -> bool {
 				self.network_length() == self.family().len()
 			}
 
 			/// network mask: an pseudo address which has the first `network
 			/// length` bits set to 1 and the remaining to 0.
-			pub fn mask(&self) -> $addr {
+			pub const fn mask(&self) -> $addr {
 				<$addr as PrivUnspecAddress>::_Tools::_network_mask(self.network_length)
 			}
 
 			/// check whether an address is contained in the network
-			pub fn contains(&self, addr: &$addr) -> bool {
+			pub const fn contains(&self, addr: &$addr) -> bool {
 				<$addr as PrivUnspecAddress>::_Tools::_prefix_match(
 					self.address,
 					*addr,

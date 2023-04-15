@@ -28,7 +28,7 @@ macro_rules! impl_inet_pair_for {
 			/// Create new pair from two addresses in the same network
 			///
 			/// Fails if the addresses are not in the same network.
-			pub fn new(first: $inet, second: $inet) -> Result<Self, InetTupleError> {
+			pub const fn new(first: $inet, second: $inet) -> Result<Self, InetTupleError> {
 				if first.network_length != second.network_length {
 					return Err(InetTupleError::NotInSharedNetwork);
 				}
@@ -49,7 +49,7 @@ macro_rules! impl_inet_pair_for {
 			/// Create new pair from two addresses and a common length
 			///
 			/// Fails if the network length is invalid for the addresses or the addresses are not in the same network.
-			pub fn new_from_addresses(
+			pub const fn new_from_addresses(
 				first: $addr,
 				second: $addr,
 				len: u8,
@@ -65,7 +65,7 @@ macro_rules! impl_inet_pair_for {
 			}
 
 			/// First address
-			pub fn first(&self) -> $inet {
+			pub const fn first(&self) -> $inet {
 				$inet {
 					address: self.first,
 					network_length: self.network_length,
@@ -73,7 +73,7 @@ macro_rules! impl_inet_pair_for {
 			}
 
 			/// Second address
-			pub fn second(&self) -> $inet {
+			pub const fn second(&self) -> $inet {
 				$inet {
 					address: self.second,
 					network_length: self.network_length,
@@ -81,12 +81,12 @@ macro_rules! impl_inet_pair_for {
 			}
 
 			/// network (i.e. drops the host information)
-			pub fn network(&self) -> $cidr {
+			pub const fn network(&self) -> $cidr {
 				self.first().network()
 			}
 
 			/// length in bits of the shared prefix of the contained addresses
-			pub fn network_length(&self) -> u8 {
+			pub const fn network_length(&self) -> u8 {
 				self.network_length
 			}
 
@@ -94,12 +94,12 @@ macro_rules! impl_inet_pair_for {
 			///
 			/// [`Ipv4`]: Family::Ipv4
 			/// [`Ipv6`]: Family::Ipv6
-			pub fn family(&self) -> Family {
+			pub const fn family(&self) -> Family {
 				$family
 			}
 
 			/// Iterate over `first..=second` (inclusive)
-			pub fn iter(self) -> InetIterator<$addr> {
+			pub const fn iter(self) -> InetIterator<$addr> {
 				InetIterator::_new(self)
 			}
 		}

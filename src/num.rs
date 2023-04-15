@@ -10,7 +10,7 @@ pub enum NumberOfAddresses {
 }
 
 impl NumberOfAddresses {
-	pub(crate) fn count_from_distance(d: u128) -> Self {
+	pub(crate) const fn count_from_distance(d: u128) -> Self {
 		match d.checked_add(1) {
 			Some(c) => Self::Count(c),
 			None => Self::MaxIpv6Addresses,

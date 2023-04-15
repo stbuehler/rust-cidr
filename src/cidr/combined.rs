@@ -20,7 +20,7 @@ use crate::{
 
 impl IpCidr {
 	/// Whether representing an IPv4 network
-	pub fn is_ipv4(&self) -> bool {
+	pub const fn is_ipv4(&self) -> bool {
 		match self {
 			Self::V4(_) => true,
 			Self::V6(_) => false,
@@ -28,7 +28,7 @@ impl IpCidr {
 	}
 
 	/// Whether representing an IPv6 network
-	pub fn is_ipv6(&self) -> bool {
+	pub const fn is_ipv6(&self) -> bool {
 		match self {
 			Self::V4(_) => false,
 			Self::V6(_) => true,
@@ -41,16 +41,22 @@ impl IpCidr {
 	/// network length exceeds the address length or the address is not
 	/// the first address in the network ("host part not zero") an
 	/// error is returned.
-	pub fn new(addr: IpAddr, len: u8) -> Result<Self, NetworkParseError> {
-		Ok(match addr {
-			IpAddr::V4(a) => Self::V4(Ipv4Cidr::new(a, len)?),
-			IpAddr::V6(a) => Self::V6(Ipv6Cidr::new(a, len)?),
-		})
+	pub const fn new(addr: IpAddr, len: u8) -> Result<Self, NetworkParseError> {
+		match addr {
+			IpAddr::V4(a) => match Ipv4Cidr::new(a, len) {
+				Ok(cidr) => Ok(Self::V4(cidr)),
+				Err(e) => Err(e),
+			},
+			IpAddr::V6(a) => match Ipv6Cidr::new(a, len) {
+				Ok(cidr) => Ok(Self::V6(cidr)),
+				Err(e) => Err(e),
+			},
+		}
 	}
 
 	/// Create a network containing a single address (network length =
 	/// address length).
-	pub fn new_host(addr: IpAddr) -> Self {
+	pub const fn new_host(addr: IpAddr) -> Self {
 		match addr {
 			IpAddr::V4(a) => Self::V4(Ipv4Cidr::new_host(a)),
 			IpAddr::V6(a) => Self::V6(Ipv6Cidr::new_host(a)),
@@ -60,12 +66,12 @@ impl IpCidr {
 	/// Iterate over all addresses in the range.  With IPv6 addresses
 	/// this can produce really long iterations (up to 2<sup>128</sup>
 	/// addresses).
-	pub fn iter(&self) -> InetIterator<IpAddr> {
+	pub const fn iter(&self) -> InetIterator<IpAddr> {
 		self._range_pair().iter()
 	}
 
 	/// first address in the network as plain address
-	pub fn first_address(&self) -> IpAddr {
+	pub const fn first_address(&self) -> IpAddr {
 		match self {
 			Self::V4(c) => IpAddr::V4(c.first_address()),
 			Self::V6(c) => IpAddr::V6(c.first_address()),
@@ -73,7 +79,7 @@ impl IpCidr {
 	}
 
 	/// first address in the network
-	pub fn first(&self) -> IpInet {
+	pub const fn first(&self) -> IpInet {
 		match self {
 			Self::V4(c) => IpInet::V4(c.first()),
 			Self::V6(c) => IpInet::V6(c.first()),
@@ -81,7 +87,7 @@ impl IpCidr {
 	}
 
 	/// last address in the network as plain address
-	pub fn last_address(&self) -> IpAddr {
+	pub const fn last_address(&self) -> IpAddr {
 		match self {
 			Self::V4(c) => IpAddr::V4(c.last_address()),
 			Self::V6(c) => IpAddr::V6(c.last_address()),
@@ -89,7 +95,7 @@ impl IpCidr {
 	}
 
 	/// last address in the network
-	pub fn last(&self) -> IpInet {
+	pub const fn last(&self) -> IpInet {
 		match self {
 			Self::V4(c) => IpInet::V4(c.last()),
 			Self::V6(c) => IpInet::V6(c.last()),
@@ -97,7 +103,7 @@ impl IpCidr {
 	}
 
 	/// length in bits of the shared prefix of the contained addresses
-	pub fn network_length(&self) -> u8 {
+	pub const fn network_length(&self) -> u8 {
 		match self {
 			Self::V4(c) => c.network_length(),
 			Self::V6(c) => c.network_length(),
@@ -108,7 +114,7 @@ impl IpCidr {
 	///
 	/// [`Ipv4`]: Family::Ipv4
 	/// [`Ipv6`]: Family::Ipv6
-	pub fn family(&self) -> Family {
+	pub const fn family(&self) -> Family {
 		match self {
 			Self::V4(_) => Family::Ipv4,
 			Self::V6(_) => Family::Ipv6,
@@ -116,7 +122,7 @@ impl IpCidr {
 	}
 
 	/// whether network represents a single host address
-	pub fn is_host_address(&self) -> bool {
+	pub const fn is_host_address(&self) -> bool {
 		match self {
 			Self::V4(c) => c.is_host_address(),
 			Self::V6(c) => c.is_host_address(),
@@ -125,7 +131,7 @@ impl IpCidr {
 
 	/// network mask: an pseudo address which has the first `network
 	/// length` bits set to 1 and the remaining to 0.
-	pub fn mask(&self) -> IpAddr {
+	pub const fn mask(&self) -> IpAddr {
 		match self {
 			Self::V4(c) => IpAddr::V4(c.mask()),
 			Self::V6(c) => IpAddr::V6(c.mask()),
@@ -133,7 +139,7 @@ impl IpCidr {
 	}
 
 	/// check whether an address is contained in the network
-	pub fn contains(&self, addr: &IpAddr) -> bool {
+	pub const fn contains(&self, addr: &IpAddr) -> bool {
 		match self {
 			Self::V4(c) => match addr {
 				IpAddr::V4(a) => c.contains(a),
@@ -146,7 +152,7 @@ impl IpCidr {
 		}
 	}
 
-	pub(crate) fn _range_pair(&self) -> IpInetPair {
+	pub(crate) const fn _range_pair(&self) -> IpInetPair {
 		match self {
 			Self::V4(c) => IpInetPair::V4(c._range_pair()),
 			Self::V6(c) => IpInetPair::V6(c._range_pair()),

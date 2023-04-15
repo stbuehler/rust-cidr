@@ -17,7 +17,7 @@ use crate::{
 
 impl IpInetPair {
 	/// Whether representing an IPv4 network
-	pub fn is_ipv4(&self) -> bool {
+	pub const fn is_ipv4(&self) -> bool {
 		match self {
 			Self::V4(_) => true,
 			Self::V6(_) => false,
@@ -25,7 +25,7 @@ impl IpInetPair {
 	}
 
 	/// Whether representing an IPv6 network
-	pub fn is_ipv6(&self) -> bool {
+	pub const fn is_ipv6(&self) -> bool {
 		match self {
 			Self::V4(_) => false,
 			Self::V6(_) => true,
@@ -37,13 +37,15 @@ impl IpInetPair {
 	/// Create new pair from two addresses in the same network
 	///
 	/// Fails if the addresses are not in the same network.
-	pub fn new(first: IpInet, second: IpInet) -> Result<Self, InetTupleError> {
+	pub const fn new(first: IpInet, second: IpInet) -> Result<Self, InetTupleError> {
 		match (first, second) {
-			(IpInet::V4(first), IpInet::V4(second)) => {
-				Ok(Self::V4(Ipv4InetPair::new(first, second)?))
+			(IpInet::V4(first), IpInet::V4(second)) => match Ipv4InetPair::new(first, second) {
+				Ok(pair) => Ok(Self::V4(pair)),
+				Err(e) => Err(e),
 			},
-			(IpInet::V6(first), IpInet::V6(second)) => {
-				Ok(Self::V6(Ipv6InetPair::new(first, second)?))
+			(IpInet::V6(first), IpInet::V6(second)) => match Ipv6InetPair::new(first, second) {
+				Ok(pair) => Ok(Self::V6(pair)),
+				Err(e) => Err(e),
 			},
 			_ => Err(InetTupleError::NotInSharedNetwork),
 		}
@@ -52,24 +54,30 @@ impl IpInetPair {
 	/// Create new pair from two addresses and a common length
 	///
 	/// Fails if the network length is invalid for the addresses or the addresses are not in the same network.
-	pub fn new_from_addresses(
+	pub const fn new_from_addresses(
 		first: IpAddr,
 		second: IpAddr,
 		len: u8,
 	) -> Result<Self, InetTupleError> {
 		match (first, second) {
-			(IpAddr::V4(first), IpAddr::V4(second)) => Ok(Self::V4(
-				Ipv4InetPair::new_from_addresses(first, second, len)?,
-			)),
-			(IpAddr::V6(first), IpAddr::V6(second)) => Ok(Self::V6(
-				Ipv6InetPair::new_from_addresses(first, second, len)?,
-			)),
+			(IpAddr::V4(first), IpAddr::V4(second)) => {
+				match Ipv4InetPair::new_from_addresses(first, second, len) {
+					Ok(pair) => Ok(Self::V4(pair)),
+					Err(e) => Err(e),
+				}
+			},
+			(IpAddr::V6(first), IpAddr::V6(second)) => {
+				match Ipv6InetPair::new_from_addresses(first, second, len) {
+					Ok(pair) => Ok(Self::V6(pair)),
+					Err(e) => Err(e),
+				}
+			},
 			_ => Err(InetTupleError::NotInSharedNetwork),
 		}
 	}
 
 	/// First address
-	pub fn first(&self) -> IpInet {
+	pub const fn first(&self) -> IpInet {
 		match self {
 			Self::V4(p) => IpInet::V4(p.first()),
 			Self::V6(p) => IpInet::V6(p.first()),
@@ -77,7 +85,7 @@ impl IpInetPair {
 	}
 
 	/// Second address
-	pub fn second(&self) -> IpInet {
+	pub const fn second(&self) -> IpInet {
 		match self {
 			Self::V4(p) => IpInet::V4(p.second()),
 			Self::V6(p) => IpInet::V6(p.second()),
@@ -85,7 +93,7 @@ impl IpInetPair {
 	}
 
 	/// network (i.e. drops the host information)
-	pub fn network(&self) -> IpCidr {
+	pub const fn network(&self) -> IpCidr {
 		match self {
 			Self::V4(p) => IpCidr::V4(p.network()),
 			Self::V6(p) => IpCidr::V6(p.network()),
@@ -93,7 +101,7 @@ impl IpInetPair {
 	}
 
 	/// length in bits of the shared prefix of the contained addresses
-	pub fn network_length(&self) -> u8 {
+	pub const fn network_length(&self) -> u8 {
 		match self {
 			Self::V4(p) => p.network_length(),
 			Self::V6(p) => p.network_length(),
@@ -104,7 +112,7 @@ impl IpInetPair {
 	///
 	/// [`Ipv4`]: Family::Ipv4
 	/// [`Ipv6`]: Family::Ipv6
-	pub fn family(&self) -> Family {
+	pub const fn family(&self) -> Family {
 		match self {
 			Self::V4(_) => Family::Ipv4,
 			Self::V6(_) => Family::Ipv6,
@@ -112,7 +120,7 @@ impl IpInetPair {
 	}
 
 	/// Iterate over `first..=second` (inclusive)
-	pub fn iter(self) -> InetIterator<IpAddr> {
+	pub const fn iter(self) -> InetIterator<IpAddr> {
 		InetIterator::_new(self)
 	}
 }
