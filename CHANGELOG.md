@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.2.2] - 2023-06-25
+
+- Make all functions const if possible
+
 ## [0.2.1] - 2021-10-08
 
 - Fix major problems in the `BitString` trait implementation for `AnyIpCidr`
@@ -24,3 +28,4 @@
 
 [0.2.0]: https://github.com/stbuehler/rust-cidr/compare/cidr-0.1.1...cidr-0.2.0
 [0.2.1]: https://github.com/stbuehler/rust-cidr/compare/cidr-0.2.0...cidr-0.2.1
+[0.2.2]: https://github.com/stbuehler/rust-cidr/compare/cidr-0.2.1...cidr-0.2.2
