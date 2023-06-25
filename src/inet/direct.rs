@@ -272,13 +272,13 @@ macro_rules! impl_inet_for {
 		}
 
 		impl fmt::Debug for $n {
-			fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+			fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 				write!(f, "{:?}/{}", self.address, self.network_length)
 			}
 		}
 
 		impl fmt::Display for $n {
-			fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+			fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 				if f.alternate() || !self.is_host_address() {
 					write!(f, "{}/{}", self.address, self.network_length)?;
 				} else {

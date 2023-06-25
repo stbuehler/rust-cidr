@@ -215,7 +215,7 @@ impl Cidr for IpCidr {
 }
 
 impl fmt::Display for IpCidr {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
 			Self::V4(c) => fmt::Display::fmt(c, f),
 			Self::V6(c) => fmt::Display::fmt(c, f),

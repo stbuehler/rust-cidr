@@ -22,7 +22,7 @@ impl NetworkLengthTooLongError {
 }
 
 impl fmt::Debug for NetworkLengthTooLongError {
-	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+	fn fmt(&self, w: &mut fmt::Formatter<'_>) -> fmt::Result {
 		write!(
 			w,
 			"Network length {} is too long for {:?} (maximum: {})",
@@ -33,7 +33,7 @@ impl fmt::Debug for NetworkLengthTooLongError {
 	}
 }
 impl fmt::Display for NetworkLengthTooLongError {
-	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+	fn fmt(&self, w: &mut fmt::Formatter<'_>) -> fmt::Result {
 		fmt::Debug::fmt(self, w)
 	}
 }
@@ -64,7 +64,7 @@ pub enum NetworkParseError {
 	NetworkLengthTooLongError(NetworkLengthTooLongError),
 }
 impl fmt::Debug for NetworkParseError {
-	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+	fn fmt(&self, w: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
 			Self::InvalidHostPart => write!(w, "host part of address was not zero"),
 			Self::AddrParseError(e) => {
@@ -80,7 +80,7 @@ impl fmt::Debug for NetworkParseError {
 	}
 }
 impl fmt::Display for NetworkParseError {
-	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+	fn fmt(&self, w: &mut fmt::Formatter<'_>) -> fmt::Result {
 		fmt::Debug::fmt(self, w)
 	}
 }
@@ -132,7 +132,7 @@ pub enum InetTupleError {
 }
 
 impl fmt::Debug for InetTupleError {
-	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+	fn fmt(&self, w: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
 			Self::NotInSharedNetwork => write!(w, "addresses not in shared network"),
 			Self::NetworkLengthTooLongError(e) => {
@@ -143,7 +143,7 @@ impl fmt::Debug for InetTupleError {
 }
 
 impl fmt::Display for InetTupleError {
-	fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+	fn fmt(&self, w: &mut fmt::Formatter<'_>) -> fmt::Result {
 		fmt::Debug::fmt(self, w)
 	}
 }

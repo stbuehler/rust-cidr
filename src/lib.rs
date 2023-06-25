@@ -1,6 +1,7 @@
 #![cfg_attr(doc_cfg, feature(doc_cfg))]
 #![cfg_attr(not(feature = "std"), no_std)]
 #![warn(missing_docs)]
+#![warn(rust_2018_idioms)]
 #![doc(html_root_url = "https://docs.rs/cidr/0.2.1")]
 #![allow(clippy::match_like_matches_macro)]
 

@@ -90,7 +90,7 @@ where
 	impl<'de> de::Visitor<'de> for Visitor {
 		type Value = Option<(IpAddr, u8)>;
 
-		fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+		fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
 			formatter.write_str("a tuple with two fields")
 		}
 
@@ -131,7 +131,7 @@ where
 	impl<'de> de::Visitor<'de> for NewTypeVisitor {
 		type Value = Option<(IpAddr, u8)>;
 
-		fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+		fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
 			formatter.write_str("newtype `")?;
 			formatter.write_str(self.0)?;
 			formatter.write_str("`")

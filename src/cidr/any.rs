@@ -211,7 +211,7 @@ impl AnyIpCidr {
 }
 
 impl fmt::Display for AnyIpCidr {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
 			Self::Any => write!(f, "any"),
 			Self::V4(c) => fmt::Display::fmt(c, f),

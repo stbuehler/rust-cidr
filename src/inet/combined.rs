@@ -249,7 +249,7 @@ impl Inet for IpInet {
 }
 
 impl fmt::Display for IpInet {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 		match self {
 			Self::V4(c) => fmt::Display::fmt(c, f),
 			Self::V6(c) => fmt::Display::fmt(c, f),

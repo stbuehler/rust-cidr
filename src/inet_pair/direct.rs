@@ -173,7 +173,7 @@ macro_rules! impl_inet_pair_for {
 		}
 
 		impl fmt::Debug for $n {
-			fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+			fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 				f.debug_struct(stringify!($n))
 					.field("first", &self.first())
 					.field("second", &self.second())
@@ -182,7 +182,7 @@ macro_rules! impl_inet_pair_for {
 		}
 
 		impl fmt::Display for $n {
-			fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+			fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
 				use core::fmt::Write;
 				f.write_char('(')?;
 				self.first().fmt(f)?;
