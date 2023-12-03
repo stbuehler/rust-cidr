@@ -424,7 +424,9 @@ fn parse_v4_23bit() {
 }
 
 #[test]
-#[should_panic(expected = "host part of address was not zero")]
+#[should_panic(
+	expected = "host part of address 192.0.3.0/23 was not zero; did you mean 192.0.2.0/23?"
+)]
 fn parse_v4_23bit_non_zero_host_bits() {
 	"192.0.3.0/23".parse::<Ipv4Cidr>().unwrap();
 }
@@ -441,7 +443,9 @@ fn parse_v4_17bit() {
 }
 
 #[test]
-#[should_panic(expected = "host part of address was not zero")]
+#[should_panic(
+	expected = "host part of address 192.0.192.0/17 was not zero; did you mean 192.0.128.0/17?"
+)]
 fn parse_v4_17bit_non_zero_host_bits() {
 	"192.0.192.0/17".parse::<Ipv4Cidr>().unwrap();
 }
@@ -491,7 +495,9 @@ fn parse_v4_0bit_short() {
 }
 
 #[test]
-#[should_panic(expected = "host part of address was not zero")]
+#[should_panic(
+	expected = "host part of address 10.1.1.1/24 was not zero; did you mean 10.1.1.0/24?"
+)]
 fn parse_v4_non_zero_host_bits() {
 	"10.1.1.1/24".parse::<Ipv4Cidr>().unwrap();
 }
@@ -641,7 +647,9 @@ fn parse_v6_64bit() {
 }
 
 #[test]
-#[should_panic(expected = "host part of address was not zero")]
+#[should_panic(
+	expected = "host part of address 2001:db8:1234:5678:1::/64 was not zero; did you mean 2001:db8:1234:5678::/64?"
+)]
 fn parse_v6_non_zero_host_bits() {
 	"2001:DB8:1234:5678:1::/64".parse::<Ipv6Cidr>().unwrap();
 }

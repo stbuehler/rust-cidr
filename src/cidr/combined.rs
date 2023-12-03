@@ -10,6 +10,7 @@ use crate::{
 	internal_traits::PrivCidr,
 	Cidr,
 	Family,
+	GenericCidr,
 	InetIterator,
 	IpCidr,
 	IpInet,
@@ -41,15 +42,15 @@ impl IpCidr {
 	/// network length exceeds the address length or the address is not
 	/// the first address in the network ("host part not zero") an
 	/// error is returned.
-	pub const fn new(addr: IpAddr, len: u8) -> Result<Self, NetworkParseError> {
+	pub const fn new(addr: IpAddr, len: u8) -> Result<Self, CidrParseError<Self>> {
 		match addr {
 			IpAddr::V4(a) => match Ipv4Cidr::new(a, len) {
 				Ok(cidr) => Ok(Self::V4(cidr)),
-				Err(e) => Err(e),
+				Err(e) => Err(e.const_v4_into()),
 			},
 			IpAddr::V6(a) => match Ipv6Cidr::new(a, len) {
 				Ok(cidr) => Ok(Self::V6(cidr)),
-				Err(e) => Err(e),
+				Err(e) => Err(e.const_v6_into()),
 			},
 		}
 	}
@@ -162,10 +163,12 @@ impl IpCidr {
 
 impl PrivCidr for IpCidr {}
 
-impl Cidr for IpCidr {
+impl GenericCidr for IpCidr {
 	type Address = IpAddr;
+}
 
-	fn new(addr: IpAddr, len: u8) -> Result<Self, NetworkParseError> {
+impl Cidr for IpCidr {
+	fn new(addr: IpAddr, len: u8) -> Result<Self, CidrParseError<Self>> {
 		Self::new(addr, len)
 	}
 
@@ -224,9 +227,9 @@ impl fmt::Display for IpCidr {
 }
 
 impl FromStr for IpCidr {
-	type Err = NetworkParseError;
+	type Err = CidrParseError<Self>;
 
-	fn from_str(s: &str) -> Result<Self, NetworkParseError> {
+	fn from_str(s: &str) -> Result<Self, CidrParseError<Self>> {
 		cidr_from_str(s)
 	}
 }

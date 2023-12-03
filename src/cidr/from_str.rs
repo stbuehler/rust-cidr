@@ -6,7 +6,7 @@ use crate::{
 	Cidr,
 };
 
-pub fn cidr_from_str<C>(s: &str) -> Result<C, NetworkParseError>
+pub fn cidr_from_str<C>(s: &str) -> Result<C, CidrParseError<C>>
 where
 	C: Cidr,
 	C::Address: ParseableAddress,

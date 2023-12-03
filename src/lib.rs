@@ -74,6 +74,7 @@ pub use self::{
 	traits::{
 		Address,
 		Cidr,
+		GenericCidr,
 		Inet,
 		InetPair,
 	},

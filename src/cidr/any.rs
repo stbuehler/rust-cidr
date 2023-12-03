@@ -7,7 +7,9 @@ use std::net::IpAddr;
 use super::from_str::cidr_from_str;
 use crate::{
 	errors::*,
+	internal_traits::PrivCidr,
 	Family,
+	GenericCidr,
 	IpCidr,
 	IpInet,
 	Ipv4Cidr,
@@ -69,15 +71,15 @@ impl AnyIpCidr {
 	/// network length exceeds the address length or the address is not
 	/// the first address in the network ("host part not zero") an error
 	/// is returned.
-	pub const fn new(addr: IpAddr, len: u8) -> Result<Self, NetworkParseError> {
+	pub const fn new(addr: IpAddr, len: u8) -> Result<Self, CidrParseError<Self>> {
 		match addr {
 			IpAddr::V4(a) => match Ipv4Cidr::new(a, len) {
 				Ok(cidr) => Ok(Self::V4(cidr)),
-				Err(e) => Err(e),
+				Err(e) => Err(e.const_v4_into_any()),
 			},
 			IpAddr::V6(a) => match Ipv6Cidr::new(a, len) {
 				Ok(cidr) => Ok(Self::V6(cidr)),
-				Err(e) => Err(e),
+				Err(e) => Err(e.const_v6_into_any()),
 			},
 		}
 	}
@@ -220,6 +222,12 @@ impl fmt::Display for AnyIpCidr {
 	}
 }
 
+impl PrivCidr for AnyIpCidr {}
+
+impl GenericCidr for AnyIpCidr {
+	type Address = IpAddr;
+}
+
 impl From<AnyIpCidr> for Option<IpCidr> {
 	fn from(value: AnyIpCidr) -> Option<IpCidr> {
 		match value {
@@ -241,13 +249,15 @@ impl From<Option<IpCidr>> for AnyIpCidr {
 }
 
 impl FromStr for AnyIpCidr {
-	type Err = NetworkParseError;
+	type Err = CidrParseError<AnyIpCidr>;
 
-	fn from_str(s: &str) -> Result<Self, NetworkParseError> {
+	fn from_str(s: &str) -> Result<Self, CidrParseError<AnyIpCidr>> {
 		if s == "any" {
 			Ok(Self::Any)
 		} else {
-			cidr_from_str::<IpCidr>(s).map(Self::from)
+			cidr_from_str::<IpCidr>(s)
+				.map(Self::from)
+				.map_err(|e| e.into())
 		}
 	}
 }

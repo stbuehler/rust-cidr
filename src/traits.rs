@@ -1,8 +1,8 @@
 use crate::{
 	errors::{
+		CidrParseError,
 		InetTupleError,
 		NetworkLengthTooLongError,
-		NetworkParseError,
 	},
 	internal_traits::{
 		PrivCidr,
@@ -14,7 +14,10 @@ use crate::{
 	InetIterator,
 };
 use core::{
-	fmt::Debug,
+	fmt::{
+		Debug,
+		Display,
+	},
 	hash::Hash,
 };
 
@@ -25,17 +28,32 @@ use core::{
 /// [`Ipv4Addr`]: std::net::Ipv4Addr
 /// [`Ipv6Addr`]: std::net::Ipv6Addr
 /// [`IpAddr`]: std::net::IpAddr
-pub trait Address: Copy + Debug + Ord + Hash + PrivUnspecAddress {
+pub trait Address: Copy + Debug + Display + Ord + Hash + PrivUnspecAddress {
 	/// Corresponding [`Inet`] type (representing an address + a network
 	/// containing it)
 	type Inet: Inet<Address = Self>;
 
 	/// Corresponding [`Cidr`] type (representing only a network, not a specific
 	/// address within)
-	type Cidr: Cidr<Address = Self>;
+	type Cidr: GenericCidr<Address = Self> + Cidr;
 
 	/// Corresponding [`InetPair`] type (representing two addresses in the same network)
 	type InetPair: InetPair<Address = Self>;
+}
+
+/// Types implementing [`GenericCidr`] represent IP networks.
+///
+/// [`GenericCidr`] is also implemented by [`AnyIpCidr`][crate::AnyIpCidr], which doesn't provide [`Cidr`].
+pub trait GenericCidr: PrivCidr {
+	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
+	/// [`Ipv6Addr`]).
+	///
+	/// [`Ipv4Addr`]: std::net::Ipv4Addr
+	/// [`Ipv6Addr`]: std::net::Ipv6Addr
+	/// [`IpAddr`]: std::net::IpAddr
+	// TODO: would like to add something like `where <Self::Address as Address>::Cidr: Into<Self>`,
+	// but results in "overflow evaluating the requirement ..."
+	type Address: Address;
 }
 
 /// Types implementing [`Cidr`] represent IP networks.  An IP network in
@@ -53,20 +71,16 @@ pub trait Address: Copy + Debug + Ord + Hash + PrivUnspecAddress {
 /// are the network part, the remaining bits are the host part.
 /// Requiring an address to be the first in a network is equivalent to
 /// requiring the host part being zero.
-pub trait Cidr: Copy + Debug + Ord + Hash + PrivCidr {
-	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
-	/// [`Ipv6Addr`]).
-	///
-	/// [`Ipv4Addr`]: std::net::Ipv4Addr
-	/// [`Ipv6Addr`]: std::net::Ipv6Addr
-	/// [`IpAddr`]: std::net::IpAddr
-	type Address: Address<Cidr = Self>;
-
+pub trait Cidr: Copy + Debug + Display + Ord + Hash + GenericCidr
+// TODO:
+// where Self::Address: Address<Cidr = Self>,
+// but results in "you might be missing a type parameter or trait bound"
+{
 	/// Create new network from address and prefix length.  If the
 	/// network length exceeds the address length or the address is not
 	/// the first address in the network ("host part not zero") an
 	/// error is returned.
-	fn new(addr: Self::Address, len: u8) -> Result<Self, NetworkParseError>;
+	fn new(addr: Self::Address, len: u8) -> Result<Self, CidrParseError<Self>>;
 
 	/// Create a network containing a single address (network length =
 	/// address length).
@@ -116,7 +130,7 @@ pub trait Cidr: Copy + Debug + Ord + Hash + PrivCidr {
 /// The representation of a [`Inet`] type is similar to that of the
 /// corresponding [`Cidr`] type, but uses the host address instead of the
 /// first address of the network.
-pub trait Inet: Copy + Debug + Ord + Hash + PrivInet {
+pub trait Inet: Copy + Debug + Display + Ord + Hash + PrivInet {
 	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
 	/// [`Ipv6Addr`]).
 	///

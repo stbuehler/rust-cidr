@@ -20,6 +20,7 @@ use crate::{
 	},
 	Cidr,
 	Family,
+	GenericCidr,
 	InetIterator,
 	Ipv4Cidr,
 	Ipv4Inet,
@@ -83,13 +84,17 @@ macro_rules! impl_cidr_for {
 			/// network length exceeds the address length or the address is not
 			/// the first address in the network ("host part not zero") an
 			/// error is returned.
-			pub const fn new(addr: $addr, len: u8) -> Result<Self, NetworkParseError> {
-				if len > $family.len() {
-					Err(NetworkParseError::NetworkLengthTooLongError(
-						NetworkLengthTooLongError::new(len as usize, $family),
-					))
-				} else if !<$addr as PrivUnspecAddress>::_Tools::_has_zero_host_part(addr, len) {
-					Err(NetworkParseError::InvalidHostPart)
+			pub const fn new(addr: $addr, len: u8) -> Result<Self, CidrParseError<Self>> {
+				let address = match $inet::new(addr, len) {
+					Ok(address) => address,
+					Err(e) => {
+						return Err(CidrParseError::NetworkParseError(
+							NetworkParseError::NetworkLengthTooLongError(e),
+						))
+					},
+				};
+				if !<$addr as PrivUnspecAddress>::_Tools::_has_zero_host_part(addr, len) {
+					Err(CidrParseError::InvalidHostPart { address })
 				} else {
 					Ok(Self {
 						address: addr,
@@ -187,10 +192,12 @@ macro_rules! impl_cidr_for {
 
 		impl PrivCidr for $n {}
 
-		impl Cidr for $n {
+		impl GenericCidr for $n {
 			type Address = $addr;
+		}
 
-			fn new(addr: $addr, len: u8) -> Result<Self, NetworkParseError> {
+		impl Cidr for $n {
+			fn new(addr: $addr, len: u8) -> Result<Self, CidrParseError<Self>> {
 				Self::new(addr, len)
 			}
 
@@ -271,9 +278,9 @@ macro_rules! impl_cidr_for {
 		}
 
 		impl FromStr for $n {
-			type Err = NetworkParseError;
+			type Err = CidrParseError<Self>;
 
-			fn from_str(s: &str) -> Result<$n, NetworkParseError> {
+			fn from_str(s: &str) -> Result<$n, CidrParseError<Self>> {
 				cidr_from_str(s)
 			}
 		}
