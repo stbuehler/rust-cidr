@@ -19,10 +19,13 @@ appveyor = { repository = "stbuehler/rust-cidr" }
 
 [features]
 default = ["std"]
+proptest = ["dep:proptest", "dep:proptest-derive"]
 std = []
 
 [dependencies]
 bitstring = { version = "0.1.0", optional = true }
+proptest = { version = "1.4.0", optional = true, default-features = false, features = ["std"] }
+proptest-derive = { version = "0.4.0", optional = true }
 serde = { version = "1.0.27", optional = true }
 
 [dev-dependencies]

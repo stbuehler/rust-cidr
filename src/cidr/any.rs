@@ -28,6 +28,7 @@ use crate::{
 ///
 /// [`Cidr`]: crate::Cidr
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[cfg_attr(feature = "proptest", derive(proptest_derive::Arbitrary))]
 pub enum AnyIpCidr {
 	/// "any" network containing all IPv4 and IPv6 addresses
 	Any,

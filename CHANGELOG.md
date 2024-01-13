@@ -1,5 +1,8 @@
 # Change Log
 
+- Add optional support for `proptest`
+  Use cidr = { version = "0.2.3", features = [ "proptest" ] }` to enable it.
+
 ## [0.2.2] - 2023-06-25
 
 - Make all functions const if possible

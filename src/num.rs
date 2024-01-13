@@ -2,6 +2,7 @@
 ///
 /// Can be 2^128, so a u128 isn't enough - we need one more.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[cfg_attr(feature = "proptest", derive(proptest_derive::Arbitrary))]
 pub enum NumberOfAddresses {
 	/// Given amount
 	Count(u128),

@@ -6,6 +6,7 @@ use std::net::{
 
 /// Represents the type of an IP address
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[cfg_attr(feature = "proptest", derive(proptest_derive::Arbitrary))]
 pub enum Family {
 	/// IPv4
 	Ipv4,
