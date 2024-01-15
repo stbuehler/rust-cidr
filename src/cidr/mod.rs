@@ -23,6 +23,7 @@ use std::net::{
 ///
 /// [`Cidr`]: crate::Cidr
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "proptest", derive(proptest_derive::Arbitrary))]
 pub struct Ipv4Cidr {
 	pub(crate) address: Ipv4Addr,
 	pub(crate) network_length: u8,
@@ -34,6 +35,7 @@ pub struct Ipv4Cidr {
 ///
 /// [`Cidr`]: crate::Cidr
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "proptest", derive(proptest_derive::Arbitrary))]
 pub struct Ipv6Cidr {
 	pub(crate) address: Ipv6Addr,
 	pub(crate) network_length: u8,
@@ -43,6 +45,7 @@ pub struct Ipv6Cidr {
 ///
 /// [`Cidr`]: crate::Cidr
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[cfg_attr(feature = "proptest", derive(proptest_derive::Arbitrary))]
 pub enum IpCidr {
 	/// IPv4 network
 	V4(Ipv4Cidr),

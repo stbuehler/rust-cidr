@@ -18,6 +18,7 @@ use std::net::{
 ///
 /// [`Inet`]: crate::Inet
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[cfg_attr(feature = "proptest", derive(proptest_derive::Arbitrary))]
 pub struct Ipv4Inet {
 	pub(crate) address: Ipv4Addr,
 	pub(crate) network_length: u8,
@@ -30,6 +31,7 @@ pub struct Ipv4Inet {
 ///
 /// [`Inet`]: crate::Inet
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[cfg_attr(feature = "proptest", derive(proptest_derive::Arbitrary))]
 pub struct Ipv6Inet {
 	pub(crate) address: Ipv6Addr,
 	pub(crate) network_length: u8,
@@ -40,6 +42,7 @@ pub struct Ipv6Inet {
 ///
 /// [`Inet`]: crate::Inet
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
+#[cfg_attr(feature = "proptest", derive(proptest_derive::Arbitrary))]
 pub enum IpInet {
 	/// IPv4 host within network
 	V4(Ipv4Inet),
