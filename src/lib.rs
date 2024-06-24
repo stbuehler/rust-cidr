@@ -1,5 +1,6 @@
 #![cfg_attr(doc_cfg, feature(doc_cfg))]
 #![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(feature = "no_unsafe", forbid(unsafe_code))]
 #![warn(missing_docs)]
 #![warn(rust_2018_idioms)]
 #![doc(html_root_url = "https://docs.rs/cidr/0.2.2")]
@@ -15,6 +16,11 @@
 //!
 //! If the `#` flag is used with the `Display` formatting (i.e. `{:#}`) the
 //! prefix will be shown even for host addresses (added in `0.1.1`).
+//!
+//! # Feature `no_unsafe`
+//!
+//! Enables `#![forbid(unsafe_code)]` for the whole crate; needs to use
+//! some workarounds that are likely slower than their `unsafe` variants.
 //!
 //! # Feature `std`
 //!

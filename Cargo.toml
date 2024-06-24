@@ -19,6 +19,7 @@ appveyor = { repository = "stbuehler/rust-cidr" }
 
 [features]
 default = ["std"]
+no_unsafe = []
 std = []
 
 [dependencies]

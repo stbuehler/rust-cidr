@@ -178,35 +178,34 @@ impl Ipv6AddrTools {
 		u128::from_be_bytes(ip.octets())
 	}
 
-	// safe variant, but "slow"
-	/*
 	pub const fn from_native(ip: u128) -> Ipv6Addr {
 		// const: Ipv6Addr::from
 		let ip = ip.to_be_bytes();
-		Ipv6Addr::new(
-			u16::from_be_bytes([ip[0], ip[1]]),
-			u16::from_be_bytes([ip[2], ip[3]]),
-			u16::from_be_bytes([ip[4], ip[5]]),
-			u16::from_be_bytes([ip[6], ip[7]]),
-			u16::from_be_bytes([ip[8], ip[9]]),
-			u16::from_be_bytes([ip[10], ip[11]]),
-			u16::from_be_bytes([ip[12], ip[13]]),
-			u16::from_be_bytes([ip[14], ip[15]]),
-		)
-	}
-	*/
-
-	pub const fn from_native(ip: u128) -> Ipv6Addr {
-		// const: Ipv6Addr::from
-		let ip = ip.to_be_bytes();
-		// Ipv6Addr is a newtype for the octets, it just doesn't have a constructor
-		// for it apart from Ipv6Addr::from, which isn't const
-		//
-		// this should be "safe":
-		// * if Ipv6Addr has a different size than [u8; 16] transmute won't compile
-		// * if the size matches, Ipv6Addr can't store any other data - it must store exactly the octets
-		// * it is unlikely std would ever store this in another endianness
-		unsafe { std::mem::transmute(ip) }
+		#[cfg(not(feature = "no_unsafe"))]
+		{
+			// Ipv6Addr is a newtype for the octets, it just doesn't have a constructor
+			// for it apart from Ipv6Addr::from, which isn't const
+			//
+			// this should be "safe":
+			// * if Ipv6Addr has a different size than [u8; 16] transmute won't compile
+			// * if the size matches, Ipv6Addr can't store any other data - it must store exactly the octets
+			// * it is unlikely std would ever store this in another endianness
+			unsafe { std::mem::transmute(ip) }
+		}
+		#[cfg(feature = "no_unsafe")]
+		{
+			// safe variant, but "slow"
+			Ipv6Addr::new(
+				u16::from_be_bytes([ip[0], ip[1]]),
+				u16::from_be_bytes([ip[2], ip[3]]),
+				u16::from_be_bytes([ip[4], ip[5]]),
+				u16::from_be_bytes([ip[6], ip[7]]),
+				u16::from_be_bytes([ip[8], ip[9]]),
+				u16::from_be_bytes([ip[10], ip[11]]),
+				u16::from_be_bytes([ip[12], ip[13]]),
+				u16::from_be_bytes([ip[14], ip[15]]),
+			)
+		}
 	}
 
 	pub const fn native_host_mask(prefix_len: u8) -> u128 {
