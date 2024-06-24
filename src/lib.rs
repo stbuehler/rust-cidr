@@ -80,6 +80,7 @@ pub use self::{
 };
 
 pub mod errors;
+pub mod parsers;
 
 mod serde_common;
 
