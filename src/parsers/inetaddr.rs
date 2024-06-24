@@ -1,4 +1,8 @@
-use std::net::{AddrParseError, IpAddr, Ipv4Addr};
+use std::net::{
+	AddrParseError,
+	IpAddr,
+	Ipv4Addr,
+};
 
 /// Parse "loose" IPv4 address similar to POSIX `inet_addr`
 ///
@@ -71,7 +75,7 @@ pub fn parse_loose_ipv4(s: &str) -> Result<Ipv4Addr, AddrParseError> {
 			} else {
 				Err(e)
 			}
-		}
+		},
 	}
 }
 
@@ -85,18 +89,25 @@ pub fn parse_loose_ip(s: &str) -> Result<IpAddr, AddrParseError> {
 			} else {
 				Err(e)
 			}
-		}
+		},
 	}
 }
 
 #[cfg(test)]
 mod tests {
-	use std::net::{AddrParseError, IpAddr, Ipv4Addr};
+	use std::net::{
+		AddrParseError,
+		IpAddr,
+		Ipv4Addr,
+	};
 
 	fn run(s: &str, expect: Ipv4Addr) {
 		assert_eq!(super::inet_addr(s), Some(expect));
 		assert_eq!(super::parse_loose_ipv4(s), Ok::<_, AddrParseError>(expect));
-		assert_eq!(super::parse_loose_ip(s), Ok::<_, AddrParseError>(IpAddr::V4(expect)));
+		assert_eq!(
+			super::parse_loose_ip(s),
+			Ok::<_, AddrParseError>(IpAddr::V4(expect))
+		);
 	}
 
 	#[test]
