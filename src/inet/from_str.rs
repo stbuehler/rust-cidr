@@ -1,5 +1,3 @@
-use core::str::FromStr;
-
 use crate::{
 	errors::NetworkParseError,
 	local_addr_parser::ParseableAddress,
@@ -11,11 +9,6 @@ where
 	I: Inet,
 	I::Address: ParseableAddress,
 {
-	Ok(match s.rfind('/') {
-		None => I::new_host(I::Address::address_from_str(s)?),
-		Some(pos) => I::new(
-			I::Address::address_from_str(&s[0..pos])?,
-			u8::from_str(&s[pos + 1..])?,
-		)?,
-	})
+	// TODO: use strict FromStr::from_str address parsing with version bump
+	crate::parsers::parse_inet(s, I::Address::address_from_str)
 }
