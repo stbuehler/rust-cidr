@@ -33,3 +33,7 @@ version-sync = "0.9.1"
 [package.metadata.docs.rs]
 all-features = true
 targets = []
+
+[lints.rust]
+# allow #[cfg_attr(doc_cfg, doc(cfg(...)))]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(doc_cfg)'] }
