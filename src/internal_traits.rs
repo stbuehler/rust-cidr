@@ -11,9 +11,6 @@ pub trait PrivUnspecAddress: Sized {
 	type _Tools;
 }
 
-/// Only implemented for IPv4Addr and IPv6Addr, NOT IpAddr
-pub trait PrivAddress: PrivUnspecAddress {}
-
 /// seal `Cidr` trait
 pub trait PrivCidr {}
 
@@ -142,8 +139,6 @@ impl Ipv4AddrTools {
 impl PrivUnspecAddress for Ipv4Addr {
 	type _Tools = Ipv4AddrTools;
 }
-
-impl PrivAddress for Ipv4Addr {}
 
 #[derive(Clone, Copy)]
 struct Ipv6OverflowingOp {
@@ -278,8 +273,6 @@ impl Ipv6AddrTools {
 impl PrivUnspecAddress for Ipv6Addr {
 	type _Tools = Ipv6AddrTools;
 }
-
-impl PrivAddress for Ipv6Addr {}
 
 pub struct IpAddrTools(());
 
