@@ -44,13 +44,13 @@ pub fn inet_addr(s: &str) -> Option<Ipv4Addr> {
 		slots[0]
 	} else {
 		let mut base: u32 = 0;
-		for ndx in 0..last_slot {
-			if slots[ndx] >= 256 {
+		for (ndx, &slot) in slots.iter().enumerate().take(last_slot) {
+			if slot >= 256 {
 				// leading parts must be octects
 				return None;
 			}
 			// shift by 24, 16 or 8
-			base = base | (slots[ndx] << (3 - ndx) * 8);
+			base |= slots[ndx] << ((3 - ndx) * 8);
 		}
 		// last 3 => have 4 => 1 byte, last 2 => have 3 => 2 bytes, last 1 => have 2 => 3 bytes
 		let last_slot_bit_limit = (4 - last_slot) * 8;

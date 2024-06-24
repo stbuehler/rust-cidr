@@ -309,7 +309,7 @@ mod tests {
 				Ipv4Addr::new(1, 2, 3, 2),
 				Ipv4Addr::new(1, 2, 3, 3),
 			],
-			(&cidr).into_iter().addresses().collect::<Vec<_>>()
+			cidr.into_iter().addresses().collect::<Vec<_>>()
 		);
 	}
 
