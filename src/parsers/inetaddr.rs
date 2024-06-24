@@ -25,12 +25,12 @@ pub fn inet_addr(s: &str) -> Option<Ipv4Addr> {
 		}
 		let slot = if part.starts_with("0x") || part.starts_with("0X") {
 			let part = &part[2..];
-			if part.starts_with("+") {
+			if part.starts_with('+') {
 				// we don't want to support "0x+..."
 				return None;
 			}
 			u32::from_str_radix(part, 16)
-		} else if part.starts_with("0") {
+		} else if part.starts_with('0') {
 			u32::from_str_radix(part, 8)
 		} else {
 			part.parse::<u32>()
