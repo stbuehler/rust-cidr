@@ -3,11 +3,11 @@ use bitstring::FixedBitString;
 
 use core::{
 	fmt,
+	net::{
+		Ipv4Addr,
+		Ipv6Addr,
+	},
 	str::FromStr,
-};
-use std::net::{
-	Ipv4Addr,
-	Ipv6Addr,
 };
 
 use super::from_str::inet_from_str;

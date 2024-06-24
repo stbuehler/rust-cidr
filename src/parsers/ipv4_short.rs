@@ -1,7 +1,9 @@
-use core::str::FromStr;
-use std::net::{
-	IpAddr,
-	Ipv4Addr,
+use core::{
+	net::{
+		IpAddr,
+		Ipv4Addr,
+	},
+	str::FromStr,
 };
 
 use crate::{

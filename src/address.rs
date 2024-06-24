@@ -10,7 +10,7 @@ use crate::{
 	Ipv6Inet,
 	Ipv6InetPair,
 };
-use std::net::{
+use core::net::{
 	IpAddr,
 	Ipv4Addr,
 	Ipv6Addr,

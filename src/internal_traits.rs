@@ -1,4 +1,4 @@
-use std::net::{
+use core::net::{
 	IpAddr,
 	Ipv4Addr,
 	Ipv6Addr,
@@ -216,7 +216,7 @@ impl Ipv6AddrTools {
 			// * if Ipv6Addr has a different size than [u8; 16] transmute won't compile
 			// * if the size matches, Ipv6Addr can't store any other data - it must store exactly the octets
 			// * it is unlikely std would ever store this in another endianness
-			unsafe { std::mem::transmute(ip) }
+			unsafe { core::mem::transmute(ip) }
 		}
 		#[cfg(feature = "no_unsafe")]
 		{

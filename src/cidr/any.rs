@@ -1,11 +1,11 @@
 use core::{
 	fmt,
+	net::{
+		IpAddr,
+		Ipv4Addr,
+		Ipv6Addr,
+	},
 	str::FromStr,
-};
-use std::net::{
-	IpAddr,
-	Ipv4Addr,
-	Ipv6Addr,
 };
 
 use crate::{

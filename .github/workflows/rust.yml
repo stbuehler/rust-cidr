@@ -38,6 +38,8 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Test
         run: cargo test --all-features
+      - name: Test no std
+        run: cargo test --no-default-features --features serde,bitstring
 
   clippy:
     name: Clippy

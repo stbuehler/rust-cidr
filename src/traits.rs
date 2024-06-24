@@ -22,9 +22,9 @@ use core::{
 ///
 /// Implemented for [`IPv4Addr`], [`IPv6Addr`] and [`IpAddr`].
 ///
-/// [`Ipv4Addr`]: std::net::Ipv4Addr
-/// [`Ipv6Addr`]: std::net::Ipv6Addr
-/// [`IpAddr`]: std::net::IpAddr
+/// [`Ipv4Addr`]: core::net::Ipv4Addr
+/// [`Ipv6Addr`]: core::net::Ipv6Addr
+/// [`IpAddr`]: core::net::IpAddr
 pub trait Address: Copy + Debug + Ord + Hash + PrivUnspecAddress {
 	/// Corresponding [`Inet`] type (representing an address + a network
 	/// containing it)
@@ -57,9 +57,9 @@ pub trait Cidr: Copy + Debug + Ord + Hash + PrivCidr {
 	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
 	/// [`Ipv6Addr`]).
 	///
-	/// [`Ipv4Addr`]: std::net::Ipv4Addr
-	/// [`Ipv6Addr`]: std::net::Ipv6Addr
-	/// [`IpAddr`]: std::net::IpAddr
+	/// [`Ipv4Addr`]: core::net::Ipv4Addr
+	/// [`Ipv6Addr`]: core::net::Ipv6Addr
+	/// [`IpAddr`]: core::net::IpAddr
 	type Address: Address<Cidr = Self>;
 
 	/// Create new network from address and prefix length.  If the
@@ -120,9 +120,9 @@ pub trait Inet: Copy + Debug + Ord + Hash + PrivInet {
 	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
 	/// [`Ipv6Addr`]).
 	///
-	/// [`Ipv4Addr`]: std::net::Ipv4Addr
-	/// [`Ipv6Addr`]: std::net::Ipv6Addr
-	/// [`IpAddr`]: std::net::IpAddr
+	/// [`Ipv4Addr`]: core::net::Ipv4Addr
+	/// [`Ipv6Addr`]: core::net::Ipv6Addr
+	/// [`IpAddr`]: core::net::IpAddr
 	type Address: Address<Inet = Self>;
 
 	/// Create new host within a network from address and prefix length.
@@ -196,9 +196,9 @@ pub trait InetPair: Copy + Debug + Eq + Hash + PrivInetPair {
 	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
 	/// [`Ipv6Addr`]).
 	///
-	/// [`Ipv4Addr`]: std::net::Ipv4Addr
-	/// [`Ipv6Addr`]: std::net::Ipv6Addr
-	/// [`IpAddr`]: std::net::IpAddr
+	/// [`Ipv4Addr`]: core::net::Ipv4Addr
+	/// [`Ipv6Addr`]: core::net::Ipv6Addr
+	/// [`IpAddr`]: core::net::IpAddr
 	type Address: Address<InetPair = Self>;
 
 	/// Create new pair from two addresses in the same network

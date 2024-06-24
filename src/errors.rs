@@ -2,11 +2,11 @@
 
 use core::{
 	fmt,
+	net::AddrParseError,
 	num::ParseIntError,
 };
 #[cfg(feature = "std")]
 use std::error::Error;
-use std::net::AddrParseError;
 
 use crate::Family;
 

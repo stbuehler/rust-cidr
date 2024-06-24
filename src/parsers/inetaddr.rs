@@ -1,4 +1,4 @@
-use std::net::{
+use core::net::{
 	AddrParseError,
 	IpAddr,
 	Ipv4Addr,
@@ -95,7 +95,7 @@ pub fn parse_loose_ip(s: &str) -> Result<IpAddr, AddrParseError> {
 
 #[cfg(test)]
 mod tests {
-	use std::net::{
+	use core::net::{
 		AddrParseError,
 		IpAddr,
 		Ipv4Addr,

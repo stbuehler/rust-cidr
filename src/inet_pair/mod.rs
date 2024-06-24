@@ -1,7 +1,7 @@
 mod combined;
 mod direct;
 
-use std::net::{
+use core::net::{
 	Ipv4Addr,
 	Ipv6Addr,
 };

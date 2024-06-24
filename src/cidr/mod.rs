@@ -12,7 +12,7 @@ mod bitstring_tests;
 #[cfg(test)]
 mod tests;
 
-use std::net::{
+use core::net::{
 	Ipv4Addr,
 	Ipv6Addr,
 };

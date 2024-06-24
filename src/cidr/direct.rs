@@ -3,11 +3,11 @@ use bitstring::FixedBitString;
 
 use core::{
 	fmt,
+	net::{
+		Ipv4Addr,
+		Ipv6Addr,
+	},
 	str::FromStr,
-};
-use std::net::{
-	Ipv4Addr,
-	Ipv6Addr,
 };
 
 use super::from_str::cidr_from_str;
@@ -299,7 +299,7 @@ impl_cidr_for! {Ipv6Cidr : inet Ipv6Inet : addr Ipv6Addr : pair Ipv6InetPair : f
 
 #[cfg(test)]
 mod tests {
-	use std::net::Ipv4Addr;
+	use core::net::Ipv4Addr;
 
 	use crate::Ipv4Cidr;
 

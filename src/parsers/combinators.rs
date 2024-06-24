@@ -1,4 +1,4 @@
-use std::net::{
+use core::net::{
 	AddrParseError,
 	IpAddr,
 };

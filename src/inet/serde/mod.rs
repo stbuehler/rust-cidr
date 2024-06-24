@@ -8,7 +8,7 @@ use crate::{
 	},
 	serde_common,
 };
-use std::net::IpAddr;
+use core::net::IpAddr;
 
 static NAME_IPV4_CIDR: &str = "Ipv4Inet";
 

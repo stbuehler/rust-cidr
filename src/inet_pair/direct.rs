@@ -1,7 +1,9 @@
-use core::fmt;
-use std::net::{
-	Ipv4Addr,
-	Ipv6Addr,
+use core::{
+	fmt,
+	net::{
+		Ipv4Addr,
+		Ipv6Addr,
+	},
 };
 
 use crate::{

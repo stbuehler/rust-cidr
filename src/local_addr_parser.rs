@@ -1,9 +1,11 @@
-use core::str::FromStr;
-use std::net::{
-	AddrParseError,
-	IpAddr,
-	Ipv4Addr,
-	Ipv6Addr,
+use core::{
+	net::{
+		AddrParseError,
+		IpAddr,
+		Ipv4Addr,
+		Ipv6Addr,
+	},
+	str::FromStr,
 };
 
 pub trait ParseableAddress: Sized {
@@ -51,7 +53,7 @@ impl ParseableAddress for IpAddr {
 #[cfg(test)]
 mod tests {
 	use super::ParseableAddress;
-	use std::net::{
+	use core::net::{
 		IpAddr,
 		Ipv4Addr,
 	};

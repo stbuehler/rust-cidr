@@ -25,8 +25,7 @@
 //!
 //! # Feature `std`
 //!
-//! Enabled by default, also mandatory right now because [`std::net`] isn't
-//! available in [`core`].
+//! Enabled by default, used for [`std::error::Error`] implementations.
 //!
 //! # Feature `serde`
 //!
@@ -53,8 +52,8 @@
 //!
 //! [bitstring-trees]: https://crates.io/crates/bitstring-trees
 //!
-//! [`Ipv4Addr`]: std::net::Ipv4Addr
-//! [`Ipv6Addr`]: std::net::Ipv6Addr
+//! [`Ipv4Addr`]: core::net::Ipv4Addr
+//! [`Ipv6Addr`]: core::net::Ipv6Addr
 
 pub use self::{
 	cidr::{
