@@ -85,6 +85,43 @@ where
 
 /// Parse [`AnyIpCidr`] with custom address and network (when no '/' separator was found) parser
 ///
+/// If a '/' is found, parse trailing number as prefix length and leading address with `address_parser`.
+/// Otherwise parse with `host_parser`.
+pub fn parse_any_cidr_full<AP, NP>(
+	s: &str,
+	address_parser: AP,
+	host_parser: NP,
+) -> Result<AnyIpCidr, NetworkParseError>
+where
+	AP: FnOnce(&str) -> Result<IpAddr, AddrParseError>,
+	NP: FnOnce(&str) -> Result<AnyIpCidr, NetworkParseError>,
+{
+	match s.rfind('/') {
+		None => host_parser(s),
+		Some(pos) => AnyIpCidr::new(address_parser(&s[0..pos])?, s[pos + 1..].parse()?),
+	}
+}
+
+/// Parse [`AnyIpCidr`] with custom address parser
+///
+/// If a '/' is found, parse trailing number as prefix length and leading address with `address_parser`.
+/// If input is just `"any"` returns [`AnyIpCidr::Any`].
+/// Otherwise parse `address_parser` and treat as host (maximum prefix length).
+pub fn parse_any_cidr<AP>(s: &str, address_parser: AP) -> Result<AnyIpCidr, NetworkParseError>
+where
+	AP: Fn(&str) -> Result<IpAddr, AddrParseError>,
+{
+	parse_any_cidr_full(s, &address_parser, |s| {
+		if s == "any" {
+			Ok(AnyIpCidr::Any)
+		} else {
+			Ok(AnyIpCidr::new_host(address_parser(s)?))
+		}
+	})
+}
+
+/// Parse [`AnyIpCidr`] with custom address and network (when no '/' separator was found) parser
+///
 /// Similar to [`parse_any_cidr_full`] but ignores host bits in addresses.
 pub fn parse_any_cidr_full_ignore_hostbits<AP, NP>(
 	s: &str,
@@ -112,43 +149,6 @@ pub fn parse_any_cidr_ignore_hostbits<AP>(
 	s: &str,
 	address_parser: AP,
 ) -> Result<AnyIpCidr, NetworkParseError>
-where
-	AP: Fn(&str) -> Result<IpAddr, AddrParseError>,
-{
-	parse_any_cidr_full(s, &address_parser, |s| {
-		if s == "any" {
-			Ok(AnyIpCidr::Any)
-		} else {
-			Ok(AnyIpCidr::new_host(address_parser(s)?))
-		}
-	})
-}
-
-/// Parse [`AnyIpCidr`] with custom address and network (when no '/' separator was found) parser
-///
-/// If a '/' is found, parse trailing number as prefix length and leading address with `address_parser`.
-/// Otherwise parse with `host_parser`.
-pub fn parse_any_cidr_full<AP, NP>(
-	s: &str,
-	address_parser: AP,
-	host_parser: NP,
-) -> Result<AnyIpCidr, NetworkParseError>
-where
-	AP: FnOnce(&str) -> Result<IpAddr, AddrParseError>,
-	NP: FnOnce(&str) -> Result<AnyIpCidr, NetworkParseError>,
-{
-	match s.rfind('/') {
-		None => host_parser(s),
-		Some(pos) => AnyIpCidr::new(address_parser(&s[0..pos])?, s[pos + 1..].parse()?),
-	}
-}
-
-/// Parse [`AnyIpCidr`] with custom address parser
-///
-/// If a '/' is found, parse trailing number as prefix length and leading address with `address_parser`.
-/// If input is just `"any"` returns [`AnyIpCidr::Any`].
-/// Otherwise parse `address_parser` and treat as host (maximum prefix length).
-pub fn parse_any_cidr<AP>(s: &str, address_parser: AP) -> Result<AnyIpCidr, NetworkParseError>
 where
 	AP: Fn(&str) -> Result<IpAddr, AddrParseError>,
 {
