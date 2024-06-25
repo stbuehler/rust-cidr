@@ -9,6 +9,7 @@ use crate::{
 	AnyIpCidr,
 	Cidr,
 	Inet,
+	IpCidr,
 	IpInet,
 };
 
@@ -85,6 +86,7 @@ where
 
 /// Parse [`AnyIpCidr`] with custom address and network (when no '/' separator was found) parser
 ///
+/// Return [`AnyIpCidr::Any`] for `"any"`.
 /// If a '/' is found, parse trailing number as prefix length and leading address with `address_parser`.
 /// Otherwise parse with `host_parser`.
 pub fn parse_any_cidr_full<AP, NP>(
@@ -94,10 +96,13 @@ pub fn parse_any_cidr_full<AP, NP>(
 ) -> Result<AnyIpCidr, NetworkParseError>
 where
 	AP: FnOnce(&str) -> Result<IpAddr, AddrParseError>,
-	NP: FnOnce(&str) -> Result<AnyIpCidr, NetworkParseError>,
+	NP: FnOnce(&str) -> Result<IpCidr, NetworkParseError>,
 {
+	if s == "any" {
+		return Ok(AnyIpCidr::Any);
+	}
 	match s.rfind('/') {
-		None => host_parser(s),
+		None => Ok(host_parser(s)?.into()),
 		Some(pos) => AnyIpCidr::new(address_parser(&s[0..pos])?, s[pos + 1..].parse()?),
 	}
 }
@@ -112,11 +117,7 @@ where
 	AP: Fn(&str) -> Result<IpAddr, AddrParseError>,
 {
 	parse_any_cidr_full(s, &address_parser, |s| {
-		if s == "any" {
-			Ok(AnyIpCidr::Any)
-		} else {
-			Ok(AnyIpCidr::new_host(address_parser(s)?))
-		}
+		Ok(IpCidr::new_host(address_parser(s)?))
 	})
 }
 
@@ -130,10 +131,13 @@ pub fn parse_any_cidr_full_ignore_hostbits<AP, NP>(
 ) -> Result<AnyIpCidr, NetworkParseError>
 where
 	AP: FnOnce(&str) -> Result<IpAddr, AddrParseError>,
-	NP: FnOnce(&str) -> Result<AnyIpCidr, NetworkParseError>,
+	NP: FnOnce(&str) -> Result<IpCidr, NetworkParseError>,
 {
+	if s == "any" {
+		return Ok(AnyIpCidr::Any);
+	}
 	match s.rfind('/') {
-		None => host_parser(s),
+		None => Ok(host_parser(s)?.into()),
 		Some(pos) => Ok(
 			IpInet::new(address_parser(&s[0..pos])?, s[pos + 1..].parse()?)?
 				.network()
@@ -152,12 +156,8 @@ pub fn parse_any_cidr_ignore_hostbits<AP>(
 where
 	AP: Fn(&str) -> Result<IpAddr, AddrParseError>,
 {
-	parse_any_cidr_full(s, &address_parser, |s| {
-		if s == "any" {
-			Ok(AnyIpCidr::Any)
-		} else {
-			Ok(AnyIpCidr::new_host(address_parser(s)?))
-		}
+	parse_any_cidr_full_ignore_hostbits(s, &address_parser, |s| {
+		Ok(IpCidr::new_host(address_parser(s)?))
 	})
 }
 
