@@ -19,7 +19,7 @@ impl serde::Serialize for Ipv4Cidr {
 		S: serde::Serializer,
 	{
 		if serializer.is_human_readable() {
-			serializer.serialize_str(&format!("{}", self))
+			serializer.serialize_str(format_cidr_fixed!("{}", self))
 		} else {
 			serde_common::serialize_v4(
 				serializer,
@@ -36,8 +36,7 @@ impl<'de> serde::Deserialize<'de> for Ipv4Cidr {
 		D: serde::Deserializer<'de>,
 	{
 		if deserializer.is_human_readable() {
-			let s = String::deserialize(deserializer)?;
-			s.parse().map_err(serde::de::Error::custom)
+			serde_common::deserialize_parse(deserializer)
 		} else {
 			let (addr, network_length) =
 				serde_common::deserialize_v4(deserializer, NAME_IPV4_CIDR)?;
@@ -54,7 +53,7 @@ impl serde::Serialize for Ipv6Cidr {
 		S: serde::Serializer,
 	{
 		if serializer.is_human_readable() {
-			serializer.serialize_str(&format!("{}", self))
+			serializer.serialize_str(format_cidr_fixed!("{}", self))
 		} else {
 			serde_common::serialize_v6(
 				serializer,
@@ -71,8 +70,7 @@ impl<'de> serde::Deserialize<'de> for Ipv6Cidr {
 		D: serde::Deserializer<'de>,
 	{
 		if deserializer.is_human_readable() {
-			let s = String::deserialize(deserializer)?;
-			s.parse().map_err(serde::de::Error::custom)
+			serde_common::deserialize_parse(deserializer)
 		} else {
 			let (addr, network_length) =
 				serde_common::deserialize_v6(deserializer, NAME_IPV6_CIDR)?;
@@ -89,7 +87,7 @@ impl serde::Serialize for IpCidr {
 		S: serde::Serializer,
 	{
 		if serializer.is_human_readable() {
-			serializer.serialize_str(&format!("{}", self))
+			serializer.serialize_str(format_cidr_fixed!("{}", self))
 		} else {
 			let data = match self {
 				Self::V4(c) => (IpAddr::V4(c.address), c.network_length),
@@ -106,8 +104,7 @@ impl<'de> serde::Deserialize<'de> for IpCidr {
 		D: serde::Deserializer<'de>,
 	{
 		if deserializer.is_human_readable() {
-			let s = String::deserialize(deserializer)?;
-			s.parse().map_err(serde::de::Error::custom)
+			serde_common::deserialize_parse(deserializer)
 		} else {
 			let (addr, network_length) = serde_common::deserialize(deserializer, NAME_IP_CIDR)?;
 			Self::new(addr, network_length).map_err(serde::de::Error::custom)
@@ -123,7 +120,7 @@ impl serde::Serialize for AnyIpCidr {
 		S: serde::Serializer,
 	{
 		if serializer.is_human_readable() {
-			serializer.serialize_str(&format!("{}", self))
+			serializer.serialize_str(format_cidr_fixed!("{}", self))
 		} else {
 			let data = match self {
 				Self::Any => None,
@@ -141,8 +138,7 @@ impl<'de> serde::Deserialize<'de> for AnyIpCidr {
 		D: serde::Deserializer<'de>,
 	{
 		if deserializer.is_human_readable() {
-			let s = String::deserialize(deserializer)?;
-			s.parse().map_err(serde::de::Error::custom)
+			serde_common::deserialize_parse(deserializer)
 		} else {
 			match serde_common::deserialize_any(deserializer, NAME_ANY_IP_CIDR)? {
 				None => Ok(Self::Any),

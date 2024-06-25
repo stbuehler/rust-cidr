@@ -86,6 +86,9 @@ pub use self::{
 	},
 };
 
+#[macro_use]
+mod display_buffer;
+
 pub mod errors;
 pub mod parsers;
 

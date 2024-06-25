@@ -122,83 +122,66 @@ mod tests {
 		Ipv6Addr,
 	};
 
+	fn check_list_iter<T: PartialEq + core::fmt::Debug>(
+		data: impl AsRef<[T]>,
+		iter: impl IntoIterator<Item = T>,
+	) {
+		let mut iter = iter.into_iter();
+		for elem in data.as_ref() {
+			assert_eq!(Some(elem), iter.next().as_ref());
+		}
+		assert_eq!(None, iter.next());
+	}
+
+	fn check_iter_iter<T1, T2>(
+		iter1: impl IntoIterator<Item = T1>,
+		iter2: impl IntoIterator<Item = T2>,
+	) where
+		T1: core::fmt::Debug + PartialEq<T2>,
+		T2: core::fmt::Debug,
+	{
+		let mut iter2 = iter2.into_iter();
+		for elem in iter1 {
+			assert_eq!(elem, iter2.next().expect("second iterator too short"));
+		}
+		assert!(iter2.next().is_none(), "second iterator too many elements");
+	}
+
 	fn test_v4(s: &'static str, l: &[Ipv4Addr]) {
-		assert_eq!(
-			s.parse::<Ipv4Cidr>()
-				.unwrap()
-				.iter()
-				.addresses()
-				.collect::<Vec<_>>(),
-			l
+		check_list_iter(l, s.parse::<Ipv4Cidr>().unwrap().iter().addresses());
+
+		check_iter_iter(
+			s.parse::<IpCidr>().unwrap().iter().addresses(),
+			l.iter().map(|e: &Ipv4Addr| IpAddr::V4(*e)),
 		);
 
-		assert_eq!(
-			s.parse::<IpCidr>()
-				.unwrap()
-				.iter()
-				.addresses()
-				.collect::<Vec<_>>(),
-			l.iter().map(|e| IpAddr::V4(*e)).collect::<Vec<_>>()
+		check_iter_iter(
+			s.parse::<Ipv4Cidr>().unwrap().iter().addresses().rev(),
+			l.iter().cloned().rev(),
 		);
 
-		assert_eq!(
-			s.parse::<Ipv4Cidr>()
-				.unwrap()
-				.iter()
-				.addresses()
-				.rev()
-				.collect::<Vec<_>>(),
-			l.iter().cloned().rev().collect::<Vec<_>>(),
-		);
-
-		assert_eq!(
-			s.parse::<IpCidr>()
-				.unwrap()
-				.iter()
-				.addresses()
-				.rev()
-				.collect::<Vec<_>>(),
-			l.iter().map(|e| IpAddr::V4(*e)).rev().collect::<Vec<_>>(),
+		check_iter_iter(
+			s.parse::<IpCidr>().unwrap().iter().addresses().rev(),
+			l.iter().map(|e| IpAddr::V4(*e)).rev(),
 		);
 	}
 
 	fn test_v6(s: &'static str, l: &[Ipv6Addr]) {
-		assert_eq!(
-			s.parse::<Ipv6Cidr>()
-				.unwrap()
-				.iter()
-				.addresses()
-				.collect::<Vec<_>>(),
-			l
+		check_list_iter(l, s.parse::<Ipv6Cidr>().unwrap().iter().addresses());
+
+		check_iter_iter(
+			s.parse::<IpCidr>().unwrap().iter().addresses(),
+			l.iter().map(|e: &Ipv6Addr| IpAddr::V6(*e)),
 		);
 
-		assert_eq!(
-			s.parse::<IpCidr>()
-				.unwrap()
-				.iter()
-				.addresses()
-				.collect::<Vec<_>>(),
-			l.iter().map(|e| IpAddr::V6(*e)).collect::<Vec<_>>(),
+		check_iter_iter(
+			s.parse::<Ipv6Cidr>().unwrap().iter().addresses().rev(),
+			l.iter().cloned().rev(),
 		);
 
-		assert_eq!(
-			s.parse::<Ipv6Cidr>()
-				.unwrap()
-				.iter()
-				.addresses()
-				.rev()
-				.collect::<Vec<_>>(),
-			l.iter().cloned().rev().collect::<Vec<_>>(),
-		);
-
-		assert_eq!(
-			s.parse::<IpCidr>()
-				.unwrap()
-				.iter()
-				.addresses()
-				.rev()
-				.collect::<Vec<_>>(),
-			l.iter().map(|e| IpAddr::V6(*e)).rev().collect::<Vec<_>>(),
+		check_iter_iter(
+			s.parse::<IpCidr>().unwrap().iter().addresses().rev(),
+			l.iter().map(|e| IpAddr::V6(*e)).rev(),
 		);
 	}
 

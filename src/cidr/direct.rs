@@ -303,31 +303,42 @@ mod tests {
 
 	use crate::Ipv4Cidr;
 
+	fn check_list_iter<T: PartialEq + core::fmt::Debug>(
+		data: impl AsRef<[T]>,
+		iter: impl IntoIterator<Item = T>,
+	) {
+		let mut iter = iter.into_iter();
+		for elem in data.as_ref() {
+			assert_eq!(Some(elem), iter.next().as_ref());
+		}
+		assert_eq!(None, iter.next());
+	}
+
 	#[test]
 	fn v4_ref_into_iter() {
 		let cidr = Ipv4Cidr::new(Ipv4Addr::new(1, 2, 3, 0), 30).unwrap();
-		assert_eq!(
-			vec![
+		check_list_iter(
+			[
 				Ipv4Addr::new(1, 2, 3, 0),
 				Ipv4Addr::new(1, 2, 3, 1),
 				Ipv4Addr::new(1, 2, 3, 2),
 				Ipv4Addr::new(1, 2, 3, 3),
 			],
-			cidr.into_iter().addresses().collect::<Vec<_>>()
+			cidr.into_iter().addresses(),
 		);
 	}
 
 	#[test]
 	fn v4_owned_into_iter() {
 		let cidr = Ipv4Cidr::new(Ipv4Addr::new(1, 2, 3, 0), 30).unwrap();
-		assert_eq!(
-			vec![
+		check_list_iter(
+			[
 				Ipv4Addr::new(1, 2, 3, 0),
 				Ipv4Addr::new(1, 2, 3, 1),
 				Ipv4Addr::new(1, 2, 3, 2),
 				Ipv4Addr::new(1, 2, 3, 3),
 			],
-			cidr.into_iter().addresses().collect::<Vec<_>>()
+			cidr.into_iter().addresses(),
 		);
 	}
 }

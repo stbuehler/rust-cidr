@@ -179,3 +179,43 @@ where
 		(IpAddr::V6(addr), len) => Ok((addr, len)),
 	}
 }
+
+pub fn deserialize_parse<'de, D, T>(deserializer: D) -> Result<T, D::Error>
+where
+	D: de::Deserializer<'de>,
+	T: core::str::FromStr,
+	T::Err: core::fmt::Display,
+{
+	struct Visitor<T: core::str::FromStr>(core::marker::PhantomData<T>);
+
+	impl<'de, T> de::Visitor<'de> for Visitor<T>
+	where
+		T: core::str::FromStr,
+		T::Err: core::fmt::Display,
+	{
+		type Value = T;
+
+		fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+			formatter.write_str("a string")
+		}
+
+		fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+		where
+			E: de::Error,
+		{
+			v.parse::<T>().map_err(de::Error::custom)
+		}
+
+		fn visit_bytes<E>(self, v: &[u8]) -> Result<Self::Value, E>
+		where
+			E: de::Error,
+		{
+			match core::str::from_utf8(v) {
+				Ok(s) => self.visit_str(s),
+				Err(_) => Err(de::Error::invalid_value(de::Unexpected::Bytes(v), &self)),
+			}
+		}
+	}
+
+	deserializer.deserialize_str(Visitor::<T>(core::marker::PhantomData))
+}
