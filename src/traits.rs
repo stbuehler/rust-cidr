@@ -14,8 +14,13 @@ use crate::{
 	InetIterator,
 };
 use core::{
-	fmt::Debug,
+	fmt::{
+		Debug,
+		Display,
+	},
 	hash::Hash,
+	net::AddrParseError,
+	str::FromStr,
 };
 
 /// Maps IP address type to other types based on this address type
@@ -25,7 +30,9 @@ use core::{
 /// [`Ipv4Addr`]: core::net::Ipv4Addr
 /// [`Ipv6Addr`]: core::net::Ipv6Addr
 /// [`IpAddr`]: core::net::IpAddr
-pub trait Address: Copy + Debug + Ord + Hash + PrivUnspecAddress {
+pub trait Address:
+	Copy + Debug + Display + FromStr<Err = AddrParseError> + Ord + Hash + PrivUnspecAddress
+{
 	/// Corresponding [`Inet`] type (representing an address + a network
 	/// containing it)
 	type Inet: Inet<Address = Self>;
@@ -53,7 +60,9 @@ pub trait Address: Copy + Debug + Ord + Hash + PrivUnspecAddress {
 /// are the network part, the remaining bits are the host part.
 /// Requiring an address to be the first in a network is equivalent to
 /// requiring the host part being zero.
-pub trait Cidr: Copy + Debug + Ord + Hash + PrivCidr {
+pub trait Cidr:
+	Copy + Debug + Display + FromStr<Err = NetworkParseError> + Ord + Hash + PrivCidr
+{
 	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
 	/// [`Ipv6Addr`]).
 	///
@@ -116,7 +125,9 @@ pub trait Cidr: Copy + Debug + Ord + Hash + PrivCidr {
 /// The representation of a [`Inet`] type is similar to that of the
 /// corresponding [`Cidr`] type, but uses the host address instead of the
 /// first address of the network.
-pub trait Inet: Copy + Debug + Ord + Hash + PrivInet {
+pub trait Inet:
+	Copy + Debug + Display + FromStr<Err = NetworkParseError> + Ord + Hash + PrivInet
+{
 	/// Type for the underlying address ([`IpAddr`], [`Ipv4Addr`] or
 	/// [`Ipv6Addr`]).
 	///
