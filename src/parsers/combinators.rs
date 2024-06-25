@@ -13,6 +13,11 @@ use crate::{
 	IpInet,
 };
 
+fn parse_prefix_len(s: &str) -> Result<u8, NetworkParseError> {
+	s.parse()
+		.map_err(NetworkParseError::NetworkLengthParseError)
+}
+
 /// Parse [`Cidr`] with custom address and network (when no '/' separator was found) parser
 ///
 /// If a '/' is found, parse trailing number as prefix length and leading address with `address_parser`.
@@ -29,7 +34,10 @@ where
 {
 	match s.rfind('/') {
 		None => host_parser(s),
-		Some(pos) => C::new(address_parser(&s[0..pos])?, s[pos + 1..].parse()?),
+		Some(pos) => C::new(
+			address_parser(&s[0..pos])?,
+			parse_prefix_len(&s[pos + 1..])?,
+		),
 	}
 }
 
@@ -63,7 +71,7 @@ where
 		Some(pos) => {
 			let inet = <C::Address as Address>::Inet::new(
 				address_parser(&s[0..pos])?,
-				s[pos + 1..].parse()?,
+				parse_prefix_len(&s[pos + 1..])?,
 			)?;
 			Ok(inet.network())
 		},
@@ -103,7 +111,10 @@ where
 	}
 	match s.rfind('/') {
 		None => Ok(host_parser(s)?.into()),
-		Some(pos) => AnyIpCidr::new(address_parser(&s[0..pos])?, s[pos + 1..].parse()?),
+		Some(pos) => AnyIpCidr::new(
+			address_parser(&s[0..pos])?,
+			parse_prefix_len(&s[pos + 1..])?,
+		),
 	}
 }
 
@@ -138,11 +149,12 @@ where
 	}
 	match s.rfind('/') {
 		None => Ok(host_parser(s)?.into()),
-		Some(pos) => Ok(
-			IpInet::new(address_parser(&s[0..pos])?, s[pos + 1..].parse()?)?
-				.network()
-				.into(),
-		),
+		Some(pos) => Ok(IpInet::new(
+			address_parser(&s[0..pos])?,
+			parse_prefix_len(&s[pos + 1..])?,
+		)?
+		.network()
+		.into()),
 	}
 }
 
@@ -177,7 +189,10 @@ where
 {
 	match s.rfind('/') {
 		None => host_parser(s),
-		Some(pos) => Ok(I::new(address_parser(&s[0..pos])?, s[pos + 1..].parse()?)?),
+		Some(pos) => Ok(I::new(
+			address_parser(&s[0..pos])?,
+			parse_prefix_len(&s[pos + 1..])?,
+		)?),
 	}
 }
 

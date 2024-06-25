@@ -105,12 +105,6 @@ impl From<AddrParseError> for NetworkParseError {
 	}
 }
 
-impl From<ParseIntError> for NetworkParseError {
-	fn from(e: ParseIntError) -> Self {
-		NetworkParseError::NetworkLengthParseError(e)
-	}
-}
-
 impl From<NetworkLengthTooLongError> for NetworkParseError {
 	fn from(e: NetworkLengthTooLongError) -> Self {
 		NetworkParseError::NetworkLengthTooLongError(e)
