@@ -7,6 +7,7 @@
 
 mod combinators;
 mod inetaddr;
+mod ipv4_short;
 
 pub use self::{
 	combinators::{
@@ -25,5 +26,12 @@ pub use self::{
 		inet_addr,
 		parse_loose_ip,
 		parse_loose_ipv4,
+	},
+	ipv4_short::{
+		parse_short_any_ip_cidr,
+		parse_short_ip_address_as_cidr,
+		parse_short_ip_cidr,
+		parse_short_ipv4_address_as_cidr,
+		parse_short_ipv4_cidr,
 	},
 };

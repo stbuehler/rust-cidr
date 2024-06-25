@@ -11,17 +11,11 @@ pub trait ParseableAddress: Sized {
 }
 
 fn special_ipv4_parser(s: &str) -> Option<Ipv4Addr> {
-	// handle ipv4 short forms (e.g. '10' as '10.0.0.0')
-	let mut octets = [0u8; 4];
-	for (ndx, os) in s.split('.').enumerate() {
-		if ndx >= 4 {
-			// too many octets
-			return None;
-		}
-		// abort on invalid octet
-		octets[ndx] = os.parse().ok()?;
-	}
-	Some(Ipv4Addr::from(octets))
+	Some(
+		crate::parsers::parse_short_ipv4_address_as_cidr(s)
+			.ok()?
+			.first_address(),
+	)
 }
 
 impl ParseableAddress for Ipv4Addr {
