@@ -126,6 +126,69 @@ macro_rules! impl_inet_for {
 				}
 			}
 
+			/// decrements host part (without changing the network part);
+			/// returns true on wrap around
+			pub fn decrement(&mut self) -> bool {
+				let (address, overflow) = <$addr as PrivUnspecAddress>::_Tools::_overflowing_prev(
+					self.address,
+					self.network_length,
+				);
+				self.address = address;
+				overflow
+			}
+
+			/// Returns previous address in network or `None` if it was the first address in the network
+			pub const fn previous(self) -> Option<Self> {
+				let (address, overflow) = <$addr as PrivUnspecAddress>::_Tools::_overflowing_prev(
+					self.address,
+					self.network_length,
+				);
+				if overflow {
+					None
+				} else {
+					Some(Self {
+						address,
+						network_length: self.network_length,
+					})
+				}
+			}
+
+			/// Find the nth host after the current one in the current network
+			///
+			/// Returned boolean indicates whether an overflow occured.
+			pub const fn overflowing_add(self, step: u128) -> (Self, bool) {
+				let (address, overflow) = <$addr as PrivUnspecAddress>::_Tools::_overflowing_inc(
+					self.address,
+					self.network_length,
+					step,
+				);
+				(
+					Self {
+						address,
+						network_length: self.network_length,
+					},
+					overflow,
+				)
+			}
+
+			/// Find the nth host before the current one in the current network
+			///
+			/// Returned boolean indicates whether an overflow occured.
+			pub const fn overflowing_sub(self, step: u128) -> (Self, bool) {
+				let (address, overflow) = <$addr as PrivUnspecAddress>::_Tools::_overflowing_dec(
+					self.address,
+					self.network_length,
+					step,
+				);
+				(
+					Self {
+						address,
+						network_length: self.network_length,
+					},
+					overflow,
+				)
+			}
+
 			/// network (i.e. drops the host information)
 			pub const fn network(&self) -> $cidr {
 				$cidr {
@@ -226,6 +289,22 @@ macro_rules! impl_inet_for {
 				self.next()
 			}
 
+			fn decrement(&mut self) -> bool {
+				self.decrement()
+			}
+
+			fn previous(self) -> Option<Self> {
+				self.previous()
+			}
+
+			fn overflowing_add(self, step: u128) -> (Self, bool) {
+				self.overflowing_add(step)
+			}
+
+			fn overflowing_sub(self, step: u128) -> (Self, bool) {
+				self.overflowing_sub(step)
+			}
+
 			fn network(&self) -> $cidr {
 				self.network()
 			}
@@ -295,8 +374,86 @@ macro_rules! impl_inet_for {
 				inet_from_str(s)
 			}
 		}
+
+		impl core::ops::Add<u128> for $n {
+			type Output = $n;
+
+			fn add(self, step: u128) -> Self::Output {
+				let (result, overflow) = self.overflowing_add(step);
+				debug_assert!(!overflow, "{} + {} overflow", self, step);
+				result
+			}
+		}
+
+		impl core::ops::Sub<u128> for $n {
+			type Output = $n;
+
+			fn sub(self, step: u128) -> Self::Output {
+				let (result, overflow) = self.overflowing_sub(step);
+				debug_assert!(!overflow, "{} - {} overflow", self, step);
+				result
+			}
+		}
 	};
 }
 
 impl_inet_for! {Ipv4Inet : cidr Ipv4Cidr : addr Ipv4Addr : pair Ipv4InetPair : family Family::Ipv4}
 impl_inet_for! {Ipv6Inet : cidr Ipv6Cidr : addr Ipv6Addr : pair Ipv6InetPair : family Family::Ipv6}
+
+impl Ipv4Inet {
+	/// Find the nth host after the current one in the current network (32-bit IPv4 variant)
+	///
+	/// Returned boolean indicates whether an overflow occured.
+	pub const fn overflowing_add_u32(self, step: u32) -> (Self, bool) {
+		let (address, overflow) = <Ipv4Addr as PrivUnspecAddress>::_Tools::_overflowing_inc_u32(
+			self.address,
+			self.network_length,
+			step,
+		);
+		(
+			Self {
+				address,
+				network_length: self.network_length,
+			},
+			overflow,
+		)
+	}
+
+	/// Find the nth host before the current one in the current network (32-bit IPv4 variant)
+	///
+	/// Returned boolean indicates whether an overflow occured.
+	pub const fn overflowing_sub_u32(self, step: u32) -> (Self, bool) {
+		let (address, overflow) = <Ipv4Addr as PrivUnspecAddress>::_Tools::_overflowing_dec_u32(
+			self.address,
+			self.network_length,
+			step,
+		);
+		(
+			Self {
+				address,
+				network_length: self.network_length,
+			},
+			overflow,
+		)
+	}
+}
+
+impl core::ops::Add<u32> for Ipv4Inet {
+	type Output = Ipv4Inet;
+
+	fn add(self, step: u32) -> Self::Output {
+		let (result, overflow) = self.overflowing_add_u32(step);
+		debug_assert!(!overflow, "{} + {} overflow", self, step);
+		result
+	}
+}
+
+impl core::ops::Sub<u32> for Ipv4Inet {
+	type Output = Ipv4Inet;
+
+	fn sub(self, step: u32) -> Self::Output {
+		let (result, overflow) = self.overflowing_sub_u32(step);
+		debug_assert!(!overflow, "{} - {} overflow", self, step);
+		result
+	}
+}

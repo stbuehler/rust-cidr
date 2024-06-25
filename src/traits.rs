@@ -141,6 +141,23 @@ pub trait Inet: Copy + Debug + Ord + Hash + PrivInet {
 	/// Returns next address in network or `None` if it was the last address in the network
 	fn next(self) -> Option<Self>;
 
+	/// decrements host part (without changing the network part);
+	/// returns true on wrap around
+	fn decrement(&mut self) -> bool;
+
+	/// Returns previous address in network or `None` if it was the first address in the network
+	fn previous(self) -> Option<Self>;
+
+	/// Find the nth host after the current one in the current network
+	///
+	/// Returned boolean indicates whether an overflow occured.
+	fn overflowing_add(self, step: u128) -> (Self, bool);
+
+	/// Find the nth host before the current one in the current network
+	///
+	/// Returned boolean indicates whether an overflow occured.
+	fn overflowing_sub(self, step: u128) -> (Self, bool);
+
 	/// network (i.e. drops the host information)
 	fn network(&self) -> <Self::Address as Address>::Cidr;
 

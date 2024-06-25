@@ -83,6 +83,61 @@ impl IpInet {
 		}
 	}
 
+	/// decrements host part (without changing the network part);
+	/// returns true on wrap around
+	pub fn decrement(&mut self) -> bool {
+		match self {
+			Self::V4(mut c) => c.decrement(),
+			Self::V6(mut c) => c.decrement(),
+		}
+	}
+
+	/// Returns previous address in network or `None` if it was the first address in the network
+	pub const fn previous(self) -> Option<Self> {
+		match self {
+			Self::V4(c) => match c.previous() {
+				Some(c) => Some(Self::V4(c)),
+				None => None,
+			},
+			Self::V6(c) => match c.previous() {
+				Some(c) => Some(Self::V6(c)),
+				None => None,
+			},
+		}
+	}
+
+	/// Find the nth host after the current one in the current network
+	///
+	/// Returned boolean indicates whether an overflow occured.
+	pub const fn overflowing_add(self, step: u128) -> (Self, bool) {
+		match self {
+			Self::V4(c) => {
+				let (c, overflow) = c.overflowing_add(step);
+				(Self::V4(c), overflow)
+			},
+			Self::V6(c) => {
+				let (c, overflow) = c.overflowing_add(step);
+				(Self::V6(c), overflow)
+			},
+		}
+	}
+
+	/// Find the nth host before the current one in the current network
+	///
+	/// Returned boolean indicates whether an overflow occured.
+	pub const fn overflowing_sub(self, step: u128) -> (Self, bool) {
+		match self {
+			Self::V4(c) => {
+				let (c, overflow) = c.overflowing_sub(step);
+				(Self::V4(c), overflow)
+			},
+			Self::V6(c) => {
+				let (c, overflow) = c.overflowing_sub(step);
+				(Self::V6(c), overflow)
+			},
+		}
+	}
+
 	/// network (i.e. drops the host information)
 	pub const fn network(&self) -> IpCidr {
 		match self {
@@ -203,6 +258,22 @@ impl Inet for IpInet {
 		self.next()
 	}
 
+	fn decrement(&mut self) -> bool {
+		self.decrement()
+	}
+
+	fn previous(self) -> Option<Self> {
+		self.previous()
+	}
+
+	fn overflowing_add(self, step: u128) -> (Self, bool) {
+		self.overflowing_add(step)
+	}
+
+	fn overflowing_sub(self, step: u128) -> (Self, bool) {
+		self.overflowing_sub(step)
+	}
+
 	fn network(&self) -> IpCidr {
 		self.network()
 	}
@@ -274,5 +345,25 @@ impl From<Ipv4Inet> for IpInet {
 impl From<Ipv6Inet> for IpInet {
 	fn from(c: Ipv6Inet) -> Self {
 		Self::V6(c)
+	}
+}
+
+impl core::ops::Add<u128> for IpInet {
+	type Output = IpInet;
+
+	fn add(self, step: u128) -> Self::Output {
+		let (result, overflow) = self.overflowing_add(step);
+		debug_assert!(!overflow, "{} + {} overflow", self, step);
+		result
+	}
+}
+
+impl core::ops::Sub<u128> for IpInet {
+	type Output = IpInet;
+
+	fn sub(self, step: u128) -> Self::Output {
+		let (result, overflow) = self.overflowing_sub(step);
+		debug_assert!(!overflow, "{} - {} overflow", self, step);
+		result
 	}
 }

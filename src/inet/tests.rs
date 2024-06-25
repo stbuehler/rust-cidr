@@ -1,4 +1,7 @@
-use core::cmp::Ordering;
+use core::{
+	cmp::Ordering,
+	str::FromStr,
+};
 use std::net::{
 	IpAddr,
 	Ipv4Addr,
@@ -6,6 +9,8 @@ use std::net::{
 };
 
 use crate::{
+	errors::NetworkParseError,
+	Inet,
 	IpInet,
 	Ipv4Inet,
 	Ipv6Inet,
@@ -962,4 +967,68 @@ fn order_v6() {
 #[test]
 fn order() {
 	test_order(Ordering::Less, "192.0.2.0/24", "2001:DB8:1234:5678::/64");
+}
+
+fn test_nth<I>(a: &str, b: &str, step: u128, overflow: bool)
+where
+	I: Inet
+		+ FromStr<Err = NetworkParseError>
+		+ core::ops::Add<u128, Output = I>
+		+ core::ops::Sub<u128, Output = I>,
+{
+	let a = a.parse::<I>().unwrap();
+	let b = b.parse::<I>().unwrap();
+
+	assert_eq!(a.overflowing_add(step), (b, overflow));
+	assert_eq!(b.overflowing_sub(step), (a, overflow));
+
+	if !overflow {
+		// overflow would trigger debug asserts here
+		assert_eq!(a + step, b);
+		assert_eq!(b - step, a);
+	}
+}
+
+#[test]
+fn test_nth_v4() {
+	test_nth::<Ipv4Inet>("255.255.255.255/0", "0.0.0.0/0", 1, true);
+	test_nth::<IpInet>("255.255.255.255/0", "0.0.0.0/0", 1, true);
+	test_nth::<Ipv4Inet>("255.255.255.255/0", "127.0.0.1/0", 0x7f000002, true);
+	test_nth::<IpInet>("255.255.255.255/0", "127.0.0.1/0", 0x7f000002, true);
+
+	test_nth::<Ipv4Inet>("192.0.2.23/24", "192.0.2.42/24", 19, false);
+	test_nth::<IpInet>("192.0.2.23/24", "192.0.2.42/24", 19, false);
+	test_nth::<Ipv4Inet>("192.0.2.42/24", "192.0.2.23/24", 237, true);
+	test_nth::<IpInet>("192.0.2.42/24", "192.0.2.23/24", 237, true);
+}
+
+#[test]
+fn test_nth_v6() {
+	test_nth::<Ipv6Inet>("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/0", "::/0", 1, true);
+	test_nth::<IpInet>("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/0", "::/0", 1, true);
+
+	test_nth::<Ipv6Inet>(
+		"2001:DB8:1234:5678::23/64",
+		"2001:DB8:1234:5678::42/64",
+		0x1f,
+		false,
+	);
+	test_nth::<IpInet>(
+		"2001:DB8:1234:5678::23/64",
+		"2001:DB8:1234:5678::42/64",
+		0x1f,
+		false,
+	);
+	test_nth::<Ipv6Inet>(
+		"2001:DB8:1234:5678::42/64",
+		"2001:DB8:1234:5678::23/64",
+		(1 << 64) - 0x1f,
+		true,
+	);
+	test_nth::<IpInet>(
+		"2001:DB8:1234:5678::42/64",
+		"2001:DB8:1234:5678::23/64",
+		(1 << 64) - 0x1f,
+		true,
+	);
 }
