@@ -10,7 +10,6 @@ use core::{
 	str::FromStr,
 };
 
-use super::from_str::inet_from_str;
 use crate::{
 	errors::*,
 	internal_traits::{
@@ -369,7 +368,7 @@ macro_rules! impl_inet_for {
 			type Err = NetworkParseError;
 
 			fn from_str(s: &str) -> Result<Self, NetworkParseError> {
-				inet_from_str(s)
+				crate::parsers::parse_inet(s, FromStr::from_str)
 			}
 		}
 

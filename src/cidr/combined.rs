@@ -8,7 +8,6 @@ use core::{
 	str::FromStr,
 };
 
-use super::from_str::cidr_from_str;
 use crate::{
 	errors::*,
 	internal_traits::PrivCidr,
@@ -231,7 +230,7 @@ impl FromStr for IpCidr {
 	type Err = NetworkParseError;
 
 	fn from_str(s: &str) -> Result<Self, NetworkParseError> {
-		cidr_from_str(s)
+		crate::parsers::parse_cidr(s, FromStr::from_str)
 	}
 }
 

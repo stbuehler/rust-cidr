@@ -247,11 +247,7 @@ impl FromStr for AnyIpCidr {
 	type Err = NetworkParseError;
 
 	fn from_str(s: &str) -> Result<Self, NetworkParseError> {
-		// TODO: use strict FromStr::from_str address parsing with version bump
-		crate::parsers::parse_any_cidr(
-			s,
-			crate::local_addr_parser::ParseableAddress::address_from_str,
-		)
+		crate::parsers::parse_any_cidr(s, str::parse)
 	}
 }
 

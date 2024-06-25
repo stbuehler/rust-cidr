@@ -460,6 +460,7 @@ fn parse_v4_8bit() {
 }
 
 #[test]
+#[should_panic(expected = "invalid IPv4 address syntax")]
 fn parse_v4_8bit_short() {
 	test_v4(
 		"10/8",
@@ -482,6 +483,7 @@ fn parse_v4_0bit() {
 }
 
 #[test]
+#[should_panic(expected = "invalid IPv4 address syntax")]
 fn parse_v4_0bit_short() {
 	test_v4(
 		"0/0",

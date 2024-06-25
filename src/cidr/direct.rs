@@ -10,7 +10,6 @@ use core::{
 	str::FromStr,
 };
 
-use super::from_str::cidr_from_str;
 use crate::{
 	errors::*,
 	internal_traits::{
@@ -272,7 +271,7 @@ macro_rules! impl_cidr_for {
 			type Err = NetworkParseError;
 
 			fn from_str(s: &str) -> Result<$n, NetworkParseError> {
-				cidr_from_str(s)
+				crate::parsers::parse_cidr(s, FromStr::from_str)
 			}
 		}
 

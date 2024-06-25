@@ -11,12 +11,15 @@
 //!
 //! The naming follows the names of the [PostgreSQL data types](https://www.postgresql.org/docs/current/static/datatype-net-types.html)
 //!
-//! Address parsing also accepts IPv4 address with less than four octets
-//! (but always parses those as decimal); this is deprecated and will be
-//! removed in 0.3.0.
+//! By default address parsing is done using `FromStr` from the standard
+//! library, which is rather strict in the inputs it accepts.
+//! [`Cidr`] types don't accept addresses with host-bits set (i.e. `127.0.0.1/8`
+//! isn't valid; it should be `127.0.0.0/8`).
+//!
+//! Custom parsing can be implemented using the helpers in the [`parsers`] module.
 //!
 //! If the `#` flag is used with the `Display` formatting (i.e. `{:#}`) the
-//! prefix will be shown even for host addresses (added in `0.1.1`).
+//! prefix length will be shown even for host addresses (added in `0.1.1`).
 //!
 //! # Feature `no_unsafe`
 //!
@@ -100,6 +103,5 @@ mod inet;
 mod inet_iterator;
 mod inet_pair;
 mod internal_traits;
-mod local_addr_parser;
 mod num;
 mod traits;
