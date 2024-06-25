@@ -4,6 +4,16 @@
 //! about the allowed input.  Depending on the data format that needs
 //! to be handled the functions here might help implementing custom
 //! parsers.
+//!
+//! The parser combinators that take an `address_parser` can either
+//! take `FromStr::from_str` or a non-default parser like [`parse_loose_ip`].
+//! They are used to parse addresses (either as part of a `"/"` separated
+//! notation or as single host).
+//!
+//! Parser combinators that take an additional `host_parser` use that
+//! to parse strings that don't have an `"/"` separator - usually these
+//! should return Cidr/Inet "host" values, but they can allow special
+//! syntax like [`parse_short_ip_cidr`] to represent non-host networks too.
 
 mod combinators;
 mod inetaddr;
