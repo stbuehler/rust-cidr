@@ -262,6 +262,20 @@ macro_rules! impl_cidr_for {
 			}
 		}
 
+		impl PartialEq<$addr> for $n {
+			#[inline]
+			fn eq(&self, other: &$addr) -> bool {
+				self.address.eq(other)
+			}
+		}
+
+		impl PartialOrd<$addr> for $n {
+			#[inline]
+			fn partial_cmp(&self, other: &$addr) -> Option<core::cmp::Ordering> {
+				Some(self.address.cmp(other))
+			}
+		}
+
 		impl Ord for $n {
 			fn cmp(&self, other: &Self) -> core::cmp::Ordering {
 				self.address
