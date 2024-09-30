@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.3.0] - 2024-09-30
+
+- remove short IPv4 address support in `FromStr` implementations
+- implement `From<Ip*Addr>` for cidr and inet types
+- remove `std` requirement - both `net` and `error` now in `core`
+- move to bitstring 0.2
+
 ## [0.2.3] - 2024-06-25
 
 - `parsers` module:
@@ -41,3 +48,4 @@
 [0.2.1]: https://github.com/stbuehler/rust-cidr/compare/cidr-0.2.0...cidr-0.2.1
 [0.2.2]: https://github.com/stbuehler/rust-cidr/compare/cidr-0.2.1...cidr-0.2.2
 [0.2.3]: https://github.com/stbuehler/rust-cidr/compare/cidr-0.2.2...cidr-0.2.3
+[0.3.0]: https://github.com/stbuehler/rust-cidr/compare/cidr-0.2.3...cidr-0.3.0
