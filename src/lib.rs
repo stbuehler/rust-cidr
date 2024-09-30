@@ -28,7 +28,7 @@
 //!
 //! # Feature `std`
 //!
-//! Enabled by default, used for [`std::error::Error`] implementations.
+//! Enabled by default, currently unused.
 //!
 //! # Feature `serde`
 //!

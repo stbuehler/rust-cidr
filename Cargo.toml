@@ -3,7 +3,7 @@ name = "cidr"
 # also bump version in html_root_url in src/lib.rs
 version = "0.2.3"
 edition = "2021"
-rust-version = "1.77"
+rust-version = "1.81"
 authors = ["Stefan Bühler <stbuehler@web.de>"]
 description = "IP network and IP host within network types"
 documentation = "https://docs.rs/cidr"

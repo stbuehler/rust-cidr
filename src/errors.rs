@@ -1,12 +1,11 @@
 //! Various error types returned by function in this crate
 
 use core::{
+	error::Error,
 	fmt,
 	net::AddrParseError,
 	num::ParseIntError,
 };
-#[cfg(feature = "std")]
-use std::error::Error;
 
 use crate::Family;
 
@@ -37,7 +36,6 @@ impl fmt::Display for NetworkLengthTooLongError {
 	}
 }
 
-#[cfg(feature = "std")]
 impl Error for NetworkLengthTooLongError {
 	fn description(&self) -> &str {
 		"network length too long"
