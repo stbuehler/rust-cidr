@@ -2,7 +2,11 @@ use core::{
 	fmt,
 	str::FromStr,
 };
-use std::net::IpAddr;
+use std::net::{
+	IpAddr,
+	Ipv4Addr,
+	Ipv6Addr,
+};
 
 use super::from_str::inet_from_str;
 use crate::{
@@ -342,9 +346,27 @@ impl From<Ipv4Inet> for IpInet {
 	}
 }
 
+impl From<Ipv4Addr> for IpInet {
+	fn from(adress: Ipv4Addr) -> Self {
+		Self::V4(adress.into())
+	}
+}
+
 impl From<Ipv6Inet> for IpInet {
 	fn from(c: Ipv6Inet) -> Self {
 		Self::V6(c)
+	}
+}
+
+impl From<Ipv6Addr> for IpInet {
+	fn from(address: Ipv6Addr) -> Self {
+		Self::V6(address.into())
+	}
+}
+
+impl From<IpAddr> for IpInet {
+	fn from(address: IpAddr) -> Self {
+		Self::new_host(address)
 	}
 }
 

@@ -278,6 +278,12 @@ macro_rules! impl_cidr_for {
 			}
 		}
 
+		impl From<$addr> for $n {
+			fn from(address: $addr) -> Self {
+				Self::new_host(address)
+			}
+		}
+
 		/// Iterate over all the addresses in the CIDR.
 		impl IntoIterator for $n {
 			type IntoIter = $crate::InetIterator<$addr>;

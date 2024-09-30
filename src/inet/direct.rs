@@ -375,6 +375,12 @@ macro_rules! impl_inet_for {
 			}
 		}
 
+		impl From<$addr> for $n {
+			fn from(address: $addr) -> Self {
+				Self::new_host(address)
+			}
+		}
+
 		impl core::ops::Add<u128> for $n {
 			type Output = $n;
 
