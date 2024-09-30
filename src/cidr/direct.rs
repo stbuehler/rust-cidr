@@ -71,7 +71,10 @@ macro_rules! impl_cidr_for {
 
 			fn shared_prefix_len(&self, other: &Self) -> usize {
 				let max_len = core::cmp::min(self.network_length, other.network_length) as usize;
-				FixedBitString::shared_prefix_len(&self.address, &other.address, max_len)
+				core::cmp::min(
+					FixedBitString::shared_prefix_len(&self.address, &other.address),
+					max_len,
+				)
 			}
 		}
 
