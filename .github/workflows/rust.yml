@@ -86,7 +86,7 @@ jobs:
       - name: Rustdoc [nightly]
         env:
           # this should need nightly
-          RUSTDOCFLAGS: "--cfg doc_cfg"
+          RUSTDOCFLAGS: "--cfg docsrs"
         run: cargo doc --all-features
       # deploy docs from nightly for doc_cfg feature
       # (for stable we'd create a new job and use the cache)

@@ -295,7 +295,6 @@ impl From<IpAddr> for AnyIpCidr {
 }
 
 #[cfg(feature = "bitstring")]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "bitstring")))]
 impl bitstring::BitString for AnyIpCidr {
 	fn get(&self, ndx: usize) -> bool {
 		assert!(!self.is_any());

@@ -5,7 +5,6 @@ use core::{
 	num::ParseIntError,
 };
 #[cfg(feature = "std")]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "std")))]
 use std::error::Error;
 use std::net::AddrParseError;
 
@@ -39,7 +38,6 @@ impl fmt::Display for NetworkLengthTooLongError {
 }
 
 #[cfg(feature = "std")]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "std")))]
 impl Error for NetworkLengthTooLongError {
 	fn description(&self) -> &str {
 		"network length too long"
@@ -86,7 +84,6 @@ impl fmt::Display for NetworkParseError {
 }
 
 #[cfg(feature = "std")]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "std")))]
 impl Error for NetworkParseError {
 	fn description(&self) -> &str {
 		"network parse error"
@@ -149,7 +146,6 @@ impl fmt::Display for InetTupleError {
 }
 
 #[cfg(feature = "std")]
-#[cfg_attr(doc_cfg, doc(cfg(feature = "std")))]
 impl Error for InetTupleError {
 	fn description(&self) -> &str {
 		"inet tuple error"

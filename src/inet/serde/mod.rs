@@ -1,5 +1,4 @@
 #![cfg(feature = "serde")]
-#![cfg_attr(doc_cfg, doc(cfg(feature = "serde")))]
 
 use crate::{
 	inet::{
