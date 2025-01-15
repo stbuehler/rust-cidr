@@ -27,7 +27,7 @@ serde = ["dep:serde"]
 
 [dependencies]
 bitstring = { version = "0.2.0", optional = true, features = ["net"] }
-serde = { version = "1.0.27", default-features = false, features = ["alloc"], optional = true }
+serde = { version = "1.0.217", default-features = false, features = ["alloc"], optional = true }
 
 [dev-dependencies]
 serde_test = "1.0.27"
