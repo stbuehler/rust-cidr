@@ -81,7 +81,6 @@ impl fmt::Display for NetworkParseError {
 	}
 }
 
-#[cfg(feature = "std")]
 impl Error for NetworkParseError {
 	fn description(&self) -> &str {
 		"network parse error"
@@ -137,7 +136,6 @@ impl fmt::Display for InetTupleError {
 	}
 }
 
-#[cfg(feature = "std")]
 impl Error for InetTupleError {
 	fn description(&self) -> &str {
 		"inet tuple error"
