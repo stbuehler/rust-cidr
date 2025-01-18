@@ -3,7 +3,7 @@
 #![cfg_attr(feature = "no_unsafe", forbid(unsafe_code))]
 #![warn(missing_docs)]
 #![warn(rust_2018_idioms)]
-#![doc(html_root_url = "https://docs.rs/cidr/0.3.0")]
+#![doc(html_root_url = "https://docs.rs/cidr/0.3.1")]
 #![allow(clippy::match_like_matches_macro)]
 
 //! This library provides types to represent an IP network ([`Cidr`]) or

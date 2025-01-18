@@ -1,7 +1,7 @@
 [package]
 name = "cidr"
 # also bump version in html_root_url in src/lib.rs
-version = "0.3.0"
+version = "0.3.1"
 edition = "2021"
 rust-version = "1.81"
 authors = ["Stefan Bühler <stbuehler@web.de>"]
