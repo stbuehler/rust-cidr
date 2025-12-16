@@ -119,6 +119,11 @@ macro_rules! impl_cidr_for {
 				self.address
 			}
 
+			/// the reference about first address in the network as plain address
+			pub const fn first_address_ref(&self) -> &$addr {
+				&self.address
+			}
+
 			/// first address in the network
 			pub const fn first(&self) -> $inet {
 				$inet {

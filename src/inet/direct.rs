@@ -202,6 +202,11 @@ macro_rules! impl_inet_for {
 				self.address
 			}
 
+			/// the reference about host
+			pub const fn address_ref(&self) -> &$addr {
+				&self.address
+			}
+
 			/// first address in the network as plain address
 			pub const fn first_address(&self) -> $addr {
 				<$addr as PrivUnspecAddress>::_Tools::_network_address(
